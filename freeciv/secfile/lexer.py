@@ -152,7 +152,7 @@ class SpecLexer:
         self.data_path = data_path
         self._lexer_stack = list()
         self._file_stack = list()
-        self._push_file(file_name, None)
+        self._push_file(file_name, None, throw=True)
 
     def _current_lexer(self):
         """
@@ -166,15 +166,22 @@ class SpecLexer:
         """
         return self._file_stack[-1]
 
-    def _push_file(self, name, token):
+    def _push_file(self, name, token, throw=False):
         """
         Pushes a file on the internal stack. The file is looked up in data_path
         (absolute file names are not supported). The token is used in error
         messages.
+
+        If throw is True, raises an exception in case of error.
         """
+        def _raise_error(self, token, message, other=None, type=ValueError):
+            self._error(token, message)
+            if throw:
+                raise type(message) from other
+
         # Prevent recursion beyond 20 files.
         if len(self._file_stack) >= 20:
-            self._error(token, 'too much recursion')
+            _raise_error(self, token, 'too much recursion')
             return
 
         # Try to locate the file.
@@ -186,7 +193,7 @@ class SpecLexer:
 
                 if full_path in self._file_stack:
                     # But we're already parsing the same file...
-                    self._error(token, 'infinite recursion')
+                    _raise_error(self, token, 'infinite recursion')
                     return
 
                 try:
@@ -202,10 +209,11 @@ class SpecLexer:
                         self._lexer_stack.append(lexer)
                         return
                 except e:
-                    self._error(token, f'could not open "{full_path}": {e}')
+                    _raise_error(
+                        self, token, f'could not open "{full_path}": {e}', e)
 
-        self._error(token, f'could not find file "{name}"')
-        _log.warn('Skipping...')
+        _raise_error(self, token, f"No such file or directory: '{name}'",
+                     type=FileNotFoundError)
 
     def _pop_file(self):
         """
