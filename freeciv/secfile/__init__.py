@@ -14,3 +14,4 @@
 # along with pyciv.  If not, see <https://www.gnu.org/licenses/>.
 
 from .lexer import SpecLexer
+from .parser import Section, SpecParser
