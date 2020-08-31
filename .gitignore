@@ -1,3 +1,8 @@
+# pyciv-specific files
+# PLY output
+freeciv/secfile/parser.out
+freeciv/secfile/parsetab.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
