@@ -198,17 +198,18 @@ class SpecLexer:
 
                 try:
                     # Push the file to the stacks
-                    with open(full_path) as f:
+                    with open(full_path, encoding='utf-8') as f:
                         lexer = lex(module=self,
                                     reflags=re.UNICODE | re.VERBOSE | re.MULTILINE)
                         lexer.lexpos = 0
                         lexer.lineno = 1
+
                         lexer.input(f.read())
 
                         self._file_stack.append(full_path)
                         self._lexer_stack.append(lexer)
                         return
-                except e:
+                except Exception as e:
                     _raise_error(
                         self, token, f'could not open "{full_path}": {e}', e)
 

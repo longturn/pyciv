@@ -19,7 +19,15 @@ import ply.yacc
 from .lexer import SpecLexer
 
 _newline_magic = {}
-_translation_domain_regex = re.compile(r'\?\w+:(.*)')
+_translation_domain_regex = re.compile(r'\?\w+:(.*)', re.DOTALL)
+
+_string_escape_regex = re.compile(r'\\(.)', re.DOTALL)
+def _string_escape_replace(match):
+    print(match.group(1))
+    if match.group(1) == 'n':
+        return '\n'
+    else:
+        return match.group(1) # \", \\ or \ anything
 
 class _Table:
     """
@@ -169,7 +177,7 @@ class SpecParser(SpecLexer):
             if match:
                 p[1] = match.group(1)
             # Resolve escaped characters
-            p[1] = p[1].encode('utf-8').decode('unicode_escape')
+            p[1] = _string_escape_regex.sub(_string_escape_replace, p[1])
         p[0] = p[1]
 
     def p_list(self, p):
