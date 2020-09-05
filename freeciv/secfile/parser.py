@@ -23,7 +23,6 @@ _translation_domain_regex = re.compile(r'\?\w+:(.*)', re.DOTALL)
 
 _string_escape_regex = re.compile(r'\\(.)', re.DOTALL)
 def _string_escape_replace(match):
-    print(match.group(1))
     if match.group(1) == 'n':
         return '\n'
     else:
