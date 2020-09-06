@@ -85,7 +85,20 @@ class SpecLexer:
 
     def t_STRING_FROM_FILE(self, t):
         r'\*[^\r\n]+\*'
-        t.value = '<Contents of %s>' % t.value[1:-1]
+        # Try to locate the file.
+        name = t.value[1:-1]
+        found = False
+        for location in self.data_path:
+            full_path = os.path.join(location, name)
+            if os.path.isfile(full_path):
+                # Found!
+                with open(full_path, encoding='utf-8') as f:
+                    t.value = f.read()
+                    found = True
+        if not found:
+            self._error(token, f'Could not find a file called "{name}"')
+            raise ValueError(f'Could not find a file called "{name}"')
+
         t.type = 'STRING_LITERAL'
         return t
 
