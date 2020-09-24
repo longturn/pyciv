@@ -14,8 +14,11 @@
 # along with pyciv.  If not, see <https://www.gnu.org/licenses/>.
 
 import argparse
+import logging
 
 from ..secfile import SpecParser
+
+_log = logging.getLogger(__name__)
 
 def parse_files(ruleset, data_path):
     """
@@ -33,6 +36,10 @@ def document_ruleset():
     Parses a ruleset and writes documentation. This should be used from the
     command line.
     """
+    # Override the logger when the entry point is used
+    global _log
+    _log = logging.getLogger('freeciv-doc')
+
     parser = argparse.ArgumentParser(
         description='Create documentation for a ruleset')
 
@@ -48,7 +55,14 @@ def document_ruleset():
     parser.add_argument('-p', '--path', action='append',
                         help='add a directory to the search path')
 
+    # Verbosity flag
+    parser.add_argument('-v', '--verbose', action='count', default=0,
+                        help='verbosity level (repeat for more verbose)')
+
     args = parser.parse_args()
+
+    # Default to WARNING, -v is INFO and -vv is DEBUG
+    logging.basicConfig(level=logging.WARNING-10*args.verbose)
 
     # Start by parsing the files so we fail immediately if any of them is
     # missing or has a syntax error
