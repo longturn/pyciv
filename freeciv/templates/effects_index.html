@@ -1,0 +1,126 @@
+<? doctype html ?>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Effects</title>
+    <style>
+        dl {
+            background-color: #eeeeee;
+            padding: 10px;
+
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-gap: 2px;
+        }
+        dt {
+            grid-column: 1;
+            font-weight: bold;
+            padding-right: 1cm;
+        }
+        dd {
+            grid-column: 2;
+            display: inline-block;
+            margin: 0;
+        }
+        table {
+            background-color: #eeeeee;
+            border-collapse: collapse;
+        }
+        thead > tr {
+            background-color: #dddddd;
+        }
+        th {
+            text-align: center;
+            padding: 2px 10px;
+            font-weight: normal;
+        }
+        thead > tr:first-child > th {
+            font-weight: bold;
+        }
+        th:first-child {
+            text-align: left;
+            font-weight: normal;
+        }
+        tr:first-child > td,
+        tr:first-child > th {
+            padding-top: 10px;
+        }
+        tr:last-child > td,
+        tr:last-child > th {
+            padding-bottom: 10px;
+        }
+        td {
+            text-align: center;
+            padding: 2px 10px;
+        }
+
+        table table {
+            border: 1px solid #ccc;
+        }
+        table table tr:first-child > td,
+        table table tr:first-child > th {
+            padding-top: 7px;
+        }
+        table table tr:last-child > td,
+        table table tr:last-child > th {
+            padding-bottom: 7px;
+        }
+    </style>
+</head>
+<body>
+    <h1>All effects</h1>
+    <p>
+        The table below lists all special effects declared in the ruleset.
+    </p>
+    <table>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Value</th>
+                <th>Policy</th>
+                <th colspan=4>Requirements</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for effect in effects %}
+                {% set rows = effect.reqs | length %}
+                <tr>
+                    <th><code>{{ effect.type or "" }}</code></th>
+                    <td>{{ effect.value }}</td>
+                    <td>{{ effect.multiplier or "-" }}</td>
+                    <td>
+                        {% if effect.reqs %}
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Name</th>
+                                        <th>Range</th>
+                                        <th>Present</th>
+                                    </tr>
+                                </thead>
+                                {% for req in effect.reqs %}
+                                    <tr>
+                                        <th><code>{{ req.type }}</code></th>
+                                        <td><code>{{ req.name }}</code></td>
+                                        <td><code>{{ req.range }}</code></td>
+                                        <td><code>{{ req.present }}</code></td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        {% else %}
+                            Always active
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

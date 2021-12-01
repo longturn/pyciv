@@ -1,0 +1,22 @@
+<? doctype html ?>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>All technologies</title>
+</head>
+<body>
+    <h1>All technologies</h1>
+    <ul>
+        {% set d = namespace(letter='-') %}
+        {% for advance in all_advances | sort %}
+            {% if advance.name.0 != d.letter %}
+                </ul>
+                <h2>{{ advance.name.0 | upper }}</h2>
+                <ul>
+                {% set d.letter = advance.name.0 %}
+            {% endif %}
+            <li><a href='{{ advance.name | make_slug }}.html'>{{ advance.name }}</a>
+        {% endfor %}
+    </ul>
+</body>
+</html>

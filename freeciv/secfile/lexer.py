@@ -96,7 +96,7 @@ class SpecLexer:
                     t.value = f.read()
                     found = True
         if not found:
-            self._error(token, f'Could not find a file called "{name}"')
+            self._error(t, f'Could not find a file called "{name}"')
             raise ValueError(f'Could not find a file called "{name}"')
 
         t.type = 'STRING_LITERAL'
@@ -269,7 +269,7 @@ class SpecLexer:
             next_token = self._current_lexer().token()
             if next_token is None:
                 # Got EOF instead.
-                self._error(token, f'unexpected end of file')
+                self._error(token, 'unexpected end of file')
                 # Rewind the stack and present the next token to the parser.
                 return self._next_token_unwinding_stack()
             elif next_token.type != 'STRING_LITERAL':

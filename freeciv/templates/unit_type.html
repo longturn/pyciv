@@ -1,0 +1,202 @@
+<? doctype html ?>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{ unit_type.name }}</title>
+    <style>
+        dl {
+            background-color: #eeeeee;
+            padding: 10px;
+
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-gap: 2px;
+        }
+        dt {
+            grid-column: 1;
+            font-weight: bold;
+            padding-right: 1cm;
+        }
+        dd {
+            grid-column: 2;
+            display: inline-block;
+            margin: 0;
+        }
+        table {
+            background-color: #eeeeee;
+            border-collapse: collapse;
+        }
+        thead > tr {
+            background-color: #dddddd;
+        }
+        th {
+            text-align: center;
+            padding: 2px 10px;
+            font-weight: normal;
+        }
+        thead > tr:first-child > th {
+            font-weight: bold;
+        }
+        th:first-child {
+            text-align: left;
+            font-weight: normal;
+        }
+        tr:first-child > td,
+        tr:first-child > th {
+            padding-top: 10px;
+        }
+        tr:last-child > td,
+        tr:last-child > th {
+            padding-bottom: 10px;
+        }
+        td {
+            text-align: center;
+            padding: 2px 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ unit_type.name }}</h1>
+    {{ html_description | safe }}
+    <h2>Properties</h2>
+    <dl>
+        <dt>Attack</dt><dd>{{ unit_type.attack }}</dd>
+        <dt>Defense</dt><dd>{{ unit_type.defense }}</dd>
+        <dt>Firepower</dt><dd>{{ unit_type.firepower }}</dd>
+        <dt>Hit points</dt><dd>{{ unit_type.hitpoints }}</dd>
+        <dt>Vision</dt><dd>{{ unit_type.vision_radius_sq }}</dd>
+        <dt>Move rate</dt><dd>
+            {% if unit_type.move_rate <= 1 %}
+                {{ unit_type.move_rate }} tile/turn
+            {% else %}
+                {{ unit_type.move_rate }} tiles/turn
+            {% endif %}
+        </dd>
+        <dt>Fuel</dt><dd>
+            {% if unit_type.fuel == 0 %}
+                unlimited
+            {% elif unit_type.fuel == 1 %}
+                1 turn
+            {% else %}
+                {{ unit_type.fuel }} turn
+            {% endif %}
+        </dd>
+        <dt>Build cost</dt><dd>{{ unit_type.build_cost }} shields
+            {% if unit_type.pop_cost == 1 %}
+                and 1 citizen
+            {% elif unit_type.pop_cost > 1 %}
+                and {{ unit_type.pop_cost }} citizens
+            {% endif %}
+        </dd>
+        <dt>Upkeep</dt><dd>
+            {% if unit_type.uk_shield == 1 %}
+                {{ unit_type.uk_shield }} shield,
+            {% elif unit_type.uk_shield > 1 %}
+                {{ unit_type.uk_shield }} shields,
+            {% endif %}
+            {{ unit_type.uk_food }} food,
+            {{ unit_type.uk_gold }} gold
+        </dd>
+        <dt>Targets</dt><dd>
+            {% set comma = joiner() %}
+            {% for tgt in unit_type.targets | sort -%}
+                {{ comma() }}<a href="../unit_class/{{ tgt.name | make_slug }}.html">{{ tgt.name }}</a>
+            {%- else -%}
+                (none)
+            {%- endfor %}
+        </dd>
+        <dt>Unit class</dt><dd>
+            <a href="../unit_class/{{ unit_type.uclass.name | make_slug }}.html">{{ unit_type.uclass.name }}</a>
+        </dd>
+    </dl>
+    <ul>
+        <li>{% if unit_type.tech_req %}
+                Require
+                {% set comma = joiner() %}
+                {% for req in unit_type.tech_req | sort -%}
+                    {{ comma() }}<a href="../tech/{{ req.name | make_slug }}.html">{{ req.name }}</a>
+                {%- endfor %}
+            {% else %}
+                No technology requirement
+            {% endif %}
+        {% if obsolete %}<li>
+            Obsolete
+            {% set comma = joiner() %}
+            {% for obs_unit_type in obsolete | sort -%}
+                {{ comma() }}<a href="../unit/{{ obs_unit_type.name | make_slug }}.html">{{ obs_unit_type.name }}</a>
+            {%- endfor %}
+        {% endif %}
+        <li>{% if unit_type.obsolete_by %}
+                Obsoleted by <a href="{{ unit_type.obsolete_by.name | make_slug }}.html">{{ unit_type.obsolete_by.name }}</a>
+            {% else %}
+                Never obsolete
+            {% endif %}
+        {% if unit_type.transport_cap %}
+        <li>{% if unit_type.transport_cap == 1 %}
+                Can carry up to 1 unit.
+            {% elif unit_type.transport_cap > 1 %}
+                Can carry up to {{ unit_type.transport_cap }} other units.
+            {% endif %}
+            {% if unit_type.cargo %}
+                {% if unit_type.cargo | length == 1 %}
+                    Allowed class:
+                {% else %}
+                    Allowed classes:
+                {% endif %}
+                {% set comma = joiner() %}
+                {% for cargo in unit_type.cargo | sort -%}
+                    {{ comma() }}<a href="../unit_class/{{ cargo.name | make_slug }}.html">{{ cargo.name }}</a>
+                {%- endfor %}
+            {% endif %}
+        {% endif %}
+    </ul>
+    <h2>Veteran levels</h2>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th colspan="2">Raise chance</th>
+                <th colspan="2">Bonuses</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>In combat</th>
+                <th>When working</th>
+                <th>Strength</th>
+                <th>Mobility</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for level in unit_type.veteran_levels -%}
+                <tr>
+                    <th>{{ level.name }}</th>
+                    <td>{{ level.raise_chance }}&thinsp;%</td>
+                    <td>{{ level.work_raise_chance }}&thinsp;%</td>
+                    <td>{{ level.power_factor }}&thinsp;%</td>
+                    <td>{{ level.move_bonus }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h2>Flags</h2>
+    {% if unit_type.flags %}
+        <ul>
+            {% for flag in unit_type.flags | sort %}
+                <li><code>{{ flag }}</code>
+            {% endfor %}
+        </ul>
+    {% else %}
+        (none)
+    {% endif %}
+    <h2>Roles</h2>
+    {% if unit_type.roles %}
+        <ul>
+            {% for role in unit_type.roles | sort %}
+                <li><code>{{ role }}</code>
+            {% endfor %}
+        </ul>
+    {% else %}
+        (none)
+    {% endif %}
+</body>
+</html>

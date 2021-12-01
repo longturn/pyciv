@@ -1,0 +1,65 @@
+<? doctype html ?>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Unit class {{ unit_class.name }}</title>
+    <style>
+        dl {
+            background-color: #eeeeee;
+            padding: 10px;
+
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-gap: 2px;
+        }
+        dt {
+            grid-column: 1;
+            font-weight: bold;
+            padding-right: 1cm;
+        }
+        dd {
+            grid-column: 2;
+            display: inline-block;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Unit class {{ unit_class.name }}</h1>
+    <h2>Properties</h2>
+    <dl>
+        <dt>Minimum speed</dt><dd>
+            {% if unit_class.min_speed <= 1 %}
+                {{ unit_class.min_speed }} tile/turn
+            {% else %}
+                {{ unit_class.min_speed }} tiles/turn
+            {% endif %}
+        </dd>
+        {% if unit_class.hp_loss_pct %}
+            <dt>HP loss per turn</dt><dd>{{ unit_class.hp_loss_pct }}&thinsp;%</dd>
+        {% endif %}
+        <dt>Defense on non native terrain</dt><dd>{{ unit_class.non_native_def_pct }}&thinsp;%</dd>
+        <dt>Hut behaviour</dt><dd>{{ unit_class.hut_behavior }}</dd>
+    </dl>
+    <h2>Flags</h2>
+    {% if unit_class.flags %}
+        <ul>
+            {% for flag in unit_class.flags | sort %}
+                <li><code>{{ flag }}</code>
+            {% endfor %}
+        </ul>
+    {% else %}
+        (none)
+    {% endif %}
+    <h2>Units in this class</h2>
+    {% if units_in_class %}
+        <ul>
+            {% for unit_class in units_in_class | sort %}
+                <li><a href="../unit/{{ unit_class.name | make_slug }}.html">{{ unit_class.name }}</code>
+            {% endfor %}
+        </ul>
+    {% else %}
+        (none)
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,131 @@
+<? doctype html ?>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{ building.name }}</title>
+    <style>
+        dl {
+            background-color: #eeeeee;
+            padding: 10px;
+
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-gap: 2px;
+        }
+        dt {
+            grid-column: 1;
+            font-weight: bold;
+            padding-right: 1cm;
+        }
+        dd {
+            grid-column: 2;
+            display: inline-block;
+            margin: 0;
+        }
+        table {
+            background-color: #eeeeee;
+            border-collapse: collapse;
+        }
+        thead > tr {
+            background-color: #dddddd;
+        }
+        th {
+            text-align: center;
+            padding: 2px 10px;
+            font-weight: normal;
+        }
+        thead > tr:first-child > th {
+            font-weight: bold;
+        }
+        th:first-child {
+            text-align: left;
+            font-weight: normal;
+        }
+        tr:first-child > td,
+        tr:first-child > th {
+            padding-top: 10px;
+        }
+        tr:last-child > td,
+        tr:last-child > th {
+            padding-bottom: 10px;
+        }
+        td {
+            text-align: center;
+            padding: 2px 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ building.name }}</h1>
+    {{ html_description | safe }}
+    <h2>Properties</h2>
+    <dl>
+        <dt>Genus</dt><dd><code>{{ building.genus }}</code></dd>
+        <dt>Build cost</dt><dd>
+            {% if building.build_cost == 1 %}
+                {{ building.build_cost }} shield
+            {% elif building.build_cost > 1 %}
+                {{ building.build_cost }} shields
+            {% endif %}
+        </dd>
+        <dt>Upkeep</dt><dd>{{ building.upkeep }} gold</dd>
+        <dt>Sabotage chance</dt><dd>{{ building.sabotage }}&thinsp;%</dd>
+    </dl>
+    <h2>Requirements</h2>
+    {% if building.reqs %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Range</th>
+                    <th>Present</th>
+                </tr>
+            </thead>
+            {% for req in building.reqs %}
+                <tr>
+                    <th><code>{{ req.type }}</code></th>
+                    <td><code>{{ req.name }}</code></td>
+                    <td><code>{{ req.range }}</code></td>
+                    <td><code>{{ req.present }}</code></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        (none)
+    {% endif %}
+    <h2>Obsoleted by</h2>
+    {% if building.obsoleted_by %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Range</th>
+                    <th>Present</th>
+                </tr>
+            </thead>
+            {% for req in building.obsoleted_by %}
+                <tr>
+                    <th><code>{{ req.type }}</code></th>
+                    <td><code>{{ req.name }}</code></td>
+                    <td><code>{{ req.range }}</code></td>
+                    <td><code>{{ req.present }}</code></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        (none)
+    {% endif %}
+    <h2>Flags</h2>
+    {% if building.flags %}
+        <ul>
+            {% for flag in building.flags | sort %}
+                <li><code>{{ flag }}</code>
+            {% endfor %}
+        </ul>
+    {% else %}
+        (none)
+    {% endif %}
+</body>
+</html>

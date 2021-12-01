@@ -1,0 +1,86 @@
+<? doctype html ?>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{ advance.name }}</title>
+    <style>
+        dl {
+            background-color: #eeeeee;
+            padding: 10px;
+
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-gap: 2px;
+        }
+        dt {
+            grid-column: 1;
+            font-weight: bold;
+            padding-right: 1cm;
+        }
+        dd {
+            grid-column: 2;
+            display: inline-block;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ advance.name }}</h1>
+    {{ html_description | safe }}
+    <h2>Properties</h2>
+    <dl>
+        <dt>Requires</dt><dd>
+            {% set comma = joiner() %}
+            {% for req in advance.reqs -%}
+                {{ comma() }}<a href="{{ req.name | make_slug }}.html">{{ req.name }}</a>
+            {%- else -%}
+                (nothing)
+            {%- endfor %}
+        </dd>
+        <dt>Hard requirement</dt><dd>
+            {% if advance.root_req %}
+                <a href="{{ advance.root_req.name | make_slug }}.html">{{ advance.root_req.name }}</a>
+            {% else %}
+                (none)
+            {% endif %}
+        </dd>
+        <dt>Required by</dt><dd>
+            {% set comma = joiner() %}
+            {% for req in required_by -%}
+                {{ comma() }}<a href="{{ req.name | make_slug }}.html">{{ req.name }}</a>
+            {%- else -%}
+                (nothing)
+            {%- endfor %}
+        </dd>
+        <dt>Hard requirement for</dt><dd>
+            {% set comma = joiner() %}
+            {% for req in hard_required_by -%}
+                {{ comma() }}<a href="{{ req.name | make_slug }}.html">{{ req.name }}</a>
+            {%- else -%}
+                (nothing)
+            {%- endfor %}
+        </dd>
+        <dt>Cost</dt><dd>{% if advance.cost %}{{ advance.cost }} bulbs{% else %}Automatic{% endif %}</dd>
+    </dl>
+    <h2>Required to build</h2>
+    {% if required_by_units %}
+        <ul>
+            {% for unit_type in required_by_units | sort %}
+                <li><a href="../unit/{{ unit_type.name | make_slug }}.html">{{ unit_type.name }}</a>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>(No unit type requires this technology.)</p>
+    {% endif %}
+    <h2>Flags</h2>
+    {% if advance.flags %}
+        <ul>
+            {% for flag in advance.flags | sort %}
+                <li><code>{{ flag }}</code>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>(none)</p>
+    {% endif %}
+</body>
+</html>

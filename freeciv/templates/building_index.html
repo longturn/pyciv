@@ -1,0 +1,22 @@
+<? doctype html ?>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>All buildings</title>
+</head>
+<body>
+    <h1>All buildings</h1>
+    <ul>
+        {% set d = namespace(letter='-') %}
+        {% for building in all_buildings | sort %}
+            {% if building.name.0 != d.letter %}
+                </ul>
+                <h2>{{ building.name.0 | upper }}</h2>
+                <ul>
+                {% set d.letter = building.name.0 %}
+            {% endif %}
+            <li><a href='{{ building.name | make_slug }}.html'>{{ building.name }}</a>
+        {% endfor %}
+    </ul>
+</body>
+</html>

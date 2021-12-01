@@ -1,0 +1,22 @@
+<? doctype html ?>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>All units</title>
+</head>
+<body>
+    <h1>All units</h1>
+    <ul>
+        {% set d = namespace(letter='-') %}
+        {% for unit_type in all_unit_types | sort %}
+            {% if unit_type.name.0 != d.letter %}
+                </ul>
+                <h2>{{ unit_type.name.0 | upper }}</h2>
+                <ul>
+                {% set d.letter = unit_type.name.0 %}
+            {% endif %}
+            <li><a href='{{ unit_type.name | make_slug }}.html'>{{ unit_type.name }}</a>
+        {% endfor %}
+    </ul>
+</body>
+</html>

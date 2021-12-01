@@ -22,11 +22,14 @@ _newline_magic = {}
 _translation_domain_regex = re.compile(r'\?\w+:(.*)', re.DOTALL)
 
 _string_escape_regex = re.compile(r'\\(.)', re.DOTALL)
+
+
 def _string_escape_replace(match):
     if match.group(1) == 'n':
         return '\n'
     else:
-        return match.group(1) # \", \\ or \ anything
+        return match.group(1)  # \", \\ or \ anything
+
 
 class _Table:
     """
@@ -45,9 +48,10 @@ class _Table:
         Turns the table into a list of dictionaries.
         """
         def make_object(row):
-            return { name: value for name, value in zip(self.columns, row) }
+            return {name: value for name, value in zip(self.columns, row)}
 
-        return [ make_object(row) for row in self.rows ]
+        return [make_object(row) for row in self.rows]
+
 
 class Section(dict):
     """
@@ -80,6 +84,7 @@ class Section(dict):
             raise ValueError('duplicate name "%s"' % name)
         else:
             super().__setitem__(name, value)
+
 
 class SpecParser(SpecLexer):
     """
@@ -142,12 +147,12 @@ class SpecParser(SpecLexer):
             # file section or file incluse
             p[0] = p[1] + [p[2]]
 
-    def p_nl(self, p): # New line (collapsing)
+    def p_nl(self, p):  # New line (collapsing)
         r'''
         nl : '\n'
         | nl '\n'
         '''
-        p[0] = _newline_magic # To identify them later on
+        p[0] = _newline_magic  # To identify them later on
 
     def p_qualified_name(self, p):
         '''

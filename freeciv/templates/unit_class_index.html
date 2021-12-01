@@ -1,0 +1,15 @@
+<? doctype html ?>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>All unit classes</title>
+</head>
+<body>
+    <h1>All unit classes</h1>
+    <ul>
+        {% for unit_class in all_unit_classes | sort %}
+            <li><a href='{{ unit_class.name | make_slug }}.html'>{{ unit_class.name }}</a>
+        {% endfor %}
+    </ul>
+</body>
+</html>

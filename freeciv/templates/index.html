@@ -1,0 +1,36 @@
+<? doctype html ?>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{ about.name }}</title>
+    <style>
+        section.lead {
+            background-color: #eeeeee;
+            font-style: italic;
+            padding: 1px 1em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>{{ about.name }}</h1>
+        {% if about.version %}<p>Version {{ about.version }}</p>{% endif %}
+    </header>
+    {%- if html_summary %}
+        <section class='lead'>
+            {{ html_summary | safe }}
+        </section>
+    {%- endif %}
+    <h2>Manual</h2>
+    <nav>
+        <ul>
+            <li><a href='building/index.html'>Buildings</a>
+            <li><a href='effect/index.html'>Effects</a>
+            <li><a href='tech/index.html'>Techs</a>
+            <li><a href='unit/index.html'>Units</a> (and <a href='unit_class/index.html'>unit classes</a>)
+        </ul>
+    </nav>
+    <h2>Description</h2>
+    {{ html_description | safe }}
+</body>
+</html>

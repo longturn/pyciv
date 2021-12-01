@@ -16,7 +16,8 @@
 import argparse
 import logging
 
-from ..secfile import SpecParser
+from ..secfile import SpecParser, read_section
+from . import DataFileHeader
 
 _log = logging.getLogger(__name__)
 
@@ -28,8 +29,37 @@ def parse_files(ruleset, data_path):
     sections = dict()
     for name in ('buildings', 'cities', 'effects', 'game', 'governments',
                  'nations', 'techs', 'terrain', 'units'):
-        sections[name] = list(SpecParser(f'{ruleset}/{name}.ruleset', data_path))
+        try:
+            _log.info('Loading %s/%s.ruleset', ruleset, name)
+            sections[name] = list(SpecParser(f'{ruleset}/{name}.ruleset', data_path))
+        except FileNotFoundError:
+            # In versions <2.5, files could be omitted and would be taken from
+            # the default ruleset.
+            # The fallback only works if files for the corresponding version are
+            # in the path.
+            _log.warn('Could not find %s/%s.ruleset, trying default/%s.ruleset',
+                      ruleset, name, name)
+            _log.warn('This behavior is supported for backwards compatibility. '
+                      'Use *include instead.')
+            sections[name] = list(SpecParser(f'default/{name}.ruleset', data_path))
+
     return sections
+
+def check_version(all_sections):
+    """
+    Checks that all the files target the same Freeciv version.
+    """
+    version = None
+    for name, sections in all_sections.items():
+        header = read_section(DataFileHeader, sections)
+        header_version = header.freeciv_version()
+        _log.debug(f'{name}.ruleset uses version {header_version}')
+        if version and version != header_version:
+            raise ValueError('Conflicting versions in ruleset files: '
+                             f'{version} and {header_version}')
+        else:
+            version = header_version
+    return version
 
 def document_ruleset():
     """
@@ -67,3 +97,7 @@ def document_ruleset():
     # Start by parsing the files so we fail immediately if any of them is
     # missing or has a syntax error
     sections = parse_files(args.ruleset, args.path)
+
+    # Determine the Freeciv version. This needs to be done first in order to set
+    # up version upgrade hooks.
+    version = check_version(sections)
