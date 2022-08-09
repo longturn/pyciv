@@ -21,6 +21,7 @@ from ply.lex import lex
 
 _log = logging.getLogger(__name__)
 
+
 class SpecLexer:
     """
     A PLY-compatible lexer for Freeciv INI-like file format.
@@ -45,46 +46,46 @@ class SpecLexer:
 
     # Tokens produced by the lexer (in addition to the literals below)
     tokens = (
-        'STRING_LITERAL',
-        'SECTION_HEADER',
-        'BOOLEAN',
-        'NUMBER',
-        'INCLUDE',
-        'IDENTIFIER',
+        "STRING_LITERAL",
+        "SECTION_HEADER",
+        "BOOLEAN",
+        "NUMBER",
+        "INCLUDE",
+        "IDENTIFIER",
     )
     # \n matched by WHITESPACE below, include it so we can produce '\n' tokens
-    literals = ',.=}{\n'
+    literals = ",.=}{\n"
 
     def t_GETTEXT_LITERAL(self, t):
-        r'''
+        r"""
         _\("                    # Opening
         (
             ([^"]|\\")*[^\\]    # Contents: \" or anything else, no \ at the end
             |                   # Or empty
         )
         "\)                     # Closing
-        '''
+        """
         t.value = t.value[3:-2]
-        t.type = 'STRING_LITERAL'
-        t.lexer.lineno += t.value.count('\n')
+        t.type = "STRING_LITERAL"
+        t.lexer.lineno += t.value.count("\n")
         return t
 
     def t_PLAIN_LITERAL(self, t):
-        r'''
+        r"""
         "                       # Opening
         (
             ([^"]|\\")*[^\\]    # Contents: \" or anything else, no \ at the end
             |                   # Or empty
         )
         "                       # Closing
-        '''
+        """
         t.value = t.value[1:-1]
-        t.type = 'STRING_LITERAL'
-        t.lexer.lineno += t.value.count('\n')
+        t.type = "STRING_LITERAL"
+        t.lexer.lineno += t.value.count("\n")
         return t
 
     def t_STRING_FROM_FILE(self, t):
-        r'\*[^\r\n]+\*'
+        r"\*[^\r\n]+\*"
         # Try to locate the file.
         name = t.value[1:-1]
         found = False
@@ -92,54 +93,54 @@ class SpecLexer:
             full_path = os.path.join(location, name)
             if os.path.isfile(full_path):
                 # Found!
-                with open(full_path, encoding='utf-8') as f:
+                with open(full_path, encoding="utf-8") as f:
                     t.value = f.read()
                     found = True
         if not found:
             self._error(t, f'Could not find a file called "{name}"')
             raise ValueError(f'Could not find a file called "{name}"')
 
-        t.type = 'STRING_LITERAL'
+        t.type = "STRING_LITERAL"
         return t
 
     def t_COMMENT(self, t):
-        r'[;#].*$'
+        r"[;#].*$"
 
     def t_SECTION_HEADER(self, t):
-        r'\[.*\]'
+        r"\[.*\]"
         t.value = t.value[1:-1]
         return t
 
     def t_NUMBER(self, t):
-        r'-?[0-9]+'
+        r"-?[0-9]+"
         t.value = int(t.value)
         return t
 
     def t_WHITESPACE(self, t):
-        r'\s+'
-        if '\n' in t.value:
+        r"\s+"
+        if "\n" in t.value:
             # If the whitespace included new lines, produce a newline token
-            t.lexer.lineno += t.value.count('\n')
-            t.type = '\n'
+            t.lexer.lineno += t.value.count("\n")
+            t.type = "\n"
             return t
 
     def t_INCLUDE(self, t):
-        r'^\*include'
+        r"^\*include"
         return t
 
     def t_IDENTIFIER(self, t):
-        r'\w+'
-        if t.value.lower() in ('true', 'false'):
-            t.type = 'BOOLEAN'
-            t.value = (t.value.lower() == 'true')
+        r"\w+"
+        if t.value.lower() in ("true", "false"):
+            t.type = "BOOLEAN"
+            t.value = t.value.lower() == "true"
         return t
 
     def t_error(self, t):
         """
         Called by PLY when it cannot match any token.
         """
-        escaped = t.lexer.lexdata[t.lexer.lexpos].encode('ascii', 'backslashreplace')
-        self._error(t, 'illegal character "%s":' % escaped.decode('ascii'))
+        escaped = t.lexer.lexdata[t.lexer.lexpos].encode("ascii", "backslashreplace")
+        self._error(t, 'illegal character "%s":' % escaped.decode("ascii"))
 
     def _error(self, t, message):
         """
@@ -147,14 +148,14 @@ class SpecLexer:
         """
         if t:
             for path in self._file_stack:
-                _log.error('In %s:' % path)
-            line_start = t.lexer.lexdata.rfind('\n', 0, t.lexpos) + 1
-            line_end = t.lexer.lexdata.find('\n', t.lexpos)
-            _log.error('Line %d: %s' % (t.lineno, message))
+                _log.error("In %s:" % path)
+            line_start = t.lexer.lexdata.rfind("\n", 0, t.lexpos) + 1
+            line_end = t.lexer.lexdata.find("\n", t.lexpos)
+            _log.error("Line %d: %s" % (t.lineno, message))
             _log.error(t.lexer.lexdata[line_start:line_end])
-            _log.error(' ' * (t.lexpos - line_start) + '^')
+            _log.error(" " * (t.lexpos - line_start) + "^")
         else:
-            _log.error('In global context:')
+            _log.error("In global context:")
             _log.error(message)
 
     def __init__(self, file_name, data_path):
@@ -187,6 +188,7 @@ class SpecLexer:
 
         If throw is True, raises an exception in case of error.
         """
+
         def _raise_error(self, token, message, other=None, type=ValueError):
             self._error(token, message)
             if throw:
@@ -194,7 +196,7 @@ class SpecLexer:
 
         # Prevent recursion beyond 20 files.
         if len(self._file_stack) >= 20:
-            _raise_error(self, token, 'too much recursion')
+            _raise_error(self, token, "too much recursion")
             return
 
         # Try to locate the file.
@@ -206,14 +208,15 @@ class SpecLexer:
 
                 if full_path in self._file_stack:
                     # But we're already parsing the same file...
-                    _raise_error(self, token, 'infinite recursion')
+                    _raise_error(self, token, "infinite recursion")
                     return
 
                 try:
                     # Push the file to the stacks
-                    with open(full_path, encoding='utf-8') as f:
-                        lexer = lex(module=self,
-                                    reflags=re.UNICODE | re.VERBOSE | re.MULTILINE)
+                    with open(full_path, encoding="utf-8") as f:
+                        lexer = lex(
+                            module=self, reflags=re.UNICODE | re.VERBOSE | re.MULTILINE
+                        )
                         lexer.lexpos = 0
                         lexer.lineno = 1
 
@@ -223,18 +226,18 @@ class SpecLexer:
                         self._lexer_stack.append(lexer)
                         return
                 except Exception as e:
-                    _raise_error(
-                        self, token, f'could not open "{full_path}": {e}', e)
+                    _raise_error(self, token, f'could not open "{full_path}": {e}', e)
 
-        _raise_error(self, token, f"No such file or directory: '{name}'",
-                     type=FileNotFoundError)
+        _raise_error(
+            self, token, f"No such file or directory: '{name}'", type=FileNotFoundError
+        )
 
     def _pop_file(self):
         """
         Pops a file off the internal stack.
         """
         if not self._file_stack:
-            raise ValueError('No file to pop')
+            raise ValueError("No file to pop")
 
         self._file_stack = self._file_stack[:-1]
         self._lexer_stack = self._lexer_stack[:-1]
@@ -264,19 +267,19 @@ class SpecLexer:
 
         # Process *include directives. This is also handled at the token level
         # by the native code.
-        if token and token.type == 'INCLUDE':
+        if token and token.type == "INCLUDE":
             # Fetch the next token. It should be a string with the file name.
             next_token = self._current_lexer().token()
             if next_token is None:
                 # Got EOF instead.
-                self._error(token, 'unexpected end of file')
+                self._error(token, "unexpected end of file")
                 # Rewind the stack and present the next token to the parser.
                 return self._next_token_unwinding_stack()
-            elif next_token.type != 'STRING_LITERAL':
+            elif next_token.type != "STRING_LITERAL":
                 # Got something that's not a string literal.
                 self._error(
-                    next_token,
-                    f'unexpected token after *include: {next_token.type}')
+                    next_token, f"unexpected token after *include: {next_token.type}"
+                )
                 # Present whatever we got to the parser.
                 return next_token
 

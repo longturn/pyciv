@@ -25,9 +25,11 @@ def section(section_regex):
     Any section whose name matches section_regex will be turned into objects of
     the decorated class when encountered.
     """
+
     def annotate(cls):
-        setattr(cls, '__section_regex__', re.compile(section_regex))
+        setattr(cls, "__section_regex__", re.compile(section_regex))
         return cls
+
     return annotate
 
 
@@ -39,7 +41,7 @@ def as_list(value, target_content_type=None):
     if type(value) == list:
         # Then coerce the contents!
         return [as_type(item, target_content_type) for item in value]
-    elif value == '':
+    elif value == "":
         # This is sometimes used as an empty list
         return []
     else:
@@ -60,26 +62,27 @@ def as_type(value, target_type):
     * typing.List[X]
     * typing.Set[X]
     """
-    if hasattr(target_type, '__origin__') and hasattr(target_type, '__args__'):
+    if hasattr(target_type, "__origin__") and hasattr(target_type, "__args__"):
         # Handle generic types from the typing module
         if target_type.__origin__ == list:
             return as_list(value, target_type.__args__[0])
         elif target_type.__origin__ == set:
             return set(as_list(value, target_type.__args__[0]))
         else:
-            raise ValueError(f'Unknown generic type {target_type}')
+            raise ValueError(f"Unknown generic type {target_type}")
     elif isinstance(value, target_type):
         # This is already good
         return value
     else:
         # Whoops
-        raise TypeError(f'Expected {target_type.__name__}, got '
-                        f'{type(value).__name__}')
+        raise TypeError(
+            f"Expected {target_type.__name__}, got " f"{type(value).__name__}"
+        )
 
 
 def read_sections(section_class, sections):
-    if not hasattr(section_class, '__section_regex__'):
-        raise ValueError('Cannot find the section regex')
+    if not hasattr(section_class, "__section_regex__"):
+        raise ValueError("Cannot find the section regex")
 
     result = []
     for section in sections:
@@ -91,8 +94,10 @@ def read_sections(section_class, sections):
 
             for name, value in section.items():
                 if name not in fields:
-                    raise TypeError(f'Type {section_class.__name__} has no '
-                                    f'field called "{name}"')
+                    raise TypeError(
+                        f"Type {section_class.__name__} has no "
+                        f'field called "{name}"'
+                    )
 
                 target_type = fields[name].type
                 dictionnary[name] = as_type(value, target_type)
@@ -107,6 +112,7 @@ def read_section(section_class, sections):
     if not all_results:
         raise ValueError(f'No section matching "{pattern}" was found')
     if len(all_results) > 1:
-        raise ValueError(f'Several sections matching "{pattern}" were found, '
-                         f'expected only one')
+        raise ValueError(
+            f'Several sections matching "{pattern}" were found, ' f"expected only one"
+        )
     return all_results[0]

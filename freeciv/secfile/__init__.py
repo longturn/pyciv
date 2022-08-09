@@ -14,5 +14,5 @@
 # along with pyciv.  If not, see <https://www.gnu.org/licenses/>.
 
 from .lexer import SpecLexer
-from .loader import section, read_section, read_sections # Bad names...
+from .loader import read_section, read_sections, section  # Bad names...
 from .parser import Section, SpecParser

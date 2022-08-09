@@ -22,10 +22,8 @@ setuptools.setup(
         "Topic :: Games/Entertainment :: Turn Based Strategy",
     ],
     entry_points={
-        "console_scripts": [
-            "freeciv-doc = freeciv.ruleset.doc:document_ruleset"
-        ],
+        "console_scripts": ["freeciv-doc = freeciv.ruleset.doc:document_ruleset"],
     },
-    python_requires='>=3.6',
-    install_requires=['ply'],
+    python_requires=">=3.6",
+    install_requires=["ply"],
 )
