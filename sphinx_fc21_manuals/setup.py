@@ -1,4 +1,4 @@
-from setuptools import setup
+import setuptools
 
 # "import" __version__
 __version__ = "unknown"
@@ -15,11 +15,14 @@ setup(
     python_requires=">=3.8",
     install_requires=[
         "sphinx>=1.8",
+        "pytypes>=1.0",
+        "ply>=3.11",
+        "typeguard>=2.13",
     ],
     author="Freeciv21 Contributors",
     author_email="longturn.net@gmail.com",
     description="Create ReST files of Freeciv21 rulesets",
-    # long_description=open('README.rst').read(),
+    long_description=open("README.md").read(),
     license="GPL-3.0",
     keywords="Sphinx Freeciv21".split(),
     url="https://github.com/longturn/pyciv/sphinx_fc21_manuals/",

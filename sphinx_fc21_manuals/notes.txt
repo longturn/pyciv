@@ -1,0 +1,33 @@
+Folder Structure for sphinx_fc21_manuals
+
+freeciv21/Docs/Manuals/Rulesets
+    index.rst -- contains links to all the ruleset manuals
+
+freeciv21/Docs/Manuals/Rulesets/{ruleset}
+    index.rst -- information from game.ruleset and cities.ruleset
+    buildings.rst -- contains links to all the individual building pages from buildings.ruleset
+    effects.rst -- ? how are we going to document effects ? -- my general thought is to include on the page
+        where the effect applies
+    governments.rst -- single page documenting the available governments
+    nations.rst -- ? how do we want to document all the nations ?
+    styles.rst -- ? how do we want to document the styles ? -- generally not very important information here
+    advances.rst -- contains links to all the individual technology pages from techs.ruleset
+    terrain.rst -- contains information from terrain.ruleset and then links to all the individual terrain pages
+    units.rst -- contains links to all the individual unit pages from units.ruleset. unit pages contain all the
+        information about a unit: base information, flags (and what the flag gives), unit_class (and what the
+        class gives), class_flag (and what that gives), and veterancy
+
+freeciv21/Docs/Manuals/Rulesets/{ruleset}/advances
+    {advance_name}.rst
+
+freeciv21/Docs/Manuals/Rulesets/{ruleset}/buildings
+    {building_name}.rst
+
+freeciv21/Docs/Manuals/Rulesets/{ruleset}/nations
+    {nation_name).rst
+
+freeciv21/Docs/Manuals/Rulesets/{ruleset}/terrain
+    {terrain_name}.rst
+
+freeciv21/Docs/Manuals/Rulesets/{ruleset}/units
+    {unit_name}.rst
