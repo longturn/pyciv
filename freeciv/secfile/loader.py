@@ -13,9 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with pyciv.  If not, see <https://www.gnu.org/licenses/>.
 
-import dataclasses
 import logging
 import re
+import typing
 
 
 def section(section_regex):
@@ -33,76 +33,91 @@ def section(section_regex):
     return annotate
 
 
-def as_list(value, target_content_type=None):
+def _list_from_value(value, target_content_type=None):
     """
     Coerces a value to a list. This is only valid in the context of data parsed
     using a SpecParser.
     """
     if type(value) == list:
         # Then coerce the contents!
-        return [as_type(item, target_content_type) for item in value]
+        return [_instance_from_value(item, target_content_type) for item in value]
     elif value == "":
         # This is sometimes used as an empty list
         return []
     else:
         # The spec format cannot distinguish between a one-element list and a
         # value
-        return [as_type(value, target_content_type)]
+        return [_instance_from_value(value, target_content_type)]
 
 
-def as_type(value, target_type):
-    """
-    Coerces a value to the target type. This is only valid in the context of
-    data parsed using a SpecParser.
-
-    The supported types are:
-
-    * int
-    * str
-    * typing.List[X]
-    * typing.Set[X]
-    """
-    if hasattr(target_type, "__origin__") and hasattr(target_type, "__args__"):
-        # Handle generic types from the typing module
-        if target_type.__origin__ == list:
-            return as_list(value, target_type.__args__[0])
-        elif target_type.__origin__ == set:
-            return set(as_list(value, target_type.__args__[0]))
+def _instance_from_value(value, target_class):
+    # A few supported "primitive" types
+    if target_class in (bool, float, int, list, set, str):
+        return target_class(value)
+    elif hasattr(target_class, "__origin__"):
+        # Generic class
+        origin, args = get_origin(target_class), get_args(target_class)
+        if origin == list:  # List[X]
+            return [instance_from_value(args[0], x) for x in value]
+        elif origin == set:  # Set[X]
+            return {instance_from_value(args[0], x) for x in value}
         else:
-            raise ValueError(f"Unknown generic type {target_type}")
-    elif isinstance(value, target_type):
-        # This is already good
-        return value
-    else:
-        # Whoops
-        raise TypeError(
-            f"Expected {target_type.__name__}, got " f"{type(value).__name__}"
-        )
+            raise ValueError(f"Unsupported type hint {target_class}")
+
+    # "General" case. Convert arguments to the requested types
+
+    # Check for unknown keys
+    hints = typing.get_type_hints(target_class)
+    unknown = value.keys() - hints.keys()
+    if unknown:
+        raise ValueError(f"{target_class.__name__} has no fields called {unknown}")
+
+    # Fetch default values
+    args = {
+        name: getattr(target_class, name)
+        for name in hints.keys()
+        if hasattr(target_class, name)
+    }
+
+    # Insert provided arguments
+    args.update(
+        {name: _instance_from_value(val, hints[name]) for name, val in value.items()}
+    )
+
+    return target_class(**args)
 
 
 def read_sections(section_class, sections):
     if not hasattr(section_class, "__section_regex__"):
-        raise ValueError("Cannot find the section regex")
+        raise TypeError("Cannot find the section regex")
 
     result = []
     for section in sections:
         if section_class.__section_regex__.match(section.name):
-            logging.debug('Processing section "%s"', section.name)
+            logging.debug(f'Processing section "%s"', section.name)
+            fields = list(
+                filter(lambda name: not name.startswith("_"), dir(section_class))
+            )
+            default_values = {name: getattr(section_class, name) for name in fields}
+            annotations = section_class.__annotations__
 
-            fields = {f.name: f for f in dataclasses.fields(section_class)}
-            dictionnary = {}
+            dictionary = {}
 
             for name, value in section.items():
-                if name not in fields:
+                if (
+                    hasattr(section_class, "__rewrite_rules__")
+                    and name in section_class.__rewrite_rules__
+                ):
+                    name = section_class.__rewrite_rules__[name]
+
+                if not name in fields and not name in annotations:
                     raise TypeError(
-                        f"Type {section_class.__name__} has no "
-                        f'field called "{name}"'
+                        f'Type {section_class.__name__} has no field called "{name}"'
                     )
 
-                target_type = fields[name].type
-                dictionnary[name] = as_type(value, target_type)
+                dictionary[name] = value
 
-            result.append(section_class(**dictionnary))
+            result.append(_instance_from_value(dictionary, section_class))
     return result
 
 
@@ -113,6 +128,6 @@ def read_section(section_class, sections):
         raise ValueError(f'No section matching "{pattern}" was found')
     if len(all_results) > 1:
         raise ValueError(
-            f'Several sections matching "{pattern}" were found, ' f"expected only one"
+            f'Several sections matching "{pattern}" were found, expected only one'
         )
     return all_results[0]
