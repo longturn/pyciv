@@ -157,8 +157,8 @@ The following game parameters are set. Each impacts gameplay in some fashion.
 
 {% if incite_cost.improvement_factor %}
 :strong:`Unit Incite Cost Factors`
-  {{ conf.improvement_factor }} {{ incite_cost.improvement_factor. }}, {{ conf.incite_cost.unit_factor. }},
-  {{ incite_cost.total_factor. }}{% endif %}
+  {{ conf.improvement_factor }} {{ incite_cost.improvement_factor }}, {{ conf.incite_cost.unit_factor }},
+  {{ incite_cost.total_factor }}{% endif %}
 
 {% if combat_rules.tired_attack %}
 :strong:`Tired Attack`
