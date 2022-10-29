@@ -3,12 +3,7 @@ from typeguard import typechecked
 import freeciv.effects
 import re
 
-def section(section_regex):
-    def annotate(cls):
-        cls._section_regex = re.compile(section_regex)
-        setattr(cls, '__section_regex__', re.compile(section_regex))
-        return cls
-    return annotate
+from .secfile.loader import section
 
 @section('datafile')
 @typechecked

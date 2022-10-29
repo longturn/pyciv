@@ -4,16 +4,7 @@ from warnings import warn
 from typeguard import typechecked
 
 from .science import Advance
-
-
-def section(section_regex):
-    def annotate(cls):
-        import re
-
-        cls._section_regex = re.compile(section_regex)
-        return cls
-
-    return annotate
+from .secfile.loader import section
 
 
 def rewrite(rules):

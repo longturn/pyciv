@@ -5,16 +5,7 @@ from typeguard import typechecked
 
 from .effects import Requirement
 from .science import Advance
-
-
-def section(section_regex):
-    def annotate(cls):
-        import re
-
-        cls._section_regex = re.compile(section_regex)
-        return cls
-
-    return annotate
+from .secfile.loader import section
 
 
 @section("building_.+")

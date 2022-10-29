@@ -3,20 +3,12 @@ from typing import List
 
 from typeguard import typechecked
 
+from .secfile.loader import section
+
 
 def rewrite(rules):
     def annotate(cls):
         cls._rewrite_rules = rules
-        return cls
-
-    return annotate
-
-
-def section(section_regex):
-    def annotate(cls):
-        import re
-
-        cls._section_regex = re.compile(section_regex)
         return cls
 
     return annotate
