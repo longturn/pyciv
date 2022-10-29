@@ -7,8 +7,9 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 from markdown import markdown
 from unidecode import unidecode
 
-import freeciv.rulesett as rs
+import freeciv.game as rs
 import freeciv.secfile as sf
+from freeciv.secfile.loader import read_section, read_sections
 from freeciv.buildings import Building
 from freeciv.effects import Effect
 from freeciv.science import Advance
@@ -29,69 +30,6 @@ env = Environment(
     autoescape=select_autoescape(["html", "xml"]),
 )
 env.filters["make_slug"] = make_slug
-
-
-def as_list(value):
-    if type(value) == list:
-        return value
-    elif value == "":
-        return []
-    else:
-        return [value]
-
-
-def read_sections(section_class, sections):
-    result = []
-    for section in sections:
-        if section_class._section_regex.match(section.name):
-            logging.debug(f'Processing section "%s"', section.name)
-            fields = list(
-                filter(lambda name: not name.startswith("_"), dir(section_class))
-            )
-            default_values = {name: getattr(section_class, name) for name in fields}
-            annotations = section_class.__annotations__
-
-            dictionnary = {}
-
-            for name, value in section.items():
-                if (
-                    hasattr(section_class, "_rewrite_rules")
-                    and name in section_class._rewrite_rules
-                ):
-                    name = section_class._rewrite_rules[name]
-
-                if not name in fields and not name in annotations:
-                    raise TypeError(
-                        f'Type {section_class.__name__} has no field called "{name}"'
-                    )
-
-                if name in annotations and type(annotations[name]) == type:
-                    if annotations[name] == list:
-                        dictionnary[name] = as_list(value)
-                        continue
-                    elif annotations[name] == set:
-                        dictionnary[name] = set(as_list(value))
-                        continue
-                    # if type(value) != annotations[name]:
-                    # raise TypeError(f'Expected {annotations[name].__name__} for {section_class.__name__}.{name}, got {type(value).__name__}')
-
-                dictionnary[name] = value
-
-            result.append(section_class(**dictionnary))
-    return result
-
-
-def read_section(section_class, sections):
-    all_results = list(read_sections(section_class, sections))
-    if not all_results:
-        raise ValueError(
-            f'No section matching "{section_class._section_regex}" was found'
-        )
-    if len(all_results) > 1:
-        raise ValueError(
-            f'Several sections matching "{section_class._section_regex}" were found'
-        )
-    return all_results[0]
 
 
 def load(name, path):
