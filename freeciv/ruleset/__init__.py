@@ -16,7 +16,7 @@
 import re
 from dataclasses import dataclass
 
-from pytypes import typechecked
+from typeguard import typechecked
 
 from ..secfile import section
 
