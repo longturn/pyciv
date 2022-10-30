@@ -108,7 +108,8 @@ def _instance_from_value(value, target_class, name=""):
     hints = get_type_hints(target_class)
     unknown = value.keys() - hints.keys()
     if unknown:
-        raise ValueError(f"{target_class.__name__} has no fields called {unknown}")
+        fields = '", "'.join(unknown)
+        raise ValueError(f'Type {target_class.__name__} has no field called "{fields}"')
 
     # Fetch default values
     args = {
@@ -144,12 +145,6 @@ def read_sections(section_class, sections):
 
             if hasattr(section_class, "_rewrite_fn"):
                 section = section_class._rewrite_fn(section)
-
-            for name, value in section.items():
-                if not name in fields and not name in annotations:
-                    raise TypeError(
-                        f'Type {section_class.__name__} has no field called "{name}"'
-                    )
 
             result.append(_instance_from_value(section, section_class))
     return result
