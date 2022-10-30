@@ -265,11 +265,19 @@ class CalendarData:
     start_year: int = 0  # FIXME default?
 
 
+@typechecked
+@dataclass
+class Setting:
+    name: str
+    value: Union[bool, int, str]
+    lock: bool = False
+
+
 @section("settings")
 @typechecked
 @dataclass
 class Settings:
-    set: list[str] = field(default_factory=list)
+    set: list[Setting] = field(default_factory=list)
 
 
 @typechecked
