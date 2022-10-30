@@ -1,54 +1,64 @@
-from dataclasses import dataclass
-from typeguard import typechecked
-import freeciv.effects
 import re
+from dataclasses import dataclass, field
+from typing import List, Union
+
+from typeguard import typechecked
+
+from freeciv.effects import Requirement
 
 from .secfile.loader import section
 
-@section('datafile')
+
+@section("datafile")
 @typechecked
 @dataclass
 class DataFileHeader:
     description: str
     options: str
-    format_version: int # 10 or 20
+    format_version: int  # 10 or 20
 
-@section('about')
+
+@section("about")
 @typechecked
 @dataclass
 class AboutData:
     name: str
-    version: str = ''
-    summary: str = ''
-    description: str = ''
-    capabilities: str = '' # 3.0
+    version: int = -1
+    summary: str = ""
+    description: str = ""
+    capabilities: str = ""  # 3.0
 
-@section('options')
+
+@section("options")
 @typechecked
 @dataclass
 class OptionsData:
     global_init_techs: str
-    global_init_buildings: list
+    global_init_buildings: str
 
-@section('tileset')
+
+@section("tileset")
 @typechecked
 @dataclass
 class TilesetData:
-    preferred: str = ''
+    preferred: str = ""
 
-@section('soundset')
+
+@section("soundset")
 @typechecked
 @dataclass
 class SoundsetData:
-    preferred: str = ''
+    preferred: str = ""
 
-@section('musicset')
+
+@section("musicset")
 @typechecked
 @dataclass
 class MusicsetData:
-    preferred: str = ''
+    preferred: str = ""
 
-@section('civstyle')
+
+@section("civstyle")
 @typechecked
 @dataclass
 class CivStyleData:
@@ -76,7 +86,8 @@ class CivStyleData:
     gold_upkeep_style: str
     output_granularity: int
 
-@section('illness')
+
+@section("illness")
 @typechecked
 @dataclass
 class IllnessData:
@@ -86,7 +97,8 @@ class IllnessData:
     illness_trade_infection: int
     illness_pollution_factor: int
 
-@section('incite_cost')
+
+@section("incite_cost")
 @typechecked
 @dataclass
 class InciteCostData:
@@ -94,7 +106,8 @@ class InciteCostData:
     unit_factor: int
     total_factor: int
 
-@section('combat_rules')
+
+@section("combat_rules")
 @typechecked
 @dataclass
 class CombatRulesData:
@@ -103,14 +116,16 @@ class CombatRulesData:
     nuke_pop_loss_pct: int
     nuke_defender_survival_chance_pct: int
 
-@section('auto_attack')
+
+@section("auto_attack")
 @typechecked
 @dataclass
 class AutoAttackData:
-    attack_actions: list
-    #if_attacker: List[Requirement] = None
+    attack_actions: list[str]
+    if_attacker: list[Requirement] = field(default_factory=list)
 
-@section('actions')
+
+@section("actions")
 @typechecked
 @dataclass
 class ActionsData:
@@ -165,7 +180,8 @@ class ActionsData:
     ui_name_transport_embark: str
     quiet_actions: str
 
-@section('borders')
+
+@section("borders")
 @typechecked
 @dataclass
 class BordersData:
@@ -173,7 +189,8 @@ class BordersData:
     size_effect: int
     radius_sq_city_permanent: int
 
-@section('research')
+
+@section("research")
 @typechecked
 @dataclass
 class ResearchData:
@@ -183,7 +200,8 @@ class ResearchData:
     tech_upkeep_style: str
     free_tech_method: str
 
-@section('culture')
+
+@section("culture")
 @typechecked
 @dataclass
 class CultureData:
@@ -192,7 +210,8 @@ class CultureData:
     history_interest_pml: int
     migration_pml: int
 
-@section('calendar')
+
+@section("calendar")
 @typechecked
 @dataclass
 class CalendarData:
@@ -203,7 +222,9 @@ class CalendarData:
     positive_label: str
     negative_label: str
 
-#TODO: Figure out how to pull in the [settings] set = {} block
+
+# TODO: Figure out how to pull in the [settings] set = {} block
+
 
 @typechecked
 class Ruleset:

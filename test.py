@@ -9,12 +9,13 @@ from unidecode import unidecode
 
 import freeciv.game as rs
 import freeciv.secfile as sf
-from freeciv.secfile.loader import read_section, read_sections
 from freeciv.buildings import Building
 from freeciv.effects import Effect
 from freeciv.science import Advance
+from freeciv.secfile.loader import read_section, read_sections
 from freeciv.units import UnitClass, UnitType, load_veteran_levels
 
+# logging.basicConfig(level=logging.DEBUG)
 logging.basicConfig(level=logging.INFO)
 
 
@@ -114,6 +115,7 @@ def process_ruleset(path, ruleset):
             if req in all_advances:
                 reqs.add(all_advances[req])
             else:
+                print(unit_type.name, unit_type.tech_req)
                 raise ValueError(
                     'Unit type "%s" references unknown advance "%s"'
                     % (unit_type.name, req.name)

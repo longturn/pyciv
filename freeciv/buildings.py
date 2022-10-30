@@ -5,9 +5,22 @@ from typeguard import typechecked
 
 from .effects import Requirement
 from .science import Advance
-from .secfile.loader import section
+from .secfile.loader import rewrite, section
 
 
+def building_compat(values):
+    obsolete_by = values["obsolete_by"]
+    if type(obsolete_by) == str:
+        del values["obsolete_by"]
+        if obsolete_by != "None":
+            values["obsolete_by"] = Requirement(
+                type="Tech", name=obsolete_by, range="Player"
+            )
+
+    return values
+
+
+@rewrite(building_compat)
 @section("building_.+")
 @typechecked
 @dataclass
@@ -18,14 +31,14 @@ class Building:
     build_cost: int
     upkeep: int
     sabotage: int
-    reqs: list = field(default_factory=list)  # Requirements
-    obsolete_by: list = field(default_factory=list)  # Requirements
+    reqs: list[Requirement] = field(default_factory=list)  # Requirements
+    obsolete_by: list[Requirement] = field(default_factory=list)  # Requirements
     rule_name: str = None
     graphic_alt: str = None
-    helptext: str = ""
+    helptext: list[str] = field(default_factory=list)
     sound: str = None
     sound_alt: str = None
-    flags: set = field(default_factory=set)
+    flags: set[str] = field(default_factory=set)
 
     # 2.3
     replaced_by: object = None
@@ -42,20 +55,6 @@ class Building:
 
         if self.reqs == ["None"]:
             self.reqs = []
-        else:
-            self.reqs = [Requirement(**req) for req in self.reqs]
-
-        if self.obsolete_by == ["None"]:
-            self.obsolete_by = []
-        else:
-            for i, req in enumerate(self.obsolete_by):
-                if type(req) == str:
-                    # Freeciv 2.5 and earlier.
-                    self.obsolete_by[i] = Requirement(
-                        type="Tech", name=req, range="Player"
-                    )
-                else:
-                    self.obsolete_by[i] = Requirement(**req)
 
     def __hash__(self):
         return self.name.__hash__()

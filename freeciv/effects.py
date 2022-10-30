@@ -1,17 +1,8 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from typeguard import typechecked
 
-from .secfile.loader import section
-
-
-def rewrite(rules):
-    def annotate(cls):
-        cls._rewrite_rules = rules
-        return cls
-
-    return annotate
+from .secfile.loader import rename, section
 
 
 # FIXME Used in other places, move?
@@ -45,6 +36,7 @@ class Requirement:
         del self.negated
 
 
+@rename(name="type")
 @section("effect_.+")
 @typechecked
 @dataclass
@@ -53,19 +45,15 @@ class Effect:
     multiplier: str = None
     type: str = None
     name: str = None
-    reqs: List[Requirement] = field(default_factory=list)
-    nreqs: List[Requirement] = None
+    reqs: list[Requirement] = field(default_factory=list)
+    nreqs: list[Requirement] = None
 
     def __post_init__(self):
-        self.reqs = [Requirement(**req) for req in self.reqs]
-
         if self.type is None:
-            if not self.name is None:  # 2.3, 2.4?
-                self.type = self.name
-                del self.name
-            else:
-                raise ValueError(f"Effect has no type")
+            raise ValueError(f"Effect has no type")
 
         if not self.nreqs is None:
-            self.reqs += [Requirement(**req, present=False) for req in self.nreqs]
+            for nreq in self.nreqs:
+                nreq.present = False
+                self.reqs.append(nreq)
         del self.nreqs

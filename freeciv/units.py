@@ -3,30 +3,10 @@ from warnings import warn
 
 from typeguard import typechecked
 
+from .buildings import Building
+from .effects import Requirement
 from .science import Advance
-from .secfile.loader import section
-
-
-def rewrite(rules):
-    def annotate(cls):
-        cls._rewrite_rules = rules
-        return cls
-
-    return annotate
-
-
-# TODO should be moved to a more general parsing code
-def as_list(value):
-    """
-    If value is a list, returns it. Otherwise return a list with value as its
-    only element. This is required because the spec file format doesn't
-    distinguish between scalars and lists of size 1.
-    """
-    if type(value) == list:
-        return value
-    else:
-        return [value]
-
+from .secfile.loader import NamedReference, rename, section
 
 KNOWN_UNIT_CLASS_FLAGS = {
     "TerrainSpeed",
@@ -51,6 +31,12 @@ KNOWN_UNIT_CLASS_FLAGS = {
     # 3.0 stuff
     "Ground",
     "Flying",
+    # New stuff
+    "BorderPolice",
+    "Expellable",
+    "HeavyWeight",
+    "LightWeight",
+    "MediumWeight",
 }
 
 
@@ -72,13 +58,6 @@ def load_veteran_levels(
     veteran_power_fact,
     veteran_move_bonus,
 ):
-    # Turn them all into lists
-    veteran_names = as_list(veteran_names)
-    veteran_raise_chance = as_list(veteran_raise_chance)
-    veteran_work_raise_chance = as_list(veteran_work_raise_chance)
-    veteran_power_fact = as_list(veteran_power_fact)
-    veteran_move_bonus = as_list(veteran_move_bonus)
-
     if any(
         (
             len(veteran_names) != len(veteran_raise_chance),
@@ -116,8 +95,8 @@ class UnitClass:
     non_native_def_pct: int = 100
     rule_name: str = None
     hut_behavior: str = "Normal"
-    flags: set = field(default_factory=set)
-    helptext: str = ""  # 3.0
+    flags: set[str] = field(default_factory=set)
+    helptext: list[str] = field(default_factory=list)  # 3.0
 
     # Pre-2.5 stuff
     move_type: str = None
@@ -143,14 +122,14 @@ class UnitClass:
         return self.name < other.name
 
 
-@rewrite({"class": "uclass"})
+@rename(**{"class": "uclass"})
 @section("unit_.+")
 @typechecked
 @dataclass
 class UnitType:
     name: str
-    uclass: UnitClass
-    tech_req: set
+    uclass: NamedReference(UnitClass)
+    tech_req: set[NamedReference(Advance)]
     graphic: str
     graphic_alt: str
     sound_move: str
@@ -171,29 +150,28 @@ class UnitType:
     uk_shield: int
     uk_food: int
     uk_gold: int
-    obsolete_by: "UnitType" = None
-    impr_req: "Improvement" = None
-    gov_req: "Government" = None
-    cargo: set = field(default_factory=set)
-    targets: set = field(default_factory=set)
-    embarks: set = field(default_factory=set)
-    disembarks: set = field(default_factory=set)
-    bonuses: list = field(default_factory=list)
-    flags: set = field(default_factory=set)
-    roles: set = field(default_factory=set)
-    helptext: str = None
-    gov_req: "Government" = None
+    obsolete_by: NamedReference("UnitType") = None
+    impr_req: NamedReference(Building) = None
+    cargo: set[NamedReference(UnitClass)] = field(default_factory=set)
+    targets: set[NamedReference(UnitClass)] = field(default_factory=set)
+    embarks: set[NamedReference(UnitClass)] = field(default_factory=set)
+    disembarks: set[NamedReference(UnitClass)] = field(default_factory=set)
+    bonuses: list[dict] = field(default_factory=list)  # TODO NamedReference(Bonus)
+    flags: set[str] = field(default_factory=set)
+    roles: set[str] = field(default_factory=set)
+    helptext: list[str] = field(default_factory=list)
+    gov_req: str = None  # TODO NamedReference(Government)
     rule_name: str = None
 
-    convert_to: "UnitType" = None
+    convert_to: NamedReference("UnitType") = None
     convert_time: int = None
 
-    veteran_names: list = None
-    veteran_raise_chance: list = None
-    veteran_work_raise_chance: list = None
-    veteran_power_fact: list = None
-    veteran_move_bonus: list = None
-    veteran_levels: list = None  # Cannot be set from outside
+    veteran_names: list[str] = None
+    veteran_raise_chance: list[int] = None
+    veteran_work_raise_chance: list[int] = None
+    veteran_power_fact: list[int] = None
+    veteran_move_bonus: list[int] = None
+    veteran_levels: list[str] = None  # Cannot be set from outside
 
     paratroopers_range: int = None
     paratroopers_mr_req: int = None
@@ -214,24 +192,11 @@ class UnitType:
         if type(self.helptext) is list:
             self.helptext = "\n\n".join(self.helptext)
 
-        if type(self.tech_req) == str:
-            self.tech_req = {self.tech_req}
-        else:
-            self.tech_req = set(self.tech_req)
         if "None" in self.tech_req:
             self.tech_req.remove("None")
 
         if self.obsolete_by == "None":
             self.obsolete_by = None
-
-        if type(self.flags) is str and self.flags:
-            self.flags = {self.flags}
-
-        if type(self.roles) is str and self.roles:
-            self.roles = {self.roles}
-
-        if type(self.cargo) is str and self.cargo:
-            self.cargo = {self.cargo}
 
         if self.veteran_levels:
             raise TypeError("veteran_levels cannot be set externally")

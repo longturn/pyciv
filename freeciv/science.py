@@ -3,7 +3,7 @@ from warnings import warn
 
 from typeguard import typechecked
 
-from .secfile.loader import section
+from .secfile.loader import NamedReference, section
 
 
 @section("advance_.+")
@@ -11,15 +11,15 @@ from .secfile.loader import section
 @dataclass
 class Advance:
     name: str
-    req1: "Advance"
-    req2: "Advance"
+    req1: NamedReference("Advance")
+    req2: NamedReference("Advance")
     graphic: str = None
     rule_name: str = None
-    root_req: "Advance" = None
+    root_req: NamedReference("Advance") = None
     graphic_alt: str = None
-    helptext: str = ""
+    helptext: list[str] = field(default_factory=list)
     bonus_message: str = None
-    flags: set = field(default_factory=set)
+    flags: set[str] = field(default_factory=set)
     cost: int = None
 
     def __post_init__(self):

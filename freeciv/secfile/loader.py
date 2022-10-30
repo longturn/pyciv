@@ -15,7 +15,34 @@
 
 import logging
 import re
-import typing
+from typing import NewType, TypeVar, Union, get_args, get_origin, get_type_hints
+
+from typeguard import check_type
+
+
+def NamedReference(T):
+    ref_type = NewType("NamedReference", Union[str, T])
+    ref_type.wrapped = T
+    return ref_type
+
+
+def rewrite(fn):
+    def annotate(cls):
+        cls._rewrite_fn = fn
+        return cls
+
+    return annotate
+
+
+def rename(**kwargs):
+    def rename_fn(values):
+        for old, new in kwargs.items():
+            if old in values:
+                values[new] = values[old]
+                del values[old]
+        return values
+
+    return rewrite(rename_fn)
 
 
 def section(section_regex):
@@ -27,7 +54,7 @@ def section(section_regex):
     """
 
     def annotate(cls):
-        setattr(cls, "__section_regex__", re.compile(section_regex))
+        setattr(cls, "_section_regex", re.compile(section_regex))
         return cls
 
     return annotate
@@ -50,24 +77,37 @@ def _list_from_value(value, target_content_type=None):
         return [_instance_from_value(value, target_content_type)]
 
 
-def _instance_from_value(value, target_class):
+def _instance_from_value(value, target_class, name=""):
     # A few supported "primitive" types
-    if target_class in (bool, float, int, list, set, str):
+    if target_class in (bool, dict, float, int, str):
         return target_class(value)
+    elif hasattr(target_class, "wrapped"):
+        # NamedReference
+        return str(value)
     elif hasattr(target_class, "__origin__"):
         # Generic class
         origin, args = get_origin(target_class), get_args(target_class)
-        if origin == list:  # List[X]
-            return [instance_from_value(args[0], x) for x in value]
+        if origin == NamedReference:
+            # Will be replaced later
+            return str(value)
+        elif origin == list:  # List[X]
+            return _list_from_value(value, args[0])
         elif origin == set:  # Set[X]
-            return {instance_from_value(args[0], x) for x in value}
+            return set(_list_from_value(value, args[0]))
         else:
             raise ValueError(f"Unsupported type hint {target_class}")
+
+    # Maybe we're already good
+    try:  # try/catch for control flow :(
+        check_type(name, value, target_class)
+        return value
+    except TypeError:
+        ...
 
     # "General" case. Convert arguments to the requested types
 
     # Check for unknown keys
-    hints = typing.get_type_hints(target_class)
+    hints = get_type_hints(target_class)
     unknown = value.keys() - hints.keys()
     if unknown:
         raise ValueError(f"{target_class.__name__} has no fields called {unknown}")
@@ -81,19 +121,22 @@ def _instance_from_value(value, target_class):
 
     # Insert provided arguments
     args.update(
-        {name: _instance_from_value(val, hints[name]) for name, val in value.items()}
+        {
+            name: _instance_from_value(val, hints[name], name)
+            for name, val in value.items()
+        }
     )
 
     return target_class(**args)
 
 
 def read_sections(section_class, sections):
-    if not hasattr(section_class, "__section_regex__"):
+    if not hasattr(section_class, "_section_regex"):
         raise TypeError("Cannot find the section regex")
 
     result = []
     for section in sections:
-        if section_class.__section_regex__.match(section.name):
+        if section_class._section_regex.match(section.name):
             logging.debug(f'Processing section "%s"', section.name)
             fields = list(
                 filter(lambda name: not name.startswith("_"), dir(section_class))
@@ -101,29 +144,22 @@ def read_sections(section_class, sections):
             default_values = {name: getattr(section_class, name) for name in fields}
             annotations = section_class.__annotations__
 
-            dictionary = {}
+            if hasattr(section_class, "_rewrite_fn"):
+                section = section_class._rewrite_fn(section)
 
             for name, value in section.items():
-                if (
-                    hasattr(section_class, "__rewrite_rules__")
-                    and name in section_class.__rewrite_rules__
-                ):
-                    name = section_class.__rewrite_rules__[name]
-
                 if not name in fields and not name in annotations:
                     raise TypeError(
                         f'Type {section_class.__name__} has no field called "{name}"'
                     )
 
-                dictionary[name] = value
-
-            result.append(_instance_from_value(dictionary, section_class))
+            result.append(_instance_from_value(section, section_class))
     return result
 
 
 def read_section(section_class, sections):
     all_results = list(read_sections(section_class, sections))
-    pattern = section_class.__section_regex__.pattern
+    pattern = section_class._section_regex.pattern
     if not all_results:
         raise ValueError(f'No section matching "{pattern}" was found')
     if len(all_results) > 1:
