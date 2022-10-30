@@ -94,8 +94,6 @@ def _instance_from_value(value, target_class, name=""):
             return _list_from_value(value, args[0])
         elif origin == set:  # Set[X]
             return set(_list_from_value(value, args[0]))
-        else:
-            raise ValueError(f"Unsupported type hint {target_class}")
 
     # Maybe we're already good
     try:  # try/catch for control flow :(

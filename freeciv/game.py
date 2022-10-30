@@ -1,6 +1,6 @@
 import re
 from dataclasses import dataclass, field
-from typing import List, Union
+from typing import Literal, Union
 
 from typeguard import typechecked
 
@@ -27,6 +27,7 @@ class AboutData:
     summary: str = ""
     description: str = ""
     capabilities: str = ""  # 3.0
+    alt_dir: str = ""  # FIXME default?
 
 
 @section("options")
@@ -62,7 +63,7 @@ class MusicsetData:
 @typechecked
 @dataclass
 class CivStyleData:
-    granary_food_ini: int
+    granary_food_ini: list[int]
     granary_food_inc: int
     min_city_center_food: int
     min_city_center_shield: int
@@ -77,7 +78,6 @@ class CivStyleData:
     tech_trade_loss_allow_holes: bool
     tech_parasite_allow_holes: bool
     tech_loss_allow_holes: bool
-    initial_diplomatic_state: str
     civil_war_enabled: bool
     civil_war_bonus_celebrating: int
     civil_war_bonus_unhappy: int
@@ -85,6 +85,12 @@ class CivStyleData:
     paradrop_to_transport: bool
     gold_upkeep_style: str
     output_granularity: int
+    initial_diplomatic_state: str = "War"
+    base_pollution: int = 0  # FIXME default?
+    happy_cost: int = 0  # FIXME default?
+    food_cost: int = 0  # FIXME default?
+    base_bribe_cost: int = 0  # FIXME default?
+    ransom_gold: int = 0  # FIXME default?
 
 
 @section("illness")
@@ -105,6 +111,7 @@ class InciteCostData:
     improvement_factor: int
     unit_factor: int
     total_factor: int
+    base_incite_cost: int = 0  # FIXME default?
 
 
 @section("combat_rules")
@@ -125,6 +132,9 @@ class AutoAttackData:
     if_attacker: list[Requirement] = field(default_factory=list)
 
 
+ActionRange = Union[int, Literal["unlimited"]]
+
+
 @section("actions")
 @typechecked
 @dataclass
@@ -133,52 +143,82 @@ class ActionsData:
     force_capture_units: bool
     force_bombard: bool
     force_explode_nuclear: bool
-    poison_empties_food_stock: bool
-    steal_maps_reveals_all_cities: bool
-    help_wonder_max_range: int
-    recycle_unit_max_range: int
-    bombard_max_range: int
-    bombard_2_max_range: int
-    bombard_3_max_range: int
-    explode_nuclear_max_range: int
-    nuke_city_max_range: int
-    nuke_units_max_range: int
-    ui_name_bribe_unit: str
-    ui_name_sabotage_city: str
-    ui_name_incite_city: str
-    ui_name_establish_embassy_stay: str
-    ui_name_steal_tech: str
-    ui_name_investigate_city_spend_unit: str
-    ui_name_establish_trade_route: str
-    ui_name_enter_marketplace: str
-    ui_name_help_wonder: str
-    ui_name_recycle_unit: str
-    ui_name_disband_unit: str
-    ui_name_found_city: str
-    ui_name_join_city: str
-    ui_name_explode_nuclear: str
-    ui_name_nuke_city: str
-    ui_name_nuke_units: str
-    ui_name_home_city: str
-    ui_name_attack: str
-    ui_name_suicide_attack: str
-    ui_name_conquer_city: str
-    ui_name_transform_terrain: str
-    ui_name_cultivate: str
-    ui_name_plant: str
-    ui_name_pillage: str
-    ui_name_clean_pollution: str
-    ui_name_fortify: str
-    ui_name_road: str
-    ui_name_build_base: str
-    ui_name_build_mine: str
-    ui_name_irrigate: str
-    ui_name_transport_alight: str
-    ui_name_transport_board: str
-    ui_name_transport_unload: str
-    ui_name_transport_disembark: str
-    ui_name_transport_embark: str
-    quiet_actions: str
+    help_wonder_max_range: ActionRange
+    recycle_unit_max_range: ActionRange
+    bombard_max_range: ActionRange
+    bombard_2_max_range: ActionRange
+    bombard_3_max_range: ActionRange
+    explode_nuclear_max_range: ActionRange
+    nuke_city_max_range: ActionRange
+    nuke_units_max_range: ActionRange
+    ui_name_bribe_unit: str = ""  # FIXME default?
+    ui_name_sabotage_city: str = ""  # FIXME default?
+    ui_name_incite_city: str = ""  # FIXME default?
+    ui_name_establish_embassy_stay: str = ""  # FIXME default?
+    ui_name_steal_tech: str = ""  # FIXME default?
+    ui_name_investigate_city_spend_unit: str = ""  # FIXME default?
+    ui_name_establish_trade_route: str = ""  # FIXME default?
+    ui_name_enter_marketplace: str = ""  # FIXME default?
+    ui_name_help_wonder: str = ""  # FIXME default?
+    ui_name_recycle_unit: str = ""  # FIXME default?
+    ui_name_disband_unit: str = ""  # FIXME default?
+    ui_name_found_city: str = ""  # FIXME default?
+    ui_name_join_city: str = ""  # FIXME default?
+    ui_name_explode_nuclear: str = ""  # FIXME default?
+    ui_name_nuke_city: str = ""  # FIXME default?
+    ui_name_nuke_units: str = ""  # FIXME default?
+    ui_name_home_city: str = ""  # FIXME default?
+    ui_name_attack: str = ""  # FIXME default?
+    ui_name_suicide_attack: str = ""  # FIXME default?
+    ui_name_conquer_city: str = ""  # FIXME default?
+    ui_name_transform_terrain: str = ""  # FIXME default?
+    ui_name_cultivate: str = ""  # FIXME default?
+    ui_name_plant: str = ""  # FIXME default?
+    ui_name_pillage: str = ""  # FIXME default?
+    ui_name_clean_pollution: str = ""  # FIXME default?
+    ui_name_fortify: str = ""  # FIXME default?
+    ui_name_road: str = ""  # FIXME default?
+    ui_name_build_base: str = ""  # FIXME default?
+    ui_name_build_mine: str = ""  # FIXME default?
+    ui_name_irrigate: str = ""  # FIXME default?
+    ui_name_transport_alight: str = ""  # FIXME default?
+    ui_name_transport_board: str = ""  # FIXME default?
+    ui_name_transport_unload: str = ""  # FIXME default?
+    ui_name_transport_disembark: str = ""  # FIXME default?
+    ui_name_transport_embark: str = ""  # FIXME default?
+    ui_name_poison_city_escape: str = ""  # FIXME default?
+    ui_name_suitcase_nuke_escape: str = ""  # FIXME default?
+    ui_name_sabotage_unit_escape: str = ""  # FIXME default?
+    ui_name_sabotage_city_escape: str = ""  # FIXME default?
+    ui_name_targeted_sabotage_city_escape: str = ""  # FIXME default?
+    ui_name_sabotage_city_production_escape: str = ""  # FIXME default?
+    ui_name_incite_city_escape: str = ""  # FIXME default?
+    ui_name_establish_embassy: str = ""  # FIXME default?
+    ui_name_steal_tech_escape: str = ""  # FIXME default?
+    ui_name_targeted_steal_tech_escape: str = ""  # FIXME default?
+    ui_name_investigate_city: str = ""  # FIXME default?
+    ui_name_upgrade_unit: str = ""  # FIXME default?
+    ui_name_paradrop_unit: str = ""  # FIXME default?
+    ui_name_airlift_unit: str = ""  # FIXME default?
+    ui_name_capture_units: str = ""  # FIXME default?
+    ui_name_bombard: str = ""  # FIXME default?
+    ui_name_conquer_city_2: str = ""  # FIXME default?
+    ui_name_clean_fallout: str = ""  # FIXME default?
+    ui_name_transport_disembark_2: str = ""  # FIXME default?
+    ui_name_steal_maps_escape: str = ""  # FIXME default?
+    ui_name_destroy_city: str = ""  # FIXME default?
+    ui_name_spy_attack: str = ""  # FIXME default?
+    ui_name_spread_plague: str = ""  # FIXME default?
+    ui_name_user_action_1: str = ""  # FIXME default?
+    user_action_1_target_kind: str = "" # FIXME default?
+    user_action_1_min_range: int = 0 # FIXME default?
+    user_action_1_max_range: ActionRange = "unlimited" # FIXME default?
+    user_action_1_actor_consuming_always: bool = True # FIXME default?
+    spread_plague_actor_consuming_always: bool = False # FIXME default?
+    airlift_max_range: ActionRange = "unlimited"  # FIXME correct?
+    quiet_actions: list[str] = field(default_factory=list)
+    poison_empties_food_stock: bool = True  # FIXME correct?
+    steal_maps_reveals_all_cities: bool = True # FIXME correct?
 
 
 @section("borders")
@@ -199,6 +239,7 @@ class ResearchData:
     tech_leakage: str
     tech_upkeep_style: str
     free_tech_method: str
+    tech_upkeep_divider: int = 0  # FIXME default?
 
 
 @section("culture")
@@ -217,13 +258,18 @@ class CultureData:
 class CalendarData:
     skip_year_0: bool
     fragments: int
-    fragment_name0: str
-    fragment_name1: str
     positive_label: str
     negative_label: str
+    fragment_name0: str = None
+    fragment_name1: str = None
+    start_year: int = 0  # FIXME default?
 
 
-# TODO: Figure out how to pull in the [settings] set = {} block
+@section("settings")
+@typechecked
+@dataclass
+class Settings:
+    set: list[str] = field(default_factory=list)
 
 
 @typechecked
