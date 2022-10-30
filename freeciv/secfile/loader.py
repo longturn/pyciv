@@ -87,10 +87,7 @@ def _instance_from_value(value, target_class, name=""):
     elif hasattr(target_class, "__origin__"):
         # Generic class
         origin, args = get_origin(target_class), get_args(target_class)
-        if origin == NamedReference:
-            # Will be replaced later
-            return str(value)
-        elif origin == list:  # List[X]
+        if origin == list:  # List[X]
             return _list_from_value(value, args[0])
         elif origin == set:  # Set[X]
             return set(_list_from_value(value, args[0]))
