@@ -292,3 +292,10 @@ class SpecParser(SpecLexer):
         Returns a list of all sections.
         """
         return [section for section in self]
+
+    @classmethod
+    def load(cls, path, freeciv_path):
+        """
+        Loads all sections from a file.
+        """
+        return cls(path, freeciv_path).get_all()
