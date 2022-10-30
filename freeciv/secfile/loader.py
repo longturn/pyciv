@@ -147,13 +147,20 @@ def read_sections(section_class, sections):
     return result
 
 
-def read_section(section_class, sections):
+def read_section(section_class, sections, *, missing_ok=False):
     all_results = list(read_sections(section_class, sections))
     pattern = section_class._section_regex.pattern
     if not all_results:
-        raise ValueError(f'No section matching "{pattern}" was found')
+        if missing_ok:
+            return None
+        else:
+            raise ValueError(f'No section matching "{pattern}" was found')
     if len(all_results) > 1:
         raise ValueError(
             f'Several sections matching "{pattern}" were found, expected only one'
         )
     return all_results[0]
+
+
+def read_named_sections(section_class, sections):
+    return {obj.name: obj for obj in read_sections(section_class, sections)}
