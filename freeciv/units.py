@@ -6,7 +6,7 @@ from typeguard import typechecked
 from .buildings import Building
 from .effects import Requirement
 from .science import Advance
-from .secfile.loader import NamedReference, rename, section
+from .secfile.loader import NamedReference, read_named_sections, rename, section
 
 KNOWN_UNIT_CLASS_FLAGS = {
     "TerrainSpeed",
@@ -214,3 +214,15 @@ class UnitType:
 
     def __lt__(self, other):
         return self.name < other.name
+
+
+class UnitsSettings:
+    def __init__(self, sections):
+        self.unit_classes = read_named_sections(UnitClass, sections)
+        self.unit_types = read_named_sections(UnitType, sections)
+
+        for section in sections:
+            if section.name == "veteran_system":
+                self.veteran_system = load_veteran_levels(**section)
+        if not self.veteran_system:
+            raise ValueError("The [veteran_system] section could not be found")

@@ -5,7 +5,7 @@ from typeguard import typechecked
 
 from .effects import Requirement
 from .science import Advance
-from .secfile.loader import rewrite, section
+from .secfile.loader import read_named_sections, rewrite, section
 
 
 def building_compat(values):
@@ -61,3 +61,8 @@ class Building:
 
     def __lt__(self, other):
         return self.name < other.name
+
+
+class BuildingsSettings:
+    def __init__(self, sections):
+        self.buildings = read_named_sections(Building, sections)

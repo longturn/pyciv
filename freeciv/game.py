@@ -6,7 +6,7 @@ from typeguard import typechecked
 
 from freeciv.effects import Requirement
 
-from .secfile.loader import section
+from .secfile.loader import read_section, section
 
 
 @section("datafile")
@@ -297,6 +297,26 @@ class Setting:
 @dataclass
 class Settings:
     set: list[Setting] = field(default_factory=list)
+
+
+class GameSettings:
+    def __init__(self, sections):
+        self.about = read_section(AboutData, sections)
+        self.actions = read_section(ActionsData, sections, missing_ok=True)
+        self.auto_attack = read_section(AutoAttackData, sections, missing_ok=True)
+        self.borders = read_section(BordersData, sections)
+        self.calendar = read_section(CalendarData, sections)
+        self.civ_style = read_section(CivStyleData, sections)
+        self.combat_rules = read_section(CombatRulesData, sections)
+        self.culture = read_section(CultureData, sections, missing_ok=True)
+        self.illness = read_section(IllnessData, sections)
+        self.incite_cost = read_section(InciteCostData, sections)
+        self.musicset = read_section(MusicsetData, sections, missing_ok=True)
+        self.options = read_section(OptionsData, sections)
+        self.research = read_section(ResearchData, sections)
+        self.settings = read_section(Settings, sections)
+        self.soundset = read_section(SoundsetData, sections, missing_ok=True)
+        self.tileset = read_section(TilesetData, sections, missing_ok=True)
 
 
 @typechecked

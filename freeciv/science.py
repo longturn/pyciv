@@ -3,7 +3,7 @@ from warnings import warn
 
 from typeguard import typechecked
 
-from .secfile.loader import NamedReference, section
+from .secfile.loader import NamedReference, read_named_sections, section
 
 
 @section("advance_.+")
@@ -48,3 +48,8 @@ class Advance:
     @property
     def reqs(self):
         return filter(lambda req: not req is None, (self.req1, self.req2))
+
+
+class ScienceSettings:
+    def __init__(self, sections):
+        self.advances = read_named_sections(Advance, sections)

@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 from typeguard import typechecked
 
-from .secfile.loader import rename, section
+from .secfile.loader import read_sections, rename, section
 
 
 # FIXME Used in other places, move?
@@ -57,3 +57,7 @@ class Effect:
                 nreq.present = False
                 self.reqs.append(nreq)
         del self.nreqs
+
+
+def EffectsSettings(sections):
+    return read_sections(Effect, sections)
