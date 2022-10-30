@@ -22,7 +22,7 @@ from typeguard import check_type
 
 def NamedReference(T):
     ref_type = NewType("NamedReference", Union[str, T])
-    ref_type.wrapped = T
+    ref_type.wrapped = T.__name__ if type(T) == type else T
     return ref_type
 
 
