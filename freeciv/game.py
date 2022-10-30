@@ -210,15 +210,15 @@ class ActionsData:
     ui_name_spy_attack: str = ""  # FIXME default?
     ui_name_spread_plague: str = ""  # FIXME default?
     ui_name_user_action_1: str = ""  # FIXME default?
-    user_action_1_target_kind: str = "" # FIXME default?
-    user_action_1_min_range: int = 0 # FIXME default?
-    user_action_1_max_range: ActionRange = "unlimited" # FIXME default?
-    user_action_1_actor_consuming_always: bool = True # FIXME default?
-    spread_plague_actor_consuming_always: bool = False # FIXME default?
+    user_action_1_target_kind: str = ""  # FIXME default?
+    user_action_1_min_range: int = 0  # FIXME default?
+    user_action_1_max_range: ActionRange = "unlimited"  # FIXME default?
+    user_action_1_actor_consuming_always: bool = True  # FIXME default?
+    spread_plague_actor_consuming_always: bool = False  # FIXME default?
     airlift_max_range: ActionRange = "unlimited"  # FIXME correct?
     quiet_actions: list[str] = field(default_factory=list)
     poison_empties_food_stock: bool = True  # FIXME correct?
-    steal_maps_reveals_all_cities: bool = True # FIXME correct?
+    steal_maps_reveals_all_cities: bool = True  # FIXME correct?
 
 
 @section("borders")

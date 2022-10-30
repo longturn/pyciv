@@ -6,10 +6,10 @@
 # Version string
 __version__ = "0.2"
 
-import sys
-import os
-import logging
 import configparser
+import logging
+import os
+import sys
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 
@@ -20,18 +20,20 @@ from freeciv.secfile.loader import read_section, read_sections
 
 logging.basicConfig(level=logging.INFO)
 
+
 def make_slug(name):
     name = unidecode(name).lower()
     name = name.replace(" ", "_").replace("-", "_")
     name = re.sub("[^a-z0-9_]", "", name)
     return name
 
-#FIXME: Adding this breaks the ability to read the ruleset files
+
+# FIXME: Adding this breaks the ability to read the ruleset files
 env = Environment(
     loader=PackageLoader("sphinx_fc21_manuals", "templates"),
-    #autoescape=select_autoescape(["html", "xml"]),
+    # autoescape=select_autoescape(["html", "xml"]),
 )
-#env.filters["make_slug"] = make_slug
+# env.filters["make_slug"] = make_slug
 
 
 def load(name, path):
@@ -60,11 +62,14 @@ def process_ruleset(path, ruleset):
     culture = read_section(game.CultureData, game_sections)
     calendar = read_section(game.CalendarData, game_sections)
     settings = read_section(game.Settings, game_sections)
+    print(settings)
 
     logging.info(f"Writing manual for {ruleset}...")
 
-    os.makedirs(file_locations.get("conf.fc21_rst_output")+"/%s/" % ruleset, exist_ok=True)
-    #template = env.get_template("index.rst")
+    os.makedirs(
+        file_locations.get("conf.fc21_rst_output") + "/%s/" % ruleset, exist_ok=True
+    )
+    # template = env.get_template("index.rst")
 
 
 def get_config(conf, section):
@@ -78,8 +83,10 @@ def get_config(conf, section):
 
     return options_dict
 
+
 # global variable
 file_locations = get_config("conf.ini", "MAIN")
+
 
 def main():
     """
@@ -89,5 +96,6 @@ def main():
     print(f"Welcome to {sys.argv[0]} v{__version__}\n")
     print(file_locations.get("conf.fc21_datadir_path"))
     process_ruleset([file_locations.get("conf.fc21_datadir_path")], "civ1")
+
 
 main()
