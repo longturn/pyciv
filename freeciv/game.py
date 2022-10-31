@@ -24,9 +24,11 @@ class DataFileHeader:
 class AboutData:
     name: str
     version: int = -1
+    version_help_rst: str = ". If the value is ``-1``, then there is no version for this ruleset."
     summary: str = ""
     description: str = ""
     capabilities: str = ""  # 3.0
+    capabilities_help_rst: str = "This ruleset has the following scenario capabilities: "
     alt_dir: str = ""  # FIXME default?
 
 
@@ -34,8 +36,10 @@ class AboutData:
 @typechecked
 @dataclass
 class OptionsData:
-    global_init_techs: str
-    global_init_buildings: str
+    global_init_techs: str = ""
+    global_init_techs_help_rst: str = "This ruleset starts a player with the folliwing technology advances at game start: "
+    global_init_buildings: str = ""
+    global_init_buildings_help_rst: str = "This ruleset starts a player with the following city improvements (buildings) at game start: "
 
 
 @section("tileset")
@@ -43,6 +47,7 @@ class OptionsData:
 @dataclass
 class TilesetData:
     preferred: str = ""
+    preferred_help_rst = "This ruleset has the following preferred tileset: "
 
 
 @section("soundset")
@@ -50,6 +55,7 @@ class TilesetData:
 @dataclass
 class SoundsetData:
     preferred: str = ""
+    preferred_help_rst = "This ruleset has the following preferred soundset: "
 
 
 @section("musicset")
@@ -57,6 +63,7 @@ class SoundsetData:
 @dataclass
 class MusicsetData:
     preferred: str = ""
+    preferred_help_rst = "This ruleset has the following preferred musicset: "
 
 
 @section("civstyle")
@@ -64,19 +71,33 @@ class MusicsetData:
 @dataclass
 class CivStyleData:
     granary_food_ini: list[int]
-    granary_food_inc: int
-    min_city_center_food: int
-    min_city_center_shield: int
-    min_city_center_trade: int
-    init_city_radius_sq: int
-    init_vis_radius_sq: int
-    upgrade_veteran_loss: int
-    autoupgrade_veteran_loss: int
-    pillage_select: bool
-    gold_upkeep_style: str
+    granary_food_ini_help_rst: str = "?"
+    granary_food_inc: int = 0
+    granary_food_inc_help_rst: str = "?"
+    min_city_center_food: int = 0
+    min_city_center_food_help_rst: str = "Minimum amount of food a city center tile generates for this ruleset: "
+    min_city_center_shield: int = 0
+    min_city_center_shield_help_rst: str = "Minimum amount of production (shields) a city center tile generates for this ruleset: "
+    min_city_center_trade: int = 0
+    min_city_center_trade_help_rst: str = "Minimum amount of trade a city center tile generates for this ruleset: "
+    init_city_radius_sq: int = 0
+    init_city_radius_sq_help_rst: str = "Square of initial city working radius for this ruleset: "
+    init_vis_radius_sq: int = 0
+    init_vis_radius_sq_help_rst: str = "Square of initially visible radius (true distance) for this ruleset: "
+    upgrade_veteran_loss: int = 0
+    upgrade_veteran_loss_help_rst: str = "Number of veteran levels lost when upgrading a unit for this ruleset: "
+    autoupgrade_veteran_loss: int = 0
+    autoupgrade_veteran_loss_help_rst: str = "Number of veteran levels lost when auto-upgrading a unit for this ruleset: "
+    pillage_select: bool = True
+    pillage_select_loss_help_rst: str = "When set to ``True``, the player gets to select which terrain improvement to pillage."
+    gold_upkeep_style: str = ""
+    gold_upkeep_style_help_rst: str = ""
     paradrop_to_transport: bool = True  # FIXME default?
+    paradrop_to_transport_help_rst: str = ""
     gameloss_style: str = ""  # FIXME default?
+    gameloss_style_help_rst: str = ""
     civil_war_enabled: bool = True  # FIXME default?
+    civil_war_enabled_help_rst: str = ""
     tech_steal_allow_holes: bool = True  # FIXME default?
     tech_trade_allow_holes: bool = True  # FIXME default?
     tech_trade_loss_allow_holes: bool = True  # FIXME default?
@@ -309,6 +330,7 @@ class GameSettings:
         self.civ_style = read_section(CivStyleData, sections)
         self.combat_rules = read_section(CombatRulesData, sections)
         self.culture = read_section(CultureData, sections, missing_ok=True)
+        self.data_file_header = read_section(DataFileHeader, sections, missing_ok=True)
         self.illness = read_section(IllnessData, sections)
         self.incite_cost = read_section(InciteCostData, sections)
         self.musicset = read_section(MusicsetData, sections, missing_ok=True)
