@@ -317,17 +317,3 @@ class GameSettings:
         self.settings = read_section(Settings, sections)
         self.soundset = read_section(SoundsetData, sections, missing_ok=True)
         self.tileset = read_section(TilesetData, sections, missing_ok=True)
-
-
-@typechecked
-class Ruleset:
-    freeciv_version: str
-    name: str
-    version: str
-    summary: str
-    description: str
-
-    unit_classes: list
-    unit_types: list
-    advances: list
-    veteran_levels: list
