@@ -23,7 +23,7 @@ class Ruleset:
     effects: list[Effect]
     game: GameSettings
     techs: ScienceSettings
-    #units: UnitsSettings
+    # units: UnitsSettings
 
     def __init__(self, name, path):
         """

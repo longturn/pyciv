@@ -53,4 +53,6 @@ class CitySettings:
     def __init__(self, sections):
         self.parameters = read_section(CityParametersData, sections)
         self.citizens = read_section(CityCitizenData, sections, missing_ok=True)
-        self.missing_unit_upkeep = read_section(CityMissingUnitUpkeepData, sections, missing_ok=True)
+        self.missing_unit_upkeep = read_section(
+            CityMissingUnitUpkeepData, sections, missing_ok=True
+        )

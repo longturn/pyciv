@@ -61,14 +61,15 @@ def process_ruleset(path, ruleset):
     citizens = rules.cities.citizens
     missing_unit_upkeep = rules.cities.missing_unit_upkeep
 
-
     logging.info(f"Writing manual for {ruleset}...")
 
     os.makedirs(
         file_locations.get("conf.fc21_rst_output") + "/%s/" % ruleset, exist_ok=True
     )
     template = env.get_template("index.rst")
-    with open(file_locations.get("conf.fc21_rst_output") + "/%s/index.rst" % ruleset, "w") as out:
+    with open(
+        file_locations.get("conf.fc21_rst_output") + "/%s/index.rst" % ruleset, "w"
+    ) as out:
         out.write(
             template.render(
                 about=about,
@@ -86,9 +87,10 @@ def process_ruleset(path, ruleset):
                 research=research,
                 culture=culture,
                 calendar=calendar,
-                settings=settings
+                settings=settings,
             )
         )
+
 
 def get_config(conf, section):
     """

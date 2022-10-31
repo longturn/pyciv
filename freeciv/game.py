@@ -24,11 +24,15 @@ class DataFileHeader:
 class AboutData:
     name: str
     version: int = -1
-    version_help_rst: str = ". If the value is ``-1``, then there is no version for this ruleset."
+    version_help_rst: str = (
+        ". If the value is ``-1``, then there is no version for this ruleset."
+    )
     summary: str = ""
     description: str = ""
     capabilities: str = ""  # 3.0
-    capabilities_help_rst: str = "This ruleset has the following scenario capabilities: "
+    capabilities_help_rst: str = (
+        "This ruleset has the following scenario capabilities: "
+    )
     alt_dir: str = ""  # FIXME default?
 
 
@@ -75,19 +79,31 @@ class CivStyleData:
     granary_food_inc: int = 0
     granary_food_inc_help_rst: str = "?"
     min_city_center_food: int = 0
-    min_city_center_food_help_rst: str = "Minimum amount of food a city center tile generates for this ruleset: "
+    min_city_center_food_help_rst: str = (
+        "Minimum amount of food a city center tile generates for this ruleset: "
+    )
     min_city_center_shield: int = 0
     min_city_center_shield_help_rst: str = "Minimum amount of production (shields) a city center tile generates for this ruleset: "
     min_city_center_trade: int = 0
-    min_city_center_trade_help_rst: str = "Minimum amount of trade a city center tile generates for this ruleset: "
+    min_city_center_trade_help_rst: str = (
+        "Minimum amount of trade a city center tile generates for this ruleset: "
+    )
     init_city_radius_sq: int = 0
-    init_city_radius_sq_help_rst: str = "Square of initial city working radius for this ruleset: "
+    init_city_radius_sq_help_rst: str = (
+        "Square of initial city working radius for this ruleset: "
+    )
     init_vis_radius_sq: int = 0
-    init_vis_radius_sq_help_rst: str = "Square of initially visible radius (true distance) for this ruleset: "
+    init_vis_radius_sq_help_rst: str = (
+        "Square of initially visible radius (true distance) for this ruleset: "
+    )
     upgrade_veteran_loss: int = 0
-    upgrade_veteran_loss_help_rst: str = "Number of veteran levels lost when upgrading a unit for this ruleset: "
+    upgrade_veteran_loss_help_rst: str = (
+        "Number of veteran levels lost when upgrading a unit for this ruleset: "
+    )
     autoupgrade_veteran_loss: int = 0
-    autoupgrade_veteran_loss_help_rst: str = "Number of veteran levels lost when auto-upgrading a unit for this ruleset: "
+    autoupgrade_veteran_loss_help_rst: str = (
+        "Number of veteran levels lost when auto-upgrading a unit for this ruleset: "
+    )
     pillage_select: bool = True
     pillage_select_loss_help_rst: str = "When set to ``True``, the player gets to select which terrain improvement to pillage."
     gold_upkeep_style: str = ""
