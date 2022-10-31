@@ -226,3 +226,7 @@ class UnitsSettings:
                 self.veteran_system = load_veteran_levels(**section)
         if not self.veteran_system:
             raise ValueError("The [veteran_system] section could not be found")
+
+        for unit_type in self.unit_types.values():
+            if unit_type.veteran_levels is None:
+                unit_type.veteran_levels = self.veteran_system
