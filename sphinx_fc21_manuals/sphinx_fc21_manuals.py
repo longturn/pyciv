@@ -4,19 +4,19 @@
 # SPDX-FileCopyrightText: 2022 James Robertson <jwrober@gmail.com>
 
 # Version string
-__version__ = "0.2"
+__version__ = "0.3"
 
 import configparser
 import logging
 import os
 import sys
+import re
+from warnings import warn
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 
 sys.path.append("../")
-import freeciv.game as game
-import freeciv.secfile as sf
-from freeciv.secfile.loader import read_section, read_sections
+from freeciv.rules import Ruleset
 
 logging.basicConfig(level=logging.INFO)
 
@@ -28,49 +28,67 @@ def make_slug(name):
     return name
 
 
-# FIXME: Adding this breaks the ability to read the ruleset files
 env = Environment(
     loader=PackageLoader("sphinx_fc21_manuals", "templates"),
-    # autoescape=select_autoescape(["html", "xml"]),
 )
-# env.filters["make_slug"] = make_slug
-
-
-def load(name, path):
-    logging.info("Reading %s..." % name)
-    return sf.SpecParser(name, path).get_all()
+env.filters["make_slug"] = make_slug
 
 
 def process_ruleset(path, ruleset):
-    game_sections = load(f"{ruleset}/game.ruleset", path)
+    rules = Ruleset(ruleset, path)
 
     # Get all the base game data
-    data_file_header = read_section(game.DataFileHeader, game_sections)
-    about = read_section(game.AboutData, game_sections)
-    options = read_section(game.OptionsData, game_sections)
-    tileset = read_section(game.TilesetData, game_sections)
-    soundset = read_section(game.SoundsetData, game_sections)
-    musicset = read_section(game.MusicsetData, game_sections)
-    civ_style = read_section(game.CivStyleData, game_sections)
-    illness = read_section(game.IllnessData, game_sections)
-    incite_cost = read_section(game.InciteCostData, game_sections)
-    combat_rules = read_section(game.CombatRulesData, game_sections)
-    auto_attack = read_section(game.AutoAttackData, game_sections)
-    actions = read_section(game.ActionsData, game_sections)
-    borders = read_section(game.BordersData, game_sections)
-    research = read_section(game.ResearchData, game_sections)
-    culture = read_section(game.CultureData, game_sections)
-    calendar = read_section(game.CalendarData, game_sections)
-    settings = read_section(game.Settings, game_sections)
-    print(settings)
+    data_file_header = rules.game.data_file_header
+    about = rules.game.about
+    options = rules.game.options
+    tileset = rules.game.tileset
+    soundset = rules.game.soundset
+    musicset = rules.game.musicset
+    civ_style = rules.game.civ_style
+    illness = rules.game.illness
+    incite_cost = rules.game.incite_cost
+    combat_rules = rules.game.combat_rules
+    auto_attack = rules.game.auto_attack
+    actions = rules.game.actions
+    borders = rules.game.borders
+    research = rules.game.research
+    culture = rules.game.culture
+    calendar = rules.game.calendar
+    settings = rules.game.settings
+
+    # Get the city settings
+    city_parameters = rules.cities.parameters
+    citizens = rules.cities.citizens
+    missing_unit_upkeep = rules.cities.missing_unit_upkeep
+
 
     logging.info(f"Writing manual for {ruleset}...")
 
     os.makedirs(
         file_locations.get("conf.fc21_rst_output") + "/%s/" % ruleset, exist_ok=True
     )
-    # template = env.get_template("index.rst")
-
+    template = env.get_template("index.rst")
+    with open(file_locations.get("conf.fc21_rst_output") + "/%s/index.rst" % ruleset, "w") as out:
+        out.write(
+            template.render(
+                about=about,
+                options=options,
+                tileset=tileset,
+                soundset=soundset,
+                musicset=musicset,
+                civ_style=civ_style,
+                illness=illness,
+                incite_cost=incite_cost,
+                combat_rules=combat_rules,
+                auto_attack=auto_attack,
+                actions=actions,
+                borders=borders,
+                research=research,
+                culture=culture,
+                calendar=calendar,
+                settings=settings
+            )
+        )
 
 def get_config(conf, section):
     """
@@ -94,7 +112,6 @@ def main():
     """
 
     print(f"Welcome to {sys.argv[0]} v{__version__}\n")
-    print(file_locations.get("conf.fc21_datadir_path"))
     process_ruleset([file_locations.get("conf.fc21_datadir_path")], "civ1")
 
 
