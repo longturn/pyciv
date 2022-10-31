@@ -45,7 +45,7 @@ KNOWN_UNIT_CLASS_FLAGS = {
 @dataclass
 class VeteranLevel:
     name: str
-    raise_chance: int
+    base_raise_chance: int
     work_raise_chance: int
     power_factor: int
     move_bonus: int
@@ -53,14 +53,14 @@ class VeteranLevel:
 
 def load_veteran_levels(
     veteran_names,
-    veteran_raise_chance,
+    veteran_base_raise_chance,
     veteran_work_raise_chance,
     veteran_power_fact,
     veteran_move_bonus,
 ):
     if any(
         (
-            len(veteran_names) != len(veteran_raise_chance),
+            len(veteran_names) != len(veteran_base_raise_chance),
             len(veteran_names) != len(veteran_work_raise_chance),
             len(veteran_names) != len(veteran_power_fact),
             len(veteran_names) != len(veteran_move_bonus),
@@ -71,13 +71,13 @@ def load_veteran_levels(
     levels = []
     for args in zip(
         veteran_names,
-        veteran_raise_chance,
+        veteran_base_raise_chance,
         veteran_work_raise_chance,
         veteran_power_fact,
         veteran_move_bonus,
     ):
         levels.append(VeteranLevel(*args))
-    if levels[-1].raise_chance != 0 or levels[-1].work_raise_chance != 0:
+    if levels[-1].base_raise_chance != 0 or levels[-1].work_raise_chance != 0:
         warn(
             'The last veteran level "%s" has a non-zero raise chance' % levels[-1].name
         )
@@ -150,6 +150,7 @@ class UnitType:
     uk_shield: int
     uk_food: int
     uk_gold: int
+    vision_layer: str = ""
     obsolete_by: NamedReference("UnitType") = None
     impr_req: NamedReference(Building) = None
     cargo: set[NamedReference(UnitClass)] = field(default_factory=set)
@@ -167,7 +168,7 @@ class UnitType:
     convert_time: int = None
 
     veteran_names: list[str] = None
-    veteran_raise_chance: list[int] = None
+    veteran_base_raise_chance: list[int] = None
     veteran_work_raise_chance: list[int] = None
     veteran_power_fact: list[int] = None
     veteran_move_bonus: list[int] = None
@@ -203,7 +204,7 @@ class UnitType:
         if self.veteran_names:
             self.veteran_levels = load_veteran_levels(
                 self.veteran_names,
-                self.veteran_raise_chance,
+                self.veteran_base_raise_chance,
                 self.veteran_work_raise_chance,
                 self.veteran_power_fact,
                 self.veteran_move_bonus,
