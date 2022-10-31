@@ -4,6 +4,7 @@
 from typing import get_args, get_type_hints
 
 from .buildings import BuildingsSettings
+from .cities import CitySettings
 from .effects import Effect, EffectsSettings
 from .game import GameSettings
 from .science import Advance, ScienceSettings
@@ -22,7 +23,7 @@ class Ruleset:
     effects: list[Effect]
     game: GameSettings
     techs: ScienceSettings
-    units: UnitsSettings
+    #units: UnitsSettings
 
     def __init__(self, name, path):
         """
@@ -31,6 +32,9 @@ class Ruleset:
 
         sections = SpecParser.load(f"{name}/buildings.ruleset", path)
         self.buildings = BuildingsSettings(sections)
+
+        sections = SpecParser.load(f"{name}/cities.ruleset", path)
+        self.cities = CitySettings(sections)
 
         sections = SpecParser.load(f"{name}/effects.ruleset", path)
         self.effects = EffectsSettings(sections)
