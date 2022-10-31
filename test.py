@@ -7,13 +7,7 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 from markdown import markdown
 from unidecode import unidecode
 
-import freeciv.game as rs
-import freeciv.secfile as sf
-from freeciv.buildings import Building
-from freeciv.effects import Effect
-from freeciv.science import Advance
-from freeciv.secfile.loader import read_section, read_sections
-from freeciv.units import UnitClass, UnitType, load_veteran_levels
+from freeciv.rules import Ruleset
 
 # logging.basicConfig(level=logging.DEBUG)
 logging.basicConfig(level=logging.INFO)
@@ -33,121 +27,17 @@ env = Environment(
 env.filters["make_slug"] = make_slug
 
 
-def load(name, path):
-    logging.info("Reading %s..." % name)
-    return sf.SpecParser(name, path).get_all()
-
-
 def process_ruleset(path, ruleset):
-    game_sections = load(f"{ruleset}/game.ruleset", path)
-    about = read_section(rs.AboutData, game_sections)
+    rules = Ruleset(ruleset, path)
 
-    tech_sections = load(f"{ruleset}/techs.ruleset", path)
+    about = rules.game.about
+    all_advances = rules.techs.advances
+    all_unit_classes = rules.units.unit_classes
+    all_unit_types = rules.units.unit_types
+    all_buildings = rules.buildings.buildings
 
-    all_advances = {
-        advance.name: advance for advance in read_sections(Advance, tech_sections)
-    }
-
-    def find_requirement(advance, name, all_advances):
-        if name is None:
-            return None
-        elif name in all_advances:
-            return all_advances[name]
-        else:
-            raise ValueError(
-                'Advance "%s" references unknown advance "%s"' % (advance.name, name)
-            )
-
-    for advance in all_advances.values():
-        advance.req1 = find_requirement(advance, advance.req1, all_advances)
-        advance.req2 = find_requirement(advance, advance.req2, all_advances)
-        advance.root_req = find_requirement(advance, advance.root_req, all_advances)
-        # TODO Check for loops
-
-    units_sections = load(f"{ruleset}/units.ruleset", path)
-
-    all_unit_classes = {
-        unit_class.name: unit_class
-        for unit_class in read_sections(UnitClass, units_sections)
-    }
-    all_unit_types = {
-        unit_type.name: unit_type
-        for unit_type in read_sections(UnitType, units_sections)
-    }
-
-    veteran_system = None
-    for section in units_sections:
-        if section.name == "veteran_system":
-            veteran_system = load_veteran_levels(**section)
-    if veteran_system is None:
-        raise ValueError("The [veteran_system] section could not be found")
-
-    for unit_type in all_unit_types.values():
-        if unit_type.uclass in all_unit_classes:
-            unit_type.uclass = all_unit_classes[unit_type.uclass]
-        else:
-            raise ValueError(
-                'Unit type "%s" references unknown unit class "%s"'
-                % (unit_type.name, unit_type.uclass)
-            )
-
-        if unit_type.obsolete_by in all_unit_types:
-            unit_type.obsolete_by = all_unit_types[unit_type.obsolete_by]
-        elif not unit_type.obsolete_by is None:
-            raise ValueError(
-                'Unit type "%s" references unknown unit type "%s"'
-                % (unit_type.name, unit_type.obsolete_by)
-            )
-
-        all_targets = []
-        for target in unit_type.targets:
-            if target in all_unit_classes:
-                all_targets.append(all_unit_classes[target])
-            else:
-                raise ValueError(
-                    'Unit type "%s" references unknown target "%s"'
-                    % (unit_type.name, target)
-                )
-        unit_type.targets = all_targets
-
-        reqs = set()
-        for req in unit_type.tech_req:
-            if req in all_advances:
-                reqs.add(all_advances[req])
-            else:
-                print(unit_type.name, unit_type.tech_req)
-                raise ValueError(
-                    'Unit type "%s" references unknown advance "%s"'
-                    % (unit_type.name, req.name)
-                )
-        unit_type.tech_req = reqs
-
-        cargo = set()
-        if unit_type.cargo:
-            for name in unit_type.cargo:
-                if name in all_unit_classes:
-                    cargo.add(all_unit_classes[name])
-                else:
-                    raise ValueError(
-                        'Unit type "%s" references unknown unit class "%s"'
-                        % (unit_type.name, name)
-                    )
-        unit_type.cargo = cargo
-
-        if unit_type.veteran_levels is None:
-            unit_type.veteran_levels = veteran_system
-
-    buildings_sections = load(f"{ruleset}/buildings.ruleset", path)
-    all_buildings = {
-        building.name: building
-        for building in read_sections(Building, buildings_sections)
-    }
-
-    effects_sections = load(f"{ruleset}/effects.ruleset", path)
-    effects = read_sections(Effect, effects_sections)
+    effects = rules.effects
     effects.sort(key=lambda e: e.type or "")
-
-    # TODO Validation, linking...
 
     ############################################################################
 
