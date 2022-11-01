@@ -9,11 +9,13 @@ __version__ = "0.3"
 import configparser
 import logging
 import os
-import sys
 import re
+import sys
 from warnings import warn
 
 from jinja2 import Environment, PackageLoader, select_autoescape
+
+#from markdown import markdown
 
 sys.path.append("../")
 from freeciv.rules import Ruleset
@@ -114,7 +116,19 @@ def main():
     """
 
     print(f"Welcome to {sys.argv[0]} v{__version__}\n")
-    process_ruleset([file_locations.get("conf.fc21_datadir_path")], "civ1")
+
+    for ruleset in (
+        "civ1",
+        "civ2",
+        "civ2civ3",
+        "classic",
+        "experimental",
+        "granularity",
+        "multiplayer",
+        "royale",
+        "sandbox",
+    ):
+        process_ruleset([file_locations.get("conf.fc21_datadir_path")], ruleset)
 
 
 main()
