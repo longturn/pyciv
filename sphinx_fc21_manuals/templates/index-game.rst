@@ -6,7 +6,9 @@
 {{ about.name|title }} Manual
 *****************************
 
-{% if about.version %}{{ about.name|title }} Version: {{ about.version }}{{ about.version_help_rst }}{% endif %}
+{% if about.version %}
+{{ about.name|title }} Version: {{ about.version }}{{ about.version_help_rst }}
+{% endif %}
 
 General Game Information
 ========================
@@ -15,7 +17,8 @@ General Game Information
 {{ about.summary }}
 {% if about.capabilities %}
 :strong:`Capabilities`
-  {{ about.capabilities_help_rst }}``{{ about.capabilities }}``{% endif %}
+  {{ about.capabilities_help_rst }}``{{ about.capabilities }}``
+{% endif %}
 {% if about.global_init_techs %}
 :strong:`Start Technologies`
   {{ about.global_init_techs_help_rst }}{{ about.global_init_techs }}{% endif %}
@@ -346,3 +349,46 @@ Game Calendar Settings
 {% if calendar.fragment_name2 %}
 :strong:`Calendar Fragment 3`
   {{ calendar.fragment_name2_help_rst }}``{{ calendar.fragment_name2 }}``{% endif %}
+
+
+City Related Settings
+---------------------
+
+The following parameters are set for cities. Each impacts gameplay in some fashion.
+
+{% if parameters.add_to_size_limit %}
+:strong:`Add Size Limit`
+  {{ parameters.add_to_size_limit_help_rst }}``{{ parameters.add_to_size_limit }}``{% endif %}
+{% if parameters.angry_citizens %}
+:strong:`Angry Citizens`
+  {{ parameters.angry_citizens_help_rst }}``{{ parameters.angry_citizens }}``{% endif %}
+{% if parameters.celebrate_size_limit %}
+:strong:`Celebrate Size Limit`
+  {{ parameters.celebrate_size_limit_help_rst }}``{{ parameters.celebrate_size_limit }}``{% endif %}
+{% if parameters.changable_budget %}
+:strong:`National Budget`
+  {{ parameters.changable_budget_help_rst }}``{{ parameters.changable_budget }}``{% endif %}
+{% if parameters.forced_science %}
+:strong:`Forced Science`
+  {{ parameters.forced_science_help_rst }}``{{ parameters.forced_science }}``{% endif %}
+{% if parameters.forced_luxury %}
+:strong:`Forced Luxury Goods`
+  {{ parameters.forced_luxury_help_rst }}``{{ parameters.forced_luxury }}``{% endif %}
+{% if parameters.forced_gold %}
+:strong:`Forced Tax`
+  {{ parameters.forced_gold_help_rst }}``{{ parameters.forced_gold }}``{% endif %}
+{% if parameters.vision_reveal_tiles %}
+:strong:`Vision Reveal`
+  {{ parameters.vision_reveal_tiles_help_rst }}``{{ parameters.vision_reveal_tiles }}``{% endif %}
+{% if citizens.nationality %}
+:strong:`Nationality`
+  {{ citizens.nationality_help_rst }}``{{ citizens.nationality }}``{% endif %}
+{% if citizens.convert_speed %}
+:strong:`Citizen Convert Speed`
+  {{ citizens.convert_speed_help_rst }}``{{ citizens.convert_speed }}``{% endif %}
+{% if citizens.partisans_pct %}
+:strong:`Partisans`
+  {{ citizens.partisans_pct_help_rst }}``{{ citizens.partisans_pct }}``{% endif %}
+{% if citizens.conquest_convert_pct %}
+:strong:`Conquest Convert`
+  {{ citizens.conquest_convert_pct_help_rst }}``{{ citizens.conquest_convert_pct }}``{% endif %}
