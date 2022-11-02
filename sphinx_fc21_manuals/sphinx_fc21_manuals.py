@@ -68,7 +68,7 @@ def process_ruleset(path, ruleset):
     os.makedirs(
         file_locations.get("conf.fc21_rst_output") + "/%s/" % ruleset, exist_ok=True
     )
-    template = env.get_template("index.rst")
+    template = env.get_template("index-game.rst")
     with open(
         file_locations.get("conf.fc21_rst_output") + "/%s/index.rst" % ruleset, "w"
     ) as out:
@@ -89,7 +89,8 @@ def process_ruleset(path, ruleset):
                 research=research,
                 culture=culture,
                 calendar=calendar,
-                settings=settings,
+                parameters=city_parameters,
+                citizens=citizens,
             )
         )
 
@@ -129,6 +130,7 @@ def main():
         "sandbox",
     ):
         process_ruleset([file_locations.get("conf.fc21_datadir_path")], ruleset)
+        #process_ruleset([file_locations.get("conf.fc21_datadir_path")], "civ1")
 
 
 main()
