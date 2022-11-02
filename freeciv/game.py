@@ -131,7 +131,7 @@ class CivStyleData:
 
     base_bribe_cost_help_rst: str = "This value represents the base cost in gold to bribe a unit. The value for this ruleset is: "
 
-    ransom_gold_help_rst: str = "This value represents the amound of gold is paid in ransom when a `Barbarian Leader` is killed. The value for this ruleset is: "
+    ransom_gold_help_rst: str = "This value represents the amound of gold is paid in ransom when a :unit:`Barbarian Leader` is killed. The value for this ruleset is: "
 
     upgrade_veteran_loss_help_rst: str = "Increments of ``10`` is one veteran level. The number of veteran levels lost when upgrading a unit for this ruleset is: "
 
@@ -159,11 +159,11 @@ class CivStyleData:
 
     civil_war_bonus_unhappy_help_rst: str = "This value indicates how many *percents* each unhappy city affects the chance of civil war. The value for this ruleset is: "
 
-    gameloss_style_help_rst: str = "A list of things to happen, in addition to death of the owner, when a ``gameloss`` unit (e.g. the last unit) dies. `CivilWar`: Part of the nation remains, controlled by a new player. `Barbarians`: Depending on if there is also `CivilWar`, all or part or half of the dead player's empire goes under barbarian control. `Loot`: The player who killed the ``gameloss`` unit gets loot, such as a partial map, gold, technologies, or cities. The game loss style for this ruleset is: "
+    gameloss_style_help_rst: str = "A list of things to happen, in addition to death of the owner, when a :strong:`gameloss` unit (e.g. the last unit) dies. `CivilWar`: Part of the nation remains, controlled by a new player. `Barbarians`: Depending on if there is also `CivilWar`, all or part or half of the dead player's empire goes under barbarian control. `Loot`: The player who killed the :strong:`gameloss` unit gets loot, such as a partial map, gold, technologies, or cities. The game loss style for this ruleset is: "
 
     paradrop_to_transport_help_rst: str = "When set to ``True``, units may safely paradrop to a transport on non-native terrain. The value for this ruleset is: "
 
-    gold_upkeep_style_help_rst: str = "This value represents the method of paying unit and improvement gold upkeep. `City`: The player`s total gold must be non-negative after paying upkeep costs associated with each city. If for any city the player`s gold is negative, random buildings in the city are sold off. If the gold is still negative, then supported units with gold upkeep are disbanded. `Mixed`: In the first step, the player`s total gold must be non-negative after paying upkeep for all buildings within a city. If for any city the player`s gold is negative, random buildings in the city are sold off. In the second step, gold upkeep for all units is paid in a lump sum. If the player does not have enough gold, random units with gold upkeep are disbanded. `Nation`: Gold upkeep for all buildings and units is paid in a lump sum after all cities have been processed. If the player does not have enough gold, random buildings from random cities are sold. If still more gold is needed, then random units with gold upkeep are disbanded. The gold upkeep style for this ruleset is: "
+    gold_upkeep_style_help_rst: str = "This value represents the method of paying unit and improvement gold upkeep. `City`: The player's total gold must be non-negative after paying upkeep costs associated with each city. If for any city the player's gold is negative, random buildings in the city are sold off. If the gold is still negative, then supported units with gold upkeep are disbanded. `Mixed`: In the first step, the player's total gold must be non-negative after paying upkeep for all buildings within a city. If for any city the player's gold is negative, random buildings in the city are sold off. In the second step, gold upkeep for all units is paid in a lump sum. If the player does not have enough gold, random units with gold upkeep are disbanded. `Nation`: Gold upkeep for all buildings and units is paid in a lump sum after all cities have been processed. If the player does not have enough gold, random buildings from random cities are sold. If still more gold is needed, then random units with gold upkeep are disbanded. The gold upkeep style for this ruleset is: "
 
     output_granularity_help_rst: str = "This value represents how granular city output is shown. This is typically some form of :math:`10^n`. The value for this ruleset is: "
 
@@ -186,7 +186,7 @@ class IllnessData:
 
     illness_min_size_help_rst: str = "This value defines the minimum city size for plague to be in effect. The value for this ruleset is: "
 
-    illness_trade_infection_help_rst: str = "This value is the percentage factor for how much trading with a plagued city increases our city`s chance for plague. The value for this ruleset is: "
+    illness_trade_infection_help_rst: str = "This value is the percentage factor for how much trading with a plagued city increases our city's chance for plague. The value for this ruleset is: "
 
     illness_pollution_factor_help_rst: str = "This value is the percentage factor for how much pollution within a city increases its chance for plague. The value for this ruleset is: "
 
@@ -202,7 +202,7 @@ class InciteCostData:
     base_incite_cost: int = 0  # FIXME default?
 
     # Help Strings
-    improvement_factor_help_rst: str = "The values for ''base_incite_cost``, ``improvement_factor``, ``unit_factor``, and ``total_factor`` are used as part of a math equation to calculate the cost to incide a city. The formula is :math:`city_incite_cost = total_factor * (city_size) * (base_incite_cost + (units_cost) * unit_factor + (improvements_cost) * improvement_factor) / ((distance to capital) * 100)`."
+    improvement_factor_help_rst: str = "The values for ``base_incite_cost``, ``improvement_factor``, ``unit_factor``, and ``total_factor`` are used as part of a math equation to calculate the cost to incide a city. The formula is :math:`city_incite_cost = total_factor * (city_size) * (base_incite_cost + (units_cost) * unit_factor + (improvements_cost) * improvement_factor) / ((distance to capital) * 100)`."
 
 
 @section("combat_rules")
@@ -225,9 +225,9 @@ class CombatRulesData:
     killstack: bool = True
 
     # Help Strings
-    incite_gold_capt_chance_help_rst: str = "If a `Diplomat` or `Spy` incites for gold, this value represents the chance of success. The value for this ruleset is: "
+    incite_gold_capt_chance_help_rst: str = "If a :unit:`Diplomat` or :unit:`Spy` incites for gold, this value represents the chance of success. The value for this ruleset is: "
 
-    incite_gold_loss_chance_help_rst: str = "If a `Diplomat` or `Spy` incites for gold, this value represents the chance of loss. The value for this ruleset is: "
+    incite_gold_loss_chance_help_rst: str = "If a :unit:`Diplomat` or :unit:`Spy` incites for gold, this value represents the chance of loss. The value for this ruleset is: "
 
     timeoutmask_help_rst: str = "? help needs help ? "
 
@@ -294,9 +294,9 @@ class ActionsData:
 
     steal_maps_reveals_all_cities_help_rst: str = "If set to ``True``, a successful `Steal Maps` or `Steal Maps Escape` action will transfer the map for all tiles containing a city. The value for this ruleset is: "
 
-    help_wonder_max_range_help_rst: str = "The maximum distance from the unit to the target of the `Help Build Wonder` action. The value ``0`` means that the target`s tile must be the tile of the unit. The value ``1`` means that the city must be on a tile adjacent to the unit. The special value ``unlimited`` lifts the maximum distance restriction. The maximum distance cannot be smaller than the minimum distance. The value for this ruleset is: "
+    help_wonder_max_range_help_rst: str = "The maximum distance from the unit to the target of the `Help Build Wonder` action. The value ``0`` means that the target's tile must be the tile of the unit. The value ``1`` means that the city must be on a tile adjacent to the unit. The special value ``unlimited`` lifts the maximum distance restriction. The maximum distance cannot be smaller than the minimum distance. The value for this ruleset is: "
 
-    recycle_unit_max_range_help_rst: str = "The maximum distance from the unit to the target of the `Recycle Unit` action. The value ``0`` means that the target`s tile must be the tile of the unit. The value ``1`` means that the city must be on a tile adjacent to the unit. The special value ``unlimited`` lifts the maximum distance restriction. The maximum distance cannot be smaller than the minimum distance. The value for this ruleset is: "
+    recycle_unit_max_range_help_rst: str = "The maximum distance from the unit to the target of the `Recycle Unit` action. The value ``0`` means that the target's tile must be the tile of the unit. The value ``1`` means that the city must be on a tile adjacent to the unit. The special value ``unlimited`` lifts the maximum distance restriction. The maximum distance cannot be smaller than the minimum distance. The value for this ruleset is: "
 
     bombard_max_range_help_rst: str = "The maximum distance from the unit to the target of the `Bombard` action. The value ``1`` means that the targets must be on a tile adjacent to the unit. The special value ``unlimited`` lifts the maximum distance restriction. The maximum distance cannot be smaller than the minimum distance. The value for this ruleset is: "
 
@@ -416,7 +416,7 @@ class ResearchData:
     free_tech_method: str = ""  # FIXME default?
 
     # Help Strings
-    tech_cost_style_help_rst: str = "This is the method of calculating technology costs. `Civ I|II`: Civ (I|II) style. Every new technology adds ``base_tech_cost`` (see below) to the cost of the next technology. `Classic`: The cost of technology is: :math:`base_tech_cost * (1 + reqs) * sqrt(1 + reqs) / 2`, where ``reqs`` equals the number of requirements for the technology advance, counted recursively. `Classic+`: The costs are read from ``tech.ruleset``. Missing costs are generated by style `Classic`. `Experimental`: The cost of technology is: :math:`base_tech_cost * (reqs^2 / (1 + sqrt(sqrt(reqs + 1))) - 0.5), where ``reqs`` equals the number of requirements for the technology, counted recursively. Initial technology cost will be ``base_tech_cost``. `Experimental+`: The costs are read from ``tech.ruleset``. Missing costs are generated by style `Experimental`. `Linear`: The cost of technology is: :math:`base_tech_cost * reqs`, where ``reqs`` equals the number of requirements for the technology, counted recursively. The value for this ruleset is: "
+    tech_cost_style_help_rst: str = "This is the method of calculating technology costs. `Civ I|II`: Civ (I|II) style. Every new technology adds ``base_tech_cost`` (see below) to the cost of the next technology. `Classic`: The cost of technology is: :math:`base_tech_cost * (1 + reqs) * sqrt(1 + reqs) / 2`, where ``reqs`` equals the number of requirements for the technology advance, counted recursively. `Classic+`: The costs are read from :file:`tech.ruleset`. Missing costs are generated by style `Classic`. `Experimental`: The cost of technology is: :math:`base_tech_cost * (reqs^2 / (1 + sqrt(sqrt(reqs + 1))) - 0.5), where ``reqs`` equals the number of requirements for the technology, counted recursively. Initial technology cost will be ``base_tech_cost``. `Experimental+`: The costs are read from :file:`tech.ruleset`. Missing costs are generated by style `Experimental`. `Linear`: The cost of technology is: :math:`base_tech_cost * reqs`, where ``reqs`` equals the number of requirements for the technology, counted recursively. The value for this ruleset is: "
 
     base_tech_cost_help_rst: str = "The value defines the base research cost for technology advances. Used in ``tech_cost_style`` (above), where the technology cost is generated. In other words: used everywhere unless the cost of :strong:`all` technologies are specified and the technology cost style is `Experimental+` or `Classic+`. The value for this ruleset is: "
 
@@ -426,7 +426,7 @@ class ResearchData:
 
     tech_upkeep_divider_help_rst: str = "The upkeep cost is divided by this value. It is essentially an over-ride value. The value for this ruleset is: "
 
-    free_tech_method_help_rst: str = "This value represents the method of selecting technologies given for free. `Goal`: Applied towards a player`s technology goal. If no goal is set, then a random technology advance is set. `Random`: A random researchable technology is picked. `Cheapest`: The cheapest researchable technology advance, random among equal cost ones. The value for this ruleset is: "
+    free_tech_method_help_rst: str = "This value represents the method of selecting technologies given for free. `Goal`: Applied towards a player's technology goal. If no goal is set, then a random technology advance is set. `Random`: A random researchable technology is picked. `Cheapest`: The cheapest researchable technology advance, random among equal cost ones. The value for this ruleset is: "
 
 
 @section("culture")
