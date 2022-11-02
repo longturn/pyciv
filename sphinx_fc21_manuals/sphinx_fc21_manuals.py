@@ -4,7 +4,7 @@
 # SPDX-FileCopyrightText: 2022 James Robertson <jwrober@gmail.com>
 
 # Version string
-__version__ = "0.3"
+__version__ = "0.4"
 
 import configparser
 import logging
@@ -13,9 +13,8 @@ import re
 import sys
 from warnings import warn
 
-from jinja2 import Environment, PackageLoader, select_autoescape
-
-#from markdown import markdown
+from jinja2 import Environment, FileSystemLoader
+from unidecode import unidecode
 
 sys.path.append("../")
 from freeciv.rules import Ruleset
@@ -29,11 +28,32 @@ def make_slug(name):
     name = re.sub("[^a-z0-9_]", "", name)
     return name
 
+def show_item(item):
+    print(item)
+
+def list_to_bullet(named_list):
+    """
+    Custom jinja2 filter function to break a list of values and turn it into an rst bulleted list.
+    """
+    return_string = ""
+    for item in named_list:
+        return_string += "* " + str(item) + "\n  "
+
+    return(return_string)
+
+def vector_to_table(vector):
+    """
+    Custom jinja2 filter funtion to break out a multi-layered list and turn it into an rst table.
+    """
+
+    return(table)
 
 env = Environment(
-    loader=PackageLoader("sphinx_fc21_manuals", "templates"),
+    loader=FileSystemLoader('./templates/'),
 )
 env.filters["make_slug"] = make_slug
+env.filters["show_item"] = show_item
+env.filters["list_to_bullet"] = list_to_bullet
 
 
 def process_ruleset(path, ruleset):
@@ -65,6 +85,9 @@ def process_ruleset(path, ruleset):
 
     logging.info(f"Writing manual for {ruleset}...")
 
+    # Write out the top level ruleset index for all the given rulesets
+    #  Due to the sheer size of the content, the base game data is written
+    #  out to multiple files to make reading much easier.
     os.makedirs(
         file_locations.get("conf.fc21_rst_output") + "/%s/" % ruleset, exist_ok=True
     )
@@ -79,18 +102,101 @@ def process_ruleset(path, ruleset):
                 tileset=tileset,
                 soundset=soundset,
                 musicset=musicset,
+            )
+        )
+    #TODO: See if we can do a check if there is a long description and don't write a file out if there isn't one
+    template = env.get_template("description.rst")
+    with open(
+        file_locations.get("conf.fc21_rst_output") + "/%s/description.rst" % ruleset, "w"
+    ) as out:
+        out.write(
+            template.render(
+                about=about,
+            )
+        )
+    template = env.get_template("game-parms.rst")
+    with open(
+        file_locations.get("conf.fc21_rst_output") + "/%s/game-parms.rst" % ruleset, "w"
+    ) as out:
+        out.write(
+            template.render(
                 civ_style=civ_style,
+            )
+        )
+    template = env.get_template("plague.rst")
+    with open(
+        file_locations.get("conf.fc21_rst_output") + "/%s/plague.rst" % ruleset, "w"
+    ) as out:
+        out.write(
+            template.render(
                 illness=illness,
+            )
+        )
+    template = env.get_template("incite-cost.rst")
+    with open(
+        file_locations.get("conf.fc21_rst_output") + "/%s/incite-cost.rst" % ruleset, "w"
+    ) as out:
+        out.write(
+            template.render(
                 incite_cost=incite_cost,
+            )
+        )
+    template = env.get_template("unit-rules.rst")
+    with open(
+        file_locations.get("conf.fc21_rst_output") + "/%s/unit-rules.rst" % ruleset, "w"
+    ) as out:
+        out.write(
+            template.render(
                 combat_rules=combat_rules,
                 auto_attack=auto_attack,
                 actions=actions,
+            )
+        )
+    template = env.get_template("borders.rst")
+    with open(
+        file_locations.get("conf.fc21_rst_output") + "/%s/borders.rst" % ruleset, "w"
+    ) as out:
+        out.write(
+            template.render(
                 borders=borders,
+            )
+        )
+    template = env.get_template("research.rst")
+    with open(
+        file_locations.get("conf.fc21_rst_output") + "/%s/research.rst" % ruleset, "w"
+    ) as out:
+        out.write(
+            template.render(
                 research=research,
+            )
+        )
+    template = env.get_template("culture.rst")
+    with open(
+        file_locations.get("conf.fc21_rst_output") + "/%s/culture.rst" % ruleset, "w"
+    ) as out:
+        out.write(
+            template.render(
                 culture=culture,
+            )
+        )
+    template = env.get_template("calendar.rst")
+    with open(
+        file_locations.get("conf.fc21_rst_output") + "/%s/calendar.rst" % ruleset, "w"
+    ) as out:
+        out.write(
+            template.render(
                 calendar=calendar,
+            )
+        )
+    template = env.get_template("city.rst")
+    with open(
+        file_locations.get("conf.fc21_rst_output") + "/%s/city.rst" % ruleset, "w"
+    ) as out:
+        out.write(
+            template.render(
                 parameters=city_parameters,
                 citizens=citizens,
+                missing_unit_upkeep = rules.cities.missing_unit_upkeep,
             )
         )
 
@@ -111,7 +217,7 @@ def get_config(conf, section):
 file_locations = get_config("conf.ini", "MAIN")
 
 
-def main():
+def main_func():
     """
     Main function for sphinx_fc21_manuals
     """
@@ -130,7 +236,8 @@ def main():
         "sandbox",
     ):
         process_ruleset([file_locations.get("conf.fc21_datadir_path")], ruleset)
-        #process_ruleset([file_locations.get("conf.fc21_datadir_path")], "civ1")
 
+    #process_ruleset([file_locations.get("conf.fc21_aviation_path")], "aviation")
 
-main()
+########################################
+main_func()
