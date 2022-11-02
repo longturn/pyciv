@@ -13,6 +13,7 @@ from .secfile.loader import read_section, section
 @typechecked
 @dataclass
 class CityParametersData:
+    # Object Attributes
     add_to_size_limit: int = 8
     angry_citizens: bool = True
     celebrate_size_limit: int = 3
@@ -23,15 +24,42 @@ class CityParametersData:
     vision_reveal_tiles: bool = False
     pop_report_zeroes: int = 4
 
+    # Help Strings
+    add_to_size_limit_help_rst: str = "The size of a city has to be less than or equal to this value to be able to add population from a settler or other popluation containing unit. The value for this ruleset is: "
+
+    angry_citizens_help_rst: str = "If set to ``True``, cities can have angry citizens. The value for this ruleset is: "
+
+    celebrate_size_limit_help_rst: str = "Cities have to be greater than or equal in size of this value before they can celebrate. The value for this ruleset is: "
+
+    changable_budget_help_rst: str = "If set to ``True``, the game allows a changable national budget for science, luxury goods, and tax. If set to ``False``, the amounts are hard coded. The value for this ruleset is: "
+
+    forced_science_help_rst: str = "Changeable Budget is ``False``. The forced science output is: "
+
+    forced_luxury_help_rst: str = "Changeable Budget is ``False``. The forced luxury goods output is: "
+
+    forced_gold_help_rst: str = "Changeable Budget is ``False``. The forced tax output is: "
+
+    vision_reveal_tiles_help_rst: str = "? help needs help ? The value for this ruleset is: "
+
 
 @section("citizen")
 @typechecked
 @dataclass
 class CityCitizenData:
+    # Object Attributes
     nationality: bool = True
     convert_speed: int = 50
     partisans_pct: int = 0
     conquest_convert_pct: int = 0
+
+    # Help Strings
+    nationality_help_rst: str = "If set to ``True``, then citizen nationality is enabled. The value for this ruleset is: "
+
+    convert_speed_help_rst: str = "The value represents the base probability of converting a foreign citizen in a conquered city to your own nation as the city grows. The value for this ruleset is: "
+
+    partisans_pct_help_rst: str = "The percentage of own nationality to inspire partisans. If ``0``, original city owner information is used instead. The value for this ruleset is: "
+
+    conquest_convert_pct_help_rst: str = "The percentage of citizens which converts to the new nation after a city was  conquered. Applied separately for each nationality present in the city, and number of converted people rounded up. The value for this ruleset is: "
 
 
 @section("missing_unit_upkeep")
