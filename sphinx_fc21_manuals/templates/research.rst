@@ -1,0 +1,26 @@
+.. Custom Interpretive Text Roles for longturn.net/Freeciv21
+.. role:: unit
+.. role:: improvement
+.. role:: wonder
+
+Technology Research Rules
+=========================
+
+{% if research.tech_upkeep_style %}
+:strong:`Technology Upkeep = {{ research.tech_upkeep_style }}`
+  {{ research.tech_upkeep_style_help_rst }}{% endif %}
+{% if research.tech_cost_style %}
+:strong:`Tech Cost Style = {{ research.tech_cost_style }}`
+  {{ research.tech_cost_style_help_rst }}{% endif %}
+{% if research.base_tech_cost %}
+:strong:`Base Tech Cost = {{ research.base_tech_cost }}`
+  {{ research.base_tech_cost_help_rst }}{% endif %}
+{% if research.tech_leakage %}
+:strong:`Technology Leakage = {{ research.tech_leakage }}`
+  {{ research.tech_leakage_help_rst }}{% endif %}
+{% if research.tech_upkeep_divider %}
+:strong:`Upkeep Divider = {{ research.tech_upkeep_divider }}`
+  {{ research.tech_upkeep_divider_help_rst }}{% endif %}
+{% if research.free_tech_method %}
+:strong:`Free Technology Method = {{ research.free_tech_method }}`
+  {{ research.free_tech_method_help_rst }}{% endif %}
