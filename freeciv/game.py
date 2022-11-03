@@ -225,7 +225,7 @@ class CombatRulesData:
 
     incite_gold_loss_chance_help_rst: str = "If a :unit:`Diplomat` or :unit:`Spy` incites for gold, this value represents the chance of loss."
 
-    timeoutmask_help_rst: str = "? help needs help for ``timeoutmask`` ?"
+    timeoutmask_help_rst: str = "? help needs help ?"
 
     tired_attack_help_rst: str = "When set to ``True``, units that attack with less than a single move point (per ``move_fragments`` in Terrain) will have their attack power reduced accordingly."
 
@@ -250,7 +250,7 @@ class AutoAttackData:
 
     # Help Strings
     attack_actions_help_rst: str = "An auto attack may be triggered when another unit moves to an adjacent tile and the ``autoattack`` server setting is enabled. The values are the possible actions.\n\n  The values for this ruleset is: "
-    if_attacker_help_rst: str = "This is a requirement vector table listing the rules that all must be true for auto attack actions to occur.\n\n  The value for this ruleset is: "
+    if_attacker_help_rst: str = "This is a requirement vector table listing the rules that all must be true for auto attack actions to occur.\n\n  The requirements for this ruleset are: "
     will_never_help_rst: str = "? help needs help on ``will_never_help`` ?\n\n  The value for this ruleset is: "
 
 
