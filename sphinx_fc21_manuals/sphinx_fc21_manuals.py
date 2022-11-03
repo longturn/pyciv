@@ -12,6 +12,7 @@ import os
 import re
 import sys
 from warnings import warn
+from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 from unidecode import unidecode
@@ -26,14 +27,20 @@ def make_slug(name):
     name = unidecode(name).lower()
     name = name.replace(" ", "_").replace("-", "_")
     name = re.sub("[^a-z0-9_]", "", name)
+
     return name
 
-def show_item(item):
-    print(item)
+def clean_string(name):
+    name = name.replace("\n", "")
+    name = name.replace(".", ". ")
+    name = name.replace("*", "\n\n*")
 
-def list_to_bullet(named_list):
+    return(name)
+
+def list_to_uobullet(named_list):
     """
-    Custom jinja2 filter function to break a list of values and turn it into an rst bulleted list.
+    Custom jinja2 filter function to break a list of values and turn it into an rst unordered
+    bulleted list.
     """
     return_string = ""
     for item in named_list:
@@ -41,20 +48,54 @@ def list_to_bullet(named_list):
 
     return(return_string)
 
+
+def list_to_obullet(named_list):
+    """
+    Custom jinja2 filter function to break a list of values and turn it into an rst ordered
+    bulleted list.
+    """
+    return_string = ""
+    for item in named_list:
+        return_string += "#. " + str(item) + "\n  "
+
+    return(return_string)
+
 def vector_to_table(vector):
     """
     Custom jinja2 filter funtion to break out a multi-layered list and turn it into an rst table.
     """
+    #return_table = ""
+    #for req in vector:
+    #    return_table +=
 
-    return(table)
+    return(return_table)
 
 env = Environment(
     loader=FileSystemLoader('./templates/'),
 )
 env.filters["make_slug"] = make_slug
-env.filters["show_item"] = show_item
-env.filters["list_to_bullet"] = list_to_bullet
+env.filters["clean_string"] = clean_string
+env.filters["list_to_uobullet"] = list_to_uobullet
+env.filters["list_to_obullet"] = list_to_obullet
+#env.filters["vector_to_table"] = vector_to_table
 
+def file_list(path):
+    """
+    Returns a sorted list of files given a path
+    """
+
+    file_list = []
+    entries = Path(path)
+    file_list = []
+    for entry in entries.iterdir():
+        file_list.append(entry.name)
+
+    file_list.sort()
+    bad_file = file_list.index("index.rst")
+    if bad_file > 0:
+        del file_list[bad_file]
+
+    return(file_list)
 
 def process_ruleset(path, ruleset):
     rules = Ruleset(ruleset, path)
@@ -200,6 +241,37 @@ def process_ruleset(path, ruleset):
             )
         )
 
+    # Get all the buildings
+    all_buildings = rules.buildings.buildings
+
+    os.makedirs(
+        file_locations.get("conf.fc21_rst_output") + "/%s/buildings/" % ruleset, exist_ok=True
+    )
+    template = env.get_template("building.rst")
+
+    for building in all_buildings.values():
+        with open(
+            file_locations.get("conf.fc21_rst_output") + "/%s/buildings/%s.rst" % (ruleset, make_slug(building.name)), "w"
+        ) as out:
+            out.write(
+                template.render(
+                    building=building,
+                )
+            )
+
+    building_list = file_list(file_locations.get("conf.fc21_rst_output") + "/%s/buildings/" % ruleset)
+    template = env.get_template("building-index.rst")
+    with open(
+        file_locations.get("conf.fc21_rst_output") + "/%s/buildings/index.rst" % ruleset, "w"
+    ) as out:
+        out.write(
+            template.render(
+                building_list=building_list,
+        )
+    )
+
+
+
 
 def get_config(conf, section):
     """
@@ -224,6 +296,31 @@ def main_func():
 
     print(f"Welcome to {sys.argv[0]} v{__version__}\n")
 
+    # Write top level index.rst
+    rulesets = []
+    rulesets.append('civ1')
+    rulesets.append('civ2')
+    rulesets.append('civ2civ3')
+    rulesets.append('classic')
+    rulesets.append('experimental')
+    rulesets.append('granularity')
+    rulesets.append('multiplayer')
+    rulesets.append('royale')
+    rulesets.append('sandbox')
+    os.makedirs(
+        file_locations.get("conf.fc21_rst_output") + "/", exist_ok=True
+    )
+    template = env.get_template("index.rst")
+    with open(
+        file_locations.get("conf.fc21_rst_output") + "/index.rst", "w"
+    ) as out:
+        out.write(
+            template.render(
+                rulesets=rulesets
+        )
+    )
+
+    # process all the shipped rulesets
     for ruleset in (
         "civ1",
         "civ2",
