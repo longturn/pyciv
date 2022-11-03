@@ -4,7 +4,7 @@
 # SPDX-FileCopyrightText: 2022 James Robertson <jwrober@gmail.com>
 
 # Version string
-__version__ = "0.4"
+__version__ = "0.5"
 
 import configparser
 import logging
@@ -85,13 +85,14 @@ def file_list(path):
     """
 
     file_list = []
+    bad_file = 0
     entries = Path(path)
-    file_list = []
     for entry in entries.iterdir():
         file_list.append(entry.name)
 
     file_list.sort()
-    bad_file = file_list.index("index.rst")
+    if ['index.rst'] in file_list:
+        bad_file = file_list.index("index.rst")
     if bad_file > 0:
         del file_list[bad_file]
 
@@ -270,6 +271,52 @@ def process_ruleset(path, ruleset):
         )
     )
 
+    # Get unit details
+    all_unit_classes = rules.units.unit_classes
+    all_unit_types = rules.units.unit_types
+    all_buildings = rules.buildings.buildings
+
+    # Get all the technology advances
+    all_advances = rules.techs.advances
+    for advance in all_advances.values():
+        required_by = list(
+            filter(lambda adv: advance in adv.reqs, all_advances.values())
+        )
+        hard_required_by = list(
+            filter(lambda adv: advance == adv.root_req, all_advances.values())
+        )
+        required_by_units = list(
+            filter(lambda ut: advance in ut.tech_req, all_unit_types.values())
+        )
+
+    os.makedirs(
+        file_locations.get("conf.fc21_rst_output") + "/%s/advances/" % ruleset, exist_ok=True
+    )
+    template = env.get_template("advance.rst")
+
+    for advance in all_advances.values():
+        with open(
+            file_locations.get("conf.fc21_rst_output") + "/%s/advances/%s.rst" % (ruleset, make_slug(advance.name)), "w"
+        ) as out:
+            out.write(
+                template.render(
+                    advance=advance,
+                    required_by=required_by,
+                    hard_required_by=hard_required_by,
+                    required_by_units=required_by_units,
+                )
+            )
+
+    advances_list = file_list(file_locations.get("conf.fc21_rst_output") + "/%s/advances/" % ruleset)
+    template = env.get_template("advance-index.rst")
+    with open(
+        file_locations.get("conf.fc21_rst_output") + "/%s/advances/index.rst" % ruleset, "w"
+    ) as out:
+        out.write(
+            template.render(
+                advances_list=advances_list,
+        )
+    )
 
 
 
@@ -303,7 +350,7 @@ def main_func():
     rulesets.append('civ2civ3')
     rulesets.append('classic')
     rulesets.append('experimental')
-    rulesets.append('granularity')
+    #rulesets.append('granularity')
     rulesets.append('multiplayer')
     rulesets.append('royale')
     rulesets.append('sandbox')
@@ -327,7 +374,7 @@ def main_func():
         "civ2civ3",
         "classic",
         "experimental",
-        "granularity",
+        #"granularity",
         "multiplayer",
         "royale",
         "sandbox",
