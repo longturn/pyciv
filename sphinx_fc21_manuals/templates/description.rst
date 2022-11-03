@@ -3,10 +3,10 @@
 .. role:: improvement
 .. role:: wonder
 
-{% if about.description %}
 Detailed Description
 ====================
-
+{% if about.description == "" %}
+This ruleset does not have a detailed description.
+{% else %}
 {{ about.description }}
-
 {% endif %}

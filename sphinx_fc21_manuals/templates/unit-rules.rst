@@ -42,10 +42,12 @@ Auto Attack Rules
 :strong:`Auto Attack`
   {{ auto_attack.attack_actions_help_rst }}
 
-  {{ auto_attack.attack_actions | list_to_bullet }}{% endif %}
+  {{ auto_attack.attack_actions | list_to_uobullet }}{% endif %}
 {% if auto_attack.if_attacker %}
 :strong:`If Attacker`
-  {{ auto_attack.if_attacker_help_rst }}``{{ auto_attack.if_attacker }}``{% endif %}
+  {{ auto_attack.if_attacker_help_rst }}
+
+  {{ auto_attack.if_attacker | list_to_obullet }}{% endif %}
 {% if auto_attack.will_never %}
 :strong:`Will Never`
   {{ auto_attack.will_never_help_rst }}``{{ auto_attack.will_never }}``{% endif %}

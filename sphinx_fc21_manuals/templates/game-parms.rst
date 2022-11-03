@@ -21,7 +21,7 @@ The following game parameters are set. Each impacts gameplay in some fashion.
 :strong:`Granary Food Sizes by City Size`
   {{ civ_style.granary_food_ini_help_rst }}
 
-  {{ civ_style.granary_food_ini | list_to_bullet }}{% endif %}
+  {{ civ_style.granary_food_ini | list_to_uobullet }}{% endif %}
 {% if civ_style.granary_food_inc %}
 :strong:`Granary Size Increment = {{ civ_style.granary_food_inc }}`
   {{ civ_style.granary_food_inc_help_rst }}{% endif %}

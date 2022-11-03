@@ -51,7 +51,7 @@ The following parameters are set for cities. Each impacts gameplay in some fashi
 :strong:`Missing Unit Upkeep: Food Unit Action`
   {{ missing_unit_upkeep.food_unit_act_help_rst }}
 
-  {{ missing_unit_upkeep.food_unit_act | list_to_bullet }}{% endif %}
+  {{ missing_unit_upkeep.food_unit_act | list_to_uobullet }}{% endif %}
 {% if missing_unit_upkeep.food_wipe %}
 :strong:`Missing Unit Upkeep: Food Wipe = {{ missing_unit_upkeep.food_wipe }}`
   {{ missing_unit_upkeep.food_wipe_help_rst }}{% endif %}
@@ -62,7 +62,7 @@ The following parameters are set for cities. Each impacts gameplay in some fashi
 :strong:`Missing Unit Upkeep: Gold Unit Action`
   {{ missing_unit_upkeep.gold_unit_act_help_rst }}
 
-  {{ missing_unit_upkeep.gold_unit_act | list_to_bullet }}{% endif %}
+  {{ missing_unit_upkeep.gold_unit_act | list_to_uobullet }}{% endif %}
 {% if missing_unit_upkeep.gold_wipe %}
 :strong:`Missing Unit Upkeep: Gold Wipe = {{ missing_unit_upkeep.gold_wipe }}`
   {{ missing_unit_upkeep.gold_wipe_help_rst }}{% endif %}
@@ -73,7 +73,7 @@ The following parameters are set for cities. Each impacts gameplay in some fashi
 :strong:`Missing Unit Upkeep: Food Unit Action`
   {{ missing_unit_upkeep.food_unit_act_help_rst }}
 
-  {{ missing_unit_upkeep.food_unit_act | list_to_bullet }}{% endif %}
+  {{ missing_unit_upkeep.food_unit_act | list_to_uobullet }}{% endif %}
 {% if missing_unit_upkeep.shield_wipe %}
 :strong:`Missing Unit Upkeep: Shield Wipe = {{ missing_unit_upkeep.shield_wipe }}`
   {{ missing_unit_upkeep.shield_wipe_help_rst }}{% endif %}

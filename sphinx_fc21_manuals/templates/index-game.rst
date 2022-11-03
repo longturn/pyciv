@@ -13,7 +13,7 @@
 General Game Information
 ========================
 
-:strong:`Ruleset Summary`: {{ about.summary }}
+:strong:`Ruleset Summary`: {{ about.summary | clean_string }}
 
 {% if about.capabilities %}
 :strong:`Capabilities`
@@ -21,10 +21,10 @@ General Game Information
 {% endif %}
 {% if options.global_init_techs %}
 :strong:`Start Technologies`
-  {{ options.global_init_techs_help_rst }}{{ options.global_init_techs }}{% endif %}
+  {{ options.global_init_techs_help_rst }}:strong:`{{ options.global_init_techs }}`{% endif %}
 {% if options.global_init_buildings %}
 :strong:`Start Buildings`
-  {{ options.global_init_buildings_help_rst }}{{ options.global_init_buildings }}{% endif %}
+  {{ options.global_init_buildings_help_rst }}:strong:`{{ options.global_init_buildings }}`{% endif %}
 {% if tileset.preferred %}
 :strong:`Preferred Tileset`
   {{ tileset.preferred_help_rst }}{{ tileset.preferred }}{% endif %}
@@ -52,7 +52,7 @@ The following pages give details of all the settings for this ruleset:
   culture.rst
   calendar.rst
   city.rst
-  :maxdepth: 2
+  :maxdepth: 1
 
 
 Ruleset Features
@@ -61,10 +61,10 @@ Ruleset Features
 Here are links to other features of this ruleset:
 
 .. toctree::
-  advances.rst
-  buildings.rst
-  governments.rst
-  nations.rst
-  terrain.rst
-  units.rst
-  :maxdepth: 2
+  advances/index.rst
+  buildings/index.rst
+  governments/index.rst
+  nations/index.rst
+  terrain/index.rst
+  units/index.rst
+  :maxdepth: 1
