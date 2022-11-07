@@ -386,28 +386,7 @@ def process_ruleset(path, ruleset):
         )
 
     # Get all the technology advances
-
-    # FIXME: Fix the lamda filters here
     all_advances = rules.techs.advances
-    # print(all_advances.values())
-    for advance in all_advances.values():
-        print(advance)
-        print("\n\n")
-        required_by = list(
-            filter(lambda adv: (advance in adv.reqs), all_advances.values())
-        )
-        print(required_by)
-        print("\n\n")
-        hard_required_by = list(
-            filter(lambda adv: (advance == adv.root_req), all_advances.values())
-        )
-        print(hard_required_by)
-        print("\n\n")
-        required_by_units = list(
-            filter(lambda ut: (advance in ut.tech_req), all_unit_types.values())
-        )
-        print(required_by_units)
-        print("\n\n")
 
     # Create a directory to house all the tech advance pages.
     os.makedirs(
@@ -418,6 +397,16 @@ def process_ruleset(path, ruleset):
     # Write out all of the tech advance details.
     template = env.get_template("advance.rst")
     for advance in all_advances.values():
+        required_by = list(
+            filter(lambda adv: advance in adv.reqs, all_advances.values())
+        )
+        hard_required_by = list(
+            filter(lambda adv: advance == adv.root_req, all_advances.values())
+        )
+        required_by_units = list(
+            filter(lambda ut: (advance in ut.tech_req), all_unit_types.values())
+        )
+
         with open(
             file_locations.get("conf.fc21_rst_output")
             + "/%s/advances/%s.rst" % (ruleset, make_slug(advance.name)),
@@ -491,11 +480,11 @@ def main_func():
     # process all the shipped rulesets
     for ruleset in (
         # "alien",
-        "civ1",
+        # "civ1",
         # "civ2",
         # "civ2civ3",
         # "classic",
-        # "experimental",
+        "experimental",
         # "granularity",
         # "multiplayer",
         # "royale",
