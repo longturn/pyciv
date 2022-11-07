@@ -47,10 +47,18 @@ Auto Attack Rules
 :strong:`If Attacker`
   {{ auto_attack.if_attacker_help_rst }}
 
-  {{ auto_attack.if_attacker | list_to_obullet }}{% endif %}
+.. csv-table::
+   :header: "Type", "Name", "Range", "Present", "Survives", "Quiet", "Negated"
+   {% for req in auto_attack.if_attacker %}
+   "{{ req.type }}","{{ req.name }}","{{ req.range }}","{{ req.present }}","{{ req.survives }}","{{ req.quiet }}","{{ req.negated }}"{% endfor %}
+
+  {% endif %}
 {% if auto_attack.will_never %}
 :strong:`Will Never`
-  {{ auto_attack.will_never_help_rst }}``{{ auto_attack.will_never }}``{% endif %}
+  {{ auto_attack.will_never_help_rst }}
+
+  {{ auto_attack.will_never | list_to_uobullet }}
+  {% endif %}
 
 
 Unit Action Rules

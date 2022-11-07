@@ -1,25 +1,34 @@
-{{ building.name | title }}
+{{ building.name }}
 ***************************
 
 
 
 .. image:: ../../../../../data/tilesets/{% if building.genus == "Improvement" or building.genus == "Special" %}buildings{% else %}wonders{% endif %}/{{ building.graphic[2:100] }}.png
+    :scale: 150%
+    :alt: {{ building.graphic[2:100] }}
 
 
-* :strong:`Name:` {{ building.name }}
-* :strong:`helptext:` {{ building.helptext | clean_string }}
+{{ building.helptext | clean_string }}
+
+
 * :strong:`Type:` {{ building.genus }}
-* :strong:`Build Cost (Shields):` {{ building.build_cost }}
-* :strong:`Upkeep Per Turn (Gold):` {{ building.upkeep }}
-* :strong:`Sabotage Cost (Gold):` {{ building.sabotage }}
-* :strong:`Requirement(s):`
+* :strong:`Build Cost:` {{ building.build_cost }} Shields
+* :strong:`Upkeep:` {{ building.upkeep }} Gold / Turn
+* :strong:`Sabotage Cost:` {{ building.sabotage }} Gold
+{% set rows = building.reqs | length %}{% if rows == 1 %}* :strong:`Requirement:`{% else %}* :strong:`Requirements:`{% endif %}
+{% if building.reqs %}
+  .. csv-table::
+   :header: "Type", "Name", "Range", "Present", "Survives", "Quiet", "Negated"
+   {% for req in building.reqs %}
+   "{{ req.type }}","{{ req.name }}","{{ req.range }}","{{ req.present }}","{{ req.survives }}","{{ req.quiet }}","{{ req.negated }}"{% endfor %}
+   {% else %}  This improvement and does not have any requirements.
+{% endif %}
 
-  {{ building.reqs | list_to_obullet }}
-
-{% if building.obsolete_by %}* :strong:`Obsoleted By:`
-
-  {{ building.obsolete_by | list_to_obullet }}{% endif %}
-
-* :strong:`Rule Name:` {{ building.rule_name }}
-{% if building.sound %}* :strong:`Sound:` {{ building.sound }}{% endif %}
-{% if building.sound_alt %}* :strong:`Sound Alternate:` {{ building.sound_alt }}{% endif %}
+* :strong:`Obsoleted By:`
+{% if building.obsolete_by %}
+  .. csv-table::
+   :header: "Type", "Name", "Range", "Present", "Survives", "Quiet", "Negated"
+   {% for req in building.obsolete_by %}
+   "{{ req.type }}","{{ req.name }}","{{ req.range }}","{{ req.present }}","{{ req.survives }}","{{ req.quiet }}","{{ req.negated }}"{% endfor %}
+   {% else %}  This improvement is not obsoleted by anything.
+{% endif %}

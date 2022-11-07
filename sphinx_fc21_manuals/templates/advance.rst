@@ -1,5 +1,7 @@
-{{ advance.name | title }}
+{{ advance.name }}
 **************************
+
+{{ advance.helptext | clean_string }}
 
 Properties
 ==========
@@ -27,6 +29,8 @@ Properties
   * This advance is not hard required by any other advances.{% endfor %}
 
 :strong:`Cost` {% if advance.cost %}{{ advance.cost }} bulbs.{% else %}Automatic.{% endif %}
+
+:strong:`Bonus Message` {% if advance.bonus_message %}{{ advance.bonus_message }}{% else %}None.{% endif %}
 
 Required to Build
 =================

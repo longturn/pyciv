@@ -21,10 +21,14 @@ General Game Information
 {% endif %}
 {% if options.global_init_techs %}
 :strong:`Start Technologies`
-  {{ options.global_init_techs_help_rst }}:strong:`{{ options.global_init_techs }}`{% endif %}
+  {{ options.global_init_techs_help_rst }}
+
+  {{ options.global_init_techs  | list_to_uobullet }}{% endif %}
 {% if options.global_init_buildings %}
 :strong:`Start Buildings`
-  {{ options.global_init_buildings_help_rst }}:strong:`{{ options.global_init_buildings }}`{% endif %}
+  {{ options.global_init_buildings_help_rst }}
+
+  {{ options.global_init_buildings | list_to_uobullet }}{% endif %}
 {% if tileset.preferred %}
 :strong:`Preferred Tileset`
   {{ tileset.preferred_help_rst }}{{ tileset.preferred }}{% endif %}
@@ -67,4 +71,5 @@ Here are links to other features of this ruleset:
   nations/index.rst
   terrain/index.rst
   units/index.rst
+  unit-classes/index.rst
   :maxdepth: 1

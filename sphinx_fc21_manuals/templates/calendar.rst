@@ -25,4 +25,7 @@ Calendar Settings
 {% if calendar.fragment_name2 %}
 :strong:`Calendar Fragment 3 = {{ calendar.fragment_name2 }}`
   {{ calendar.fragment_name2_help_rst }}{% endif %}
+{% if calendar.fragment_name3 %}
+:strong:`Calendar Fragment 4 = {{ calendar.fragment_name3 }}`
+  {{ calendar.fragment_name3_help_rst }}{% endif %}
 {% endif %}
