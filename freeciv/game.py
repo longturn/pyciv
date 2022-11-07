@@ -40,8 +40,10 @@ class AboutData:
 @typechecked
 @dataclass
 class OptionsData:
-    global_init_techs: str
-    global_init_buildings: str
+    global_init_techs: list[str]
+    global_init_buildings: list[str]
+    # Alien World
+    popup_tech_help: bool = None
 
     global_init_techs_help_rst: str = "This ruleset starts a player with the folliwing technology advances at game start: "
 
@@ -107,7 +109,9 @@ class CivStyleData:
     output_granularity: int = 1  # FIXME default?
 
     # Help Strings
-    base_pollution_help_rst: str = "This value represents the base amount of pollution for each city."
+    base_pollution_help_rst: str = (
+        "This value represents the base amount of pollution for each city."
+    )
 
     happy_cost_help_rst: str = "This value represents the cost in luxury goods of making one citizen happier in a city."
 
@@ -117,23 +121,33 @@ class CivStyleData:
 
     granary_food_inc_help_rst: str = "This value is related to the previous list above. If this value is greater than zero, it represents how much the city granary size grows for cities larger than the last value of the list above."
 
-    min_city_center_food_help_rst: str = "The value represetns the minimum amount of food a city center tile generates"
+    min_city_center_food_help_rst: str = (
+        "The value represetns the minimum amount of food a city center tile generates"
+    )
 
     min_city_center_shield_help_rst: str = "The value represents the minimum amount of production (shields) a city center tile generates"
 
-    min_city_center_trade_help_rst: str = "The value represents the minimum amount of trade a city center tile generates,"
+    min_city_center_trade_help_rst: str = (
+        "The value represents the minimum amount of trade a city center tile generates,"
+    )
 
     init_city_radius_sq_help_rst: str = "This value represents the input to define the initial working area for a city. The math is somewhat complicated and is documented on the legacy freeciv wiki at https://freeciv.fandom.com/wiki/Radius. The larger the value, the larger the working area for the city."
 
     init_vis_radius_sq_help_rst: str = "This value represents the input to define the initial vision area for a city. The math is somewhat complicated and is documented on the legacy freeciv wiki at https://freeciv.fandom.com/wiki/Radius. The larger the value, the larger the vision area for the city."
 
-    base_bribe_cost_help_rst: str = "This value represents the base cost in gold to bribe a unit."
+    base_bribe_cost_help_rst: str = (
+        "This value represents the base cost in gold to bribe a unit."
+    )
 
     ransom_gold_help_rst: str = "This value represents the amound of gold is paid in ransom when a :unit:`Barbarian Leader` is killed."
 
-    upgrade_veteran_loss_help_rst: str = "Increments of ``10`` is one veteran level per upgrade."
+    upgrade_veteran_loss_help_rst: str = (
+        "Increments of ``10`` is one veteran level per upgrade."
+    )
 
-    autoupgrade_veteran_loss_help_rst: str = "Increments of ``10`` is one veteran level per auto-upgrade."
+    autoupgrade_veteran_loss_help_rst: str = (
+        "Increments of ``10`` is one veteran level per auto-upgrade."
+    )
 
     pillage_select_help_rst: str = "When set to ``True``, the player gets to select which terrain improvement to pillage."
 
@@ -176,11 +190,17 @@ class IllnessData:
     illness_pollution_factor: int
 
     # Help Strings
-    illness_on_help_rst: str = "When set to ``True``, illness (plague) is enabled for the game."
+    illness_on_help_rst: str = (
+        "When set to ``True``, illness (plague) is enabled for the game."
+    )
 
-    illness_base_factor_help_rst: str = "This value defines the percentage factor of how plague is calculated."
+    illness_base_factor_help_rst: str = (
+        "This value defines the percentage factor of how plague is calculated."
+    )
 
-    illness_min_size_help_rst: str = "This value defines the minimum city size for plague to be in effect."
+    illness_min_size_help_rst: str = (
+        "This value defines the minimum city size for plague to be in effect."
+    )
 
     illness_trade_infection_help_rst: str = "This value is the percentage factor for how much trading with a plagued city increases our city's chance for plague."
 
@@ -238,7 +258,6 @@ class CombatRulesData:
     killstack_help_rst: str = "When set to ``True``, a stack of units can be completely destroyed when the strongest defender is killed."
 
 
-
 @section("auto_attack")
 @typechecked
 @dataclass
@@ -255,6 +274,7 @@ class AutoAttackData:
 
 
 ActionRange = Union[int, Literal["unlimited"]]
+
 
 @section("actions")
 @typechecked
@@ -395,7 +415,9 @@ class BordersData:
 
     # Help Strings
     radius_sq_city_help_rst: str = "This value represents the input to define the initial border area outside a city. The math is somewhat complicated and is documented on the legacy freeciv wiki at https://freeciv.fandom.com/wiki/Radius. The larger the value, the larger the border area for the city."
-    size_effect_help_rst: str = "The border area increases by this amount divided by the of city size."
+    size_effect_help_rst: str = (
+        "The border area increases by this amount divided by the of city size."
+    )
     radius_sq_city_permanent_help_rst: str = "This value is the difference between a city's workable area and the area permanently claimed by the city. These tiles cannot be stolen by a stronger border source. A value of ``0`` means the city workable area is immune to border stealing. A negative value means outer workable tiles can be stolen. Highly negative values (more than max city area) means any workable tile can be stolen. If the city area value is variable, so is the set of locked tiles. This is a squared value, so the radius of the ring of tiles which are workable, but not locked (or vice versa) varies but the area is constant."
 
 
@@ -436,13 +458,16 @@ class CultureData:
     history_interest_pml: int = 0  # FIXME 3.0?
 
     # Help Strings
-    victory_min_points_help_rst: str = "The minimum culture points for cultural domination victory."
+    victory_min_points_help_rst: str = (
+        "The minimum culture points for cultural domination victory."
+    )
 
     victory_lead_pct_help_rst: str = "How big of a lead relative to second best player that is needed for cultural domination victory."
 
     migration_pml_help_rst: str = "How much existing history grows each turn. This makes older history of the same  original value more valuable as newer history, as it has gained more interest."
 
     history_interest_pml_help_rst: str = "How much each culture point affects the migration from/to the city. Each culture point counts as this many permilles of a migration point."
+
 
 @section("calendar")
 @typechecked
@@ -456,7 +481,10 @@ class CalendarData:
     fragments: int = 1  # FIXME default?
     fragment_name0: str = None
     fragment_name1: str = None
+    # Aviation
     fragment_name2: str = None
+    # Alien World
+    fragment_name3: str = None
 
     # Help Strings
     start_year_help_rst: str = "This value defines the year the game starts."
@@ -470,6 +498,8 @@ class CalendarData:
     fragment_name1_help_rst: str = "The second calendar year fragment name."
 
     fragment_name2_help_rst: str = "The third calendar year fragment name."
+
+    fragment_name3_help_rst: str = "The forth calendar year fragment name."
 
 
 @typechecked

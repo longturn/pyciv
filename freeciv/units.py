@@ -45,10 +45,10 @@ KNOWN_UNIT_CLASS_FLAGS = {
 @dataclass
 class VeteranLevel:
     name: str
-    base_raise_chance: int
     work_raise_chance: int
     power_factor: int
     move_bonus: int
+    base_raise_chance: int = 0
 
 
 def load_veteran_levels(

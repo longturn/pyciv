@@ -33,13 +33,21 @@ class CityParametersData:
 
     changable_budget_help_rst: str = "If set to ``True``, the game allows a changable national budget for science, luxury goods, and tax. If set to ``False``, the amounts are hard coded."
 
-    forced_science_help_rst: str = "Changeable Budget is ``False``. The forced science output is: "
+    forced_science_help_rst: str = (
+        "Changeable Budget is ``False``. The forced science output is: "
+    )
 
-    forced_luxury_help_rst: str = "Changeable Budget is ``False``. The forced luxury goods output is: "
+    forced_luxury_help_rst: str = (
+        "Changeable Budget is ``False``. The forced luxury goods output is: "
+    )
 
-    forced_gold_help_rst: str = "Changeable Budget is ``False``. The forced tax output is: "
+    forced_gold_help_rst: str = (
+        "Changeable Budget is ``False``. The forced tax output is: "
+    )
 
-    vision_reveal_tiles_help_rst: str = "If set to ``True``, terrain within a city vision area is revealed."
+    vision_reveal_tiles_help_rst: str = (
+        "If set to ``True``, terrain within a city vision area is revealed."
+    )
 
 
 @section("citizen")
@@ -53,7 +61,9 @@ class CityCitizenData:
     conquest_convert_pct: int = 0
 
     # Help Strings
-    nationality_help_rst: str = "If set to ``True``, then citizen nationality is enabled."
+    nationality_help_rst: str = (
+        "If set to ``True``, then citizen nationality is enabled."
+    )
 
     convert_speed_help_rst: str = "The value represents the base probability of converting a foreign citizen in a conquered city to your own nation as the city grows."
 
@@ -95,7 +105,6 @@ class CityMissingUnitUpkeepData:
     shield_unit_act_help_rst: str = "? helptext needs help ?"
 
     shield_wipe_help_rst: str = "? helptext needs help ?"
-
 
 
 class CitySettings:

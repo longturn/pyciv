@@ -9,13 +9,14 @@ from .secfile.loader import read_named_sections, rewrite, section
 
 
 def building_compat(values):
-    obsolete_by = values["obsolete_by"]
-    if type(obsolete_by) == str:
-        del values["obsolete_by"]
-        if obsolete_by != "None":
-            values["obsolete_by"] = Requirement(
-                type="Tech", name=obsolete_by, range="Player"
-            )
+    if "obsolete_by" in values:
+        obsolete_by = values["obsolete_by"]
+        if type(obsolete_by) == str:
+            del values["obsolete_by"]
+            if obsolete_by != "None":
+                values["obsolete_by"] = Requirement(
+                    type="Tech", name=obsolete_by, range="Player"
+                )
 
     return values
 
