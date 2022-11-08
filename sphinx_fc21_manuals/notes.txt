@@ -4,18 +4,21 @@ freeciv21/Docs/Manuals/Rulesets
     index.rst -- contains links to all the ruleset manuals
 
 freeciv21/Docs/Manuals/Rulesets/{ruleset}
-    index.rst -- information from game.ruleset and cities.ruleset
-    buildings.rst -- contains links to all the individual building pages from buildings.ruleset
+    index.rst -- Information from game.ruleset and cities.ruleset
+    advances.rst -- Contains links to all the individual technology pages from techs.ruleset
+    buildings.rst -- Contains links to all the individual building pages from buildings.ruleset
+    units-classes.rst -- Contains links to all of the individual unit class pages from units.ruleset
+    units-types.rst -- Contains links to all of the individual unit type pages from units.ruleset
+    governments.rst -- [needs code] single page documenting the available governments
+    nations.rst -- [needs code] add to game information set of pages to show the values from nations.ruleset.
+                -- also include links to a common set of nation pages (see TODO)
+    terrain.rst -- [needs code] add to game information set of pages to show the values from terrain.ruleset.
+                -- also include links to a common set of terrain pages (see TODO)
+
     effects.rst -- ? how are we going to document effects ? -- my general thought is to include on the page
         where the effect applies
-    governments.rst -- single page documenting the available governments
-    nations.rst -- ? how do we want to document all the nations ?
     styles.rst -- ? how do we want to document the styles ? -- generally not very important information here
-    advances.rst -- contains links to all the individual technology pages from techs.ruleset
-    terrain.rst -- contains information from terrain.ruleset and then links to all the individual terrain pages
-    units.rst -- contains links to all the individual unit pages from units.ruleset. unit pages contain all the
-        information about a unit: base information, flags (and what the flag gives), unit_class (and what the
-        class gives), class_flag (and what that gives), and veterancy
+
 
 freeciv21/Docs/Manuals/Rulesets/{ruleset}/advances
     {advance_name}.rst
@@ -23,11 +26,47 @@ freeciv21/Docs/Manuals/Rulesets/{ruleset}/advances
 freeciv21/Docs/Manuals/Rulesets/{ruleset}/buildings
     {building_name}.rst
 
-freeciv21/Docs/Manuals/Rulesets/{ruleset}/nations
-    {nation_name).rst
-
-freeciv21/Docs/Manuals/Rulesets/{ruleset}/terrain
-    {terrain_name}.rst
-
 freeciv21/Docs/Manuals/Rulesets/{ruleset}/units
     {unit_name}.rst
+    {unit_class}.rst
+
+freeciv21/Docs/Manuals/Rulesets/{ruleset}/governments
+    {gov_name}.rst
+
+freeciv21/Docs/Manuals/Rulesets/common/nations
+    {nation_name).rst
+
+freeciv21/Docs/Manuals/Rulesets/common/terrain
+    {terrain_name}.rst
+
+freeciv21/Docs/Manuals/Rulesets/common
+    unit_class_flags.rst -- Common source to document all of the unit class flags.
+    unit_class_hut.rst -- Common source to document all of the hut behaviors.
+    unit_type_flags.rst -- Common source to document all of the unit type flags.
+    unit_type_roles.rst -- Common source to document all of the unit type roles.
+
+TODO:
+- Get buildings by tech to add to advance.rst
+- Figure out best way to document the nations. They are duplicated across the rulesets.
+- Figure out best way to document terrain. I'll bet there is a lot of overlap between the rulesets. Will need terrain specific sprites if we want to show it on the page.
+- Document the governments.
+- Gather effects and document them where they are "effected" and not as a big page of them
+- See if we can get all the unit action enablers documented and associated with the appropriate unit
+- Need a detailed look at the helptext across all rulesets. Many items need to be cleaned up to be rst friendly. Usage of consonants and other doco style are not being followed.
+- Create a universal look up page to document what the requirement vector table columns mean. Link to it where needed.
+- The current graphics for the techs are really crappy. Before we go and show a graphic for the tech advances, need to get that issue fixed first.
+- Run through each of the rulesets one by one and see how many sphinx warnings come up and see about fixes.
+- Document (with helptext) what the scenario capabilities are. See index-game.rst
+
+FIXES:
+- SPRITE: Ecclesiastical palace is a small wonder, but in buildings list
+- SPRITE: Harbor image uses the en_GB form of harbour, needs to be renamed.
+- SPRITE: The wonder mausoleum_of_halicarnassus sprite is referred to as simply mausoleum in most rulesets, causing an issue with image lookup
+- SPRITE: srcaravel is sq_rig_caravel.png, needs to be renamed
+- BLDG: Fix building flags (see airport in royale, or others that say "set()")
+- UNIT: The unit obsoletes value isn't working. for example, cavalry obsoletes knights in a lot of rulesets. Another example is pikemen obsolete phalanx.
+- UNIT: Some rulesets have the mobility bonus added to the name of the veteran level causing duplicated information in the
+
+
+QUESTIONS:
+- Do we have any rulesets that use the "convert" feature for units? Would be good to see if the code works there.
