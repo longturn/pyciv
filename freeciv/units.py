@@ -186,6 +186,8 @@ class UnitType:
     # 3.0 stuff
     city_size: int = None
 
+    targets_help_rst: str = "This is a list of unit classes that this unit type can target (hit) in an attack. Targets are typically associated with airborne units and air-to-air combat."
+
     def __post_init__(self):
         if self.rule_name is None:
             self.rule_name = self.name
