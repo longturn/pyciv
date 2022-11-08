@@ -9,16 +9,16 @@ City Related Settings
 The following parameters are set for cities. Each impacts gameplay in some fashion.
 
 {% if parameters.add_to_size_limit %}
-:strong:`Add Size Limit = {{ parameters.add_to_size_limit }}`
+:strong:`Add Size Limit` = {{ parameters.add_to_size_limit }}
   {{ parameters.add_to_size_limit_help_rst }}{% endif %}
 {% if parameters.angry_citizens %}
-:strong:`Angry Citizens = {{ parameters.angry_citizens }}`
+:strong:`Angry Citizens` = {{ parameters.angry_citizens }}
   {{ parameters.angry_citizens_help_rst }}{% endif %}
 {% if parameters.celebrate_size_limit %}
-:strong:`Celebrate Size Limit = {{ parameters.celebrate_size_limit }}`
+:strong:`Celebrate Size Limit` = {{ parameters.celebrate_size_limit }}
   {{ parameters.celebrate_size_limit_help_rst }}{% endif %}
 {% if parameters.changable_budget %}
-:strong:`National Budget = {{ parameters.changable_budget }}`
+:strong:`National Budget` = {{ parameters.changable_budget }}
   {{ parameters.changable_budget_help_rst }}{% endif %}
 {% if parameters.forced_science %}
 :strong:`Forced Science`
@@ -30,22 +30,22 @@ The following parameters are set for cities. Each impacts gameplay in some fashi
 :strong:`Forced Tax`
   {{ parameters.forced_gold_help_rst }}``{{ parameters.forced_gold }}``{% endif %}
 {% if parameters.vision_reveal_tiles %}
-:strong:`Vision Reveal = {{ parameters.vision_reveal_tiles }}`
+:strong:`Vision Reveal` = {{ parameters.vision_reveal_tiles }}
   {{ parameters.vision_reveal_tiles_help_rst }}{% endif %}
 {% if citizens.nationality %}
-:strong:`Nationality = {{ citizens.nationality }}`
+:strong:`Nationality` = {{ citizens.nationality }}
   {{ citizens.nationality_help_rst }}{% endif %}
 {% if citizens.convert_speed %}
-:strong:`Citizen Convert Speed = {{ citizens.convert_speed }}`
+:strong:`Citizen Convert Speed` = {{ citizens.convert_speed }}
   {{ citizens.convert_speed_help_rst }}{% endif %}
 {% if citizens.partisans_pct %}
-:strong:`Partisans = {{ citizens.partisans_pct }}%`
+:strong:`Partisans` = {{ citizens.partisans_pct }}%
   {{ citizens.partisans_pct_help_rst }}{% endif %}
 {% if citizens.conquest_convert_pct %}
-:strong:`Conquest Conver = {{ citizens.conquest_convert_pct }}%`
+:strong:`Conquest Conver` = {{ citizens.conquest_convert_pct }}%
   {{ citizens.conquest_convert_pct_help_rst }}{% endif %}
 {% if missing_unit_upkeep.food_protected %}
-:strong:`Missing Unit Upkeep: Food Protected = {{ missing_unit_upkeep.food_protected }}`
+:strong:`Missing Unit Upkeep: Food Protected` = {{ missing_unit_upkeep.food_protected }}
   {{ missing_unit_upkeep.food_protected_help_rst }}{% endif %}
 {% if missing_unit_upkeep.food_unit_act %}
 :strong:`Missing Unit Upkeep: Food Unit Action`
@@ -53,10 +53,10 @@ The following parameters are set for cities. Each impacts gameplay in some fashi
 
   {{ missing_unit_upkeep.food_unit_act | list_to_uobullet }}{% endif %}
 {% if missing_unit_upkeep.food_wipe %}
-:strong:`Missing Unit Upkeep: Food Wipe = {{ missing_unit_upkeep.food_wipe }}`
+:strong:`Missing Unit Upkeep: Food Wipe` = {{ missing_unit_upkeep.food_wipe }}
   {{ missing_unit_upkeep.food_wipe_help_rst }}{% endif %}
 {% if missing_unit_upkeep.gold_protected %}
-:strong:`Missing Unit Upkeep: Gold Protected = {{ missing_unit_upkeep.gold_protected }}`
+:strong:`Missing Unit Upkeep: Gold Protected` = {{ missing_unit_upkeep.gold_protected }}
   {{ missing_unit_upkeep.gold_protected_help_rst }}{% endif %}
 {% if missing_unit_upkeep.gold_unit_act %}
 :strong:`Missing Unit Upkeep: Gold Unit Action`
@@ -64,10 +64,10 @@ The following parameters are set for cities. Each impacts gameplay in some fashi
 
   {{ missing_unit_upkeep.gold_unit_act | list_to_uobullet }}{% endif %}
 {% if missing_unit_upkeep.gold_wipe %}
-:strong:`Missing Unit Upkeep: Gold Wipe = {{ missing_unit_upkeep.gold_wipe }}`
+:strong:`Missing Unit Upkeep: Gold Wipe` = {{ missing_unit_upkeep.gold_wipe }}
   {{ missing_unit_upkeep.gold_wipe_help_rst }}{% endif %}
 {% if missing_unit_upkeep.shield_protected %}
-:strong:`Missing Unit Upkeep: Gold Protected = {{ missing_unit_upkeep.shield_protected }}`
+:strong:`Missing Unit Upkeep: Gold Protected` = {{ missing_unit_upkeep.shield_protected }}
   {{ missing_unit_upkeep.shield_protected_help_rst }}{% endif %}
 {% if missing_unit_upkeep.food_unit_act %}
 :strong:`Missing Unit Upkeep: Food Unit Action`

@@ -2,5 +2,5 @@ Buildings
 *********
 
 .. toctree::{% for item in building_list %}
-   {{ item }}{% endfor %}
+   buildings/{{ item | make_slug }}.rst{% endfor %}
    :maxdepth: 1

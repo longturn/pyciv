@@ -15,4 +15,5 @@ City Incite Cost Settings
   * Base Incite Cost: ``{{ incite_cost.base_incite_cost }}``
   * Improvement Factor: ``{{ incite_cost.improvement_factor }}``
   * Unit Factor: ``{{ incite_cost.unit_factor }}``
-  * Total Factor: ``{{ incite_cost.total_factor }}``{% endif %}
+  * Total Factor: ``{{ incite_cost.total_factor }}``
+  {% endif %}

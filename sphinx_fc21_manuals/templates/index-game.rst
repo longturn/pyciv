@@ -13,30 +13,30 @@
 General Game Information
 ========================
 
-:strong:`Ruleset Summary`: {{ about.summary | clean_string }}
+:strong:`Ruleset Summary:` {{ about.summary | clean_string }}
 
 {% if about.capabilities %}
-:strong:`Capabilities`
+:strong:`Capabilities:`
   {{ about.capabilities_help_rst }}``{{ about.capabilities }}``
 {% endif %}
 {% if options.global_init_techs %}
-:strong:`Start Technologies`
+:strong:`Start Technologies:`
   {{ options.global_init_techs_help_rst }}
 
   {{ options.global_init_techs  | list_to_uobullet }}{% endif %}
 {% if options.global_init_buildings %}
-:strong:`Start Buildings`
+:strong:`Start Buildings:`
   {{ options.global_init_buildings_help_rst }}
 
   {{ options.global_init_buildings | list_to_uobullet }}{% endif %}
 {% if tileset.preferred %}
-:strong:`Preferred Tileset`
+:strong:`Preferred Tileset:`
   {{ tileset.preferred_help_rst }}{{ tileset.preferred }}{% endif %}
 {% if soundset.preferred %}
-:strong:`Preferred Soundset`
+:strong:`Preferred Soundset:`
   {{ soundset.preferred_help_rst }}{{ soundset.preferred }}{% endif %}
 {% if musicset.preferred %}
-:strong:`Preferred Musicset`
+:strong:`Preferred Musicset:`
   {{ musicset.preferred_help_rst }}{{ musicset.preferred }}{% endif %}
 
 
@@ -65,11 +65,8 @@ Ruleset Features
 Here are links to other features of this ruleset:
 
 .. toctree::
-  advances/index.rst
-  buildings/index.rst
-  governments/index.rst
-  nations/index.rst
-  terrain/index.rst
-  units/index.rst
-  unit-classes/index.rst
+  advances.rst
+  buildings.rst
+  unit-types.rst
+  unit-classes.rst
   :maxdepth: 1

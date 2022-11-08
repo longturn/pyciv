@@ -1,7 +1,7 @@
-Unit Types
-**********
+Units
+*****
 
 .. toctree::{% for item in unit_type_list %}
-   {{ item }}{% endfor %}
+   units/{{ item | make_slug }}.rst{% endfor %}
    :maxdepth: 1
 

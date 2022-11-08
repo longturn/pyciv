@@ -48,9 +48,9 @@ Auto Attack Rules
   {{ auto_attack.if_attacker_help_rst }}
 
 .. csv-table::
-   :header: "Type", "Name", "Range", "Present", "Survives", "Quiet", "Negated"
+   :header: "Type", "Name", "Range", "Present", "Survives", "Quiet"
    {% for req in auto_attack.if_attacker %}
-   "{{ req.type }}","{{ req.name }}","{{ req.range }}","{{ req.present }}","{{ req.survives }}","{{ req.quiet }}","{{ req.negated }}"{% endfor %}
+   "{{ req.type }}","{{ req.name }}","{{ req.range }}","{{ req.present }}","{{ req.survives }}","{{ req.quiet }}"{% endfor %}
 
   {% endif %}
 {% if auto_attack.will_never %}

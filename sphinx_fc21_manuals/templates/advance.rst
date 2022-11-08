@@ -28,19 +28,17 @@ Properties
   * :doc:`{{ req.name | make_slug }}`{% else %}
   * This advance is not hard required by any other advances.{% endfor %}
 
-:strong:`Cost` {% if advance.cost %}{{ advance.cost }} bulbs.{% else %}Automatic.{% endif %}
-
-:strong:`Bonus Message` {% if advance.bonus_message %}{{ advance.bonus_message }}{% else %}None.{% endif %}
-
-Required to Build
-=================
+:strong:`Required to Build:`
 {% if required_by_units %}{% for unit_type in required_by_units | sort %}
   * :doc:`../units/{{ unit_type.name | make_slug }}`{% endfor %}{% else %}
   * No unit type requires this technology.
 {% endif %}
 
-Flags
-=====
+:strong:`Flags:`
 {% if advance.flags %}{% for flag in advance.flags | sort %}
   * ``{{ flag }}``{% endfor %}{% else %}
   * This advance does not have any flags.{% endif %}
+
+.. todo:: Add helptext for the flags.
+
+:strong:`Bonus Message:` {% if advance.bonus_message %}{{ advance.bonus_message }}{% else %}None.{% endif %}

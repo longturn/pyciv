@@ -2,5 +2,5 @@ Unit Classes
 ************
 
 .. toctree::{% for item in unit_class_list %}
-   {{ item }}{% endfor %}
+   units/{{ item | make_slug }}.rst{% endfor %}
    :maxdepth: 1
