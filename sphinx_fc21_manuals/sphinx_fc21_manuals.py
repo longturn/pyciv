@@ -11,12 +11,13 @@ import logging
 import os
 import re
 import sys
-from warnings import warn
 from pathlib import Path
+from warnings import warn
 
 from jinja2 import Environment, FileSystemLoader
 from unidecode import unidecode
 
+# FIXME: There is probably a better way to do this
 sys.path.append("../")
 from freeciv.rules import Ruleset
 
@@ -35,6 +36,7 @@ def clean_string(name):
     name = name.replace("\n", "")
     name = name.replace(".", ". ")
     name = name.replace("*", "\n\n*")
+    name = name.replace(":", ": ")
 
     return name
 
@@ -70,26 +72,6 @@ env.filters["make_slug"] = make_slug
 env.filters["clean_string"] = clean_string
 env.filters["list_to_uobullet"] = list_to_uobullet
 env.filters["list_to_obullet"] = list_to_obullet
-
-
-def file_list(path):
-    """
-    Returns a sorted list of files given a path
-    """
-
-    file_list = []
-    bad_file = -1
-    entries = Path(path)
-    for entry in entries.iterdir():
-        file_list.append(entry.name)
-
-    file_list.sort()
-    if "index.rst" in file_list:
-        bad_file = file_list.index("index.rst")
-    if bad_file > 0:
-        del file_list[bad_file]
-
-    return file_list
 
 
 def process_ruleset(path, ruleset):
@@ -273,8 +255,10 @@ def process_ruleset(path, ruleset):
 
     # Write a file for each building in the list of all of the buildings
     # FIXME: Figure out a way to use graphic_alt if main graphic isn't available.
+    building_list = []
     template = env.get_template("building.rst")
     for building in all_buildings.values():
+        building_list.append(building.name)
         with open(
             file_locations.get("conf.fc21_rst_output")
             + "/%s/buildings/%s.rst" % (ruleset, make_slug(building.name)),
@@ -287,13 +271,10 @@ def process_ruleset(path, ruleset):
             )
 
     # Build a list of all the building files created above and then populate an index page.
-    building_list = file_list(
-        file_locations.get("conf.fc21_rst_output") + "/%s/buildings/" % ruleset
-    )
     template = env.get_template("building-index.rst")
+    building_list.sort()
     with open(
-        file_locations.get("conf.fc21_rst_output")
-        + "/%s/buildings/index.rst" % ruleset,
+        file_locations.get("conf.fc21_rst_output") + "/%s/buildings.rst" % ruleset,
         "w",
     ) as out:
         out.write(
@@ -306,21 +287,23 @@ def process_ruleset(path, ruleset):
     all_unit_classes = rules.units.unit_classes
     all_unit_types = rules.units.unit_types
 
-    # Create a directory to house all the unit-class pages.
+    # Create a directory to house all the unit-type and unit-class pages.
     os.makedirs(
-        file_locations.get("conf.fc21_rst_output") + "/%s/unit-classes/" % ruleset,
+        file_locations.get("conf.fc21_rst_output") + "/%s/units/" % ruleset,
         exist_ok=True,
     )
 
     # Write out all of the unit class details.
+    unit_class_list = []
     template = env.get_template("unit-class.rst")
     for unit_class in all_unit_classes.values():
-        units_in_class = list(
-            filter(lambda ut: (ut.uclass == unit_class.name), all_unit_types.values())
+        unit_class_list.append(unit_class.name)
+        units_in_class = filter(
+            lambda ut: ut.uclass == unit_class, all_unit_types.values()
         )
         with open(
             file_locations.get("conf.fc21_rst_output")
-            + "/%s/unit-classes/%s.rst" % (ruleset, make_slug(unit_class.name)),
+            + "/%s/units/%s.rst" % (ruleset, make_slug(unit_class.name)),
             "w",
         ) as out:
             out.write(
@@ -328,13 +311,10 @@ def process_ruleset(path, ruleset):
             )
 
     # Build a list of all the unit class files created above and then populate an index page.
-    unit_class_list = file_list(
-        file_locations.get("conf.fc21_rst_output") + "/%s/unit-classes/" % ruleset
-    )
+    unit_class_list.sort()
     template = env.get_template("unit-class-index.rst")
     with open(
-        file_locations.get("conf.fc21_rst_output")
-        + "/%s/unit-classes/index.rst" % ruleset,
+        file_locations.get("conf.fc21_rst_output") + "/%s/unit-classes.rst" % ruleset,
         "w",
     ) as out:
         out.write(
@@ -343,15 +323,11 @@ def process_ruleset(path, ruleset):
             )
         )
 
-    # Create a directory to house all the units pages.
-    os.makedirs(
-        file_locations.get("conf.fc21_rst_output") + "/%s/units/" % ruleset,
-        exist_ok=True,
-    )
-
     # Write out all of the unit type details.
+    unit_type_list = []
     template = env.get_template("unit-type.rst")
     for unit_type in all_unit_types.values():
+        unit_type_list.append(unit_type.name)
         obsolete = list(
             filter(
                 lambda ut: (ut.obsolete_by == unit_type.name), all_unit_types.values()
@@ -371,12 +347,10 @@ def process_ruleset(path, ruleset):
 
     # Build a list of all the unit files created above and then populate an index page.
     # FIXME:figure out a way to use graphic_alt when the main graphic isn't available.
-    unit_type_list = file_list(
-        file_locations.get("conf.fc21_rst_output") + "/%s/units/" % ruleset
-    )
+    unit_type_list.sort()
     template = env.get_template("unit-type-index.rst")
     with open(
-        file_locations.get("conf.fc21_rst_output") + "/%s/units/index.rst" % ruleset,
+        file_locations.get("conf.fc21_rst_output") + "/%s/unit-types.rst" % ruleset,
         "w",
     ) as out:
         out.write(
@@ -396,7 +370,9 @@ def process_ruleset(path, ruleset):
 
     # Write out all of the tech advance details.
     template = env.get_template("advance.rst")
+    advances_list = []
     for advance in all_advances.values():
+        advances_list.append(advance.name)
         required_by = list(
             filter(lambda adv: advance in adv.reqs, all_advances.values())
         )
@@ -406,6 +382,8 @@ def process_ruleset(path, ruleset):
         required_by_units = list(
             filter(lambda ut: (advance in ut.tech_req), all_unit_types.values())
         )
+        # required_by_buildings = list(
+        #    filter(lambda bd: (
 
         with open(
             file_locations.get("conf.fc21_rst_output")
@@ -422,12 +400,10 @@ def process_ruleset(path, ruleset):
             )
 
     # Build a list of all the tech advance files created above and then populate an index page.
-    advances_list = file_list(
-        file_locations.get("conf.fc21_rst_output") + "/%s/advances/" % ruleset
-    )
+    advances_list.sort()
     template = env.get_template("advance-index.rst")
     with open(
-        file_locations.get("conf.fc21_rst_output") + "/%s/advances/index.rst" % ruleset,
+        file_locations.get("conf.fc21_rst_output") + "/%s/advances.rst" % ruleset,
         "w",
     ) as out:
         out.write(
@@ -480,11 +456,11 @@ def main_func():
     # process all the shipped rulesets
     for ruleset in (
         # "alien",
-        # "civ1",
+        "civ1",
         # "civ2",
         # "civ2civ3",
         # "classic",
-        "experimental",
+        # "experimental",
         # "granularity",
         # "multiplayer",
         # "royale",
