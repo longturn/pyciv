@@ -10,6 +10,8 @@
 Properties
 ==========
 
+:strong:`Cost:` {{ advance.cost }} Bulbs
+
 :strong:`Requires:`
 {% for req in advance.reqs %}
   * :doc:`{{ req.name | make_slug }}`{% else %}
