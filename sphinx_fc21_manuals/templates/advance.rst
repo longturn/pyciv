@@ -34,10 +34,16 @@ Properties
   * :doc:`{{ req.name | make_slug }}`{% else %}
   * This advance is not hard required by any other advances.{% endfor %}
 
-:strong:`Required to Build:`
+:strong:`Required to Build Units:`
 {% if required_by_units %}{% for unit_type in required_by_units | sort %}
   * :doc:`../units/{{ unit_type.name | make_slug }}`{% endfor %}{% else %}
-  * No unit type requires this technology.
+  * No unit type requires this technology advance.
+{% endif %}
+
+:strong:`Required to Build Improvement:`
+{% if all_advances_buildings %}{% for item in all_advances_buildings | sort %}
+  * :doc:`../buildings/{{ item.name | make_slug }}`{% endfor %}{% else %}
+  * No improvement requires this technology advance.
 {% endif %}
 
 :strong:`Flags:`

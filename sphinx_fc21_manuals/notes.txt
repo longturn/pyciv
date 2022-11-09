@@ -40,13 +40,14 @@ freeciv21/Docs/Manuals/Rulesets/common/terrain
     {terrain_name}.rst
 
 freeciv21/Docs/Manuals/Rulesets/common
+    building_flags.rst -- Common source to document all of the building flags.
+    tech_adv_flags.rst -- Common source to document all of the technology advance flags
     unit_class_flags.rst -- Common source to document all of the unit class flags.
     unit_class_hut.rst -- Common source to document all of the hut behaviors.
     unit_type_flags.rst -- Common source to document all of the unit type flags.
     unit_type_roles.rst -- Common source to document all of the unit type roles.
 
 TODO:
-- Get buildings by tech to add to advance.rst
 - Figure out best way to document the nations. They are duplicated across the rulesets.
 - Figure out best way to document terrain. I'll bet there is a lot of overlap between the rulesets. Will need terrain specific sprites if we want to show it on the page.
 - Document the governments.
@@ -59,13 +60,10 @@ TODO:
 - Document (with helptext) what the scenario capabilities are. See index-game.rst
 
 FIXES:
-- SPRITE: Ecclesiastical palace is a small wonder, but in buildings list
-- SPRITE: Harbor image uses the en_GB form of harbour, needs to be renamed.
 - SPRITE: The wonder mausoleum_of_halicarnassus sprite is referred to as simply mausoleum in most rulesets, causing an issue with image lookup
-- SPRITE: srcaravel is sq_rig_caravel.png, needs to be renamed
-- BLDG: Fix building flags (see airport in royale, or others that say "set()")
+- BLDG: Fix building flags (see airport in royale, or others that say "set()" or city walls with "{‘VisibleByOthers’}")
 - UNIT: The unit obsoletes value isn't working. for example, cavalry obsoletes knights in a lot of rulesets. Another example is pikemen obsolete phalanx.
-- UNIT: Some rulesets have the mobility bonus added to the name of the veteran level causing duplicated information in the
+- UNIT: Some rulesets have the mobility bonus added to the name of the veteran level causing duplicated information in the table
 
 
 QUESTIONS:

@@ -29,7 +29,7 @@
    :header: "Type", "Name", "Range", "Present", "Survives", "Quiet"
    {% for req in building.reqs %}
    "{{ req.type }}","{{ req.name }}","{{ req.range }}","{{ req.present }}","{{ req.survives }}","{{ req.quiet }}"{% endfor %}
-   {% else %}  This improvement and does not have any requirements.
+   {% else %}  This improvement does not have any requirements.
 {% endif %}
 
 :strong:`Obsoleted By:`

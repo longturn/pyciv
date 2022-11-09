@@ -75,6 +75,12 @@ env.filters["list_to_uobullet"] = list_to_uobullet
 env.filters["list_to_obullet"] = list_to_obullet
 
 
+def Convert(a):
+    it = iter(a)
+    res_dct = dict(zip(it, it))
+    return res_dct
+
+
 def process_ruleset(path, ruleset):
     rules = Ruleset(ruleset, path)
 
@@ -106,18 +112,18 @@ def process_ruleset(path, ruleset):
     all_effects = rules.effects
     all_effects.sort(key=lambda e: e.type or "")
 
-    all_tech_effects = []
-    all_building_effects = []
-    for effect in all_effects:
-        for i in range(len(effect.reqs)):
-            if i == 0: pass
-            match effect.reqs[i].type:
-                case "Tech":
-                    all_tech_effects.append(effect.reqs[i])
-                case "Building":
-                    all_building_effects.append(effect.reqs[i])
+    # all_tech_effects = []
+    # all_building_effects = []
+    # for effect in all_effects:
+    #    for i in range(len(effect.reqs)):
+    #        if i == 0: pass
+    #        match effect.reqs[i].type:
+    #            case "Tech":
+    #                all_tech_effects.append(effect)
+    #            case "Building":
+    #                all_building_effects.append(effect)
 
-    #print(all_building_effects)
+    # print(all_building_effects)
 
     logging.info(f"Writing manual for {ruleset}...")
 
@@ -347,9 +353,7 @@ def process_ruleset(path, ruleset):
     for unit_type in all_unit_types.values():
         unit_type_list.append(unit_type.name)
         obsolete = list(
-            filter(
-                lambda ut: (ut.obsolete_by == unit_type.name), all_unit_types.values()
-            )
+            filter(lambda ut: (ut.obsolete_by == unit_type), all_unit_types.values())
         )
         with open(
             file_locations.get("conf.fc21_rst_output")
@@ -388,16 +392,8 @@ def process_ruleset(path, ruleset):
 
     # Write out all of the tech advance details.
     template = env.get_template("advance.rst")
+
     advances_list = []
-
-    all_advances_buildings = {"building":"", "reqs":""}
-    for building in all_buildings.values():
-        for i in range(len(building.reqs)):
-            if i == 0: pass
-            if building.reqs[i].type == "Tech":
-                print(building.name)
-                print(building.reqs[i])
-
     for advance in all_advances.values():
         advances_list.append(advance.name)
         required_by = list(
@@ -409,6 +405,12 @@ def process_ruleset(path, ruleset):
         required_by_units = list(
             filter(lambda ut: (advance in ut.tech_req), all_unit_types.values())
         )
+        all_advances_buildings = [
+            building
+            for building in all_buildings.values()
+            if advance.name in building.required_techs()
+        ]
+
         with open(
             file_locations.get("conf.fc21_rst_output")
             + "/%s/advances/%s.rst" % (ruleset, make_slug(advance.name)),
@@ -420,7 +422,7 @@ def process_ruleset(path, ruleset):
                     required_by=required_by,
                     hard_required_by=hard_required_by,
                     required_by_units=required_by_units,
-                    #all_advances_buildings=all_advances_buildings,
+                    all_advances_buildings=all_advances_buildings,
                 )
             )
 
