@@ -8,6 +8,7 @@ from .cities import CitySettings
 from .effects import Effect, EffectsSettings
 from .game import GameSettings
 from .science import Advance, ScienceSettings, calculate_cost
+from .governments import GovernmentSettings
 from .secfile import SpecParser
 from .units import UnitClass, UnitsSettings, UnitType, load_veteran_levels
 
@@ -24,6 +25,7 @@ class Ruleset:
     game: GameSettings
     techs: ScienceSettings
     units: UnitsSettings
+    governments: GovernmentSettings
 
     def __init__(self, name, path):
         """
@@ -47,6 +49,9 @@ class Ruleset:
 
         sections = SpecParser.load(f"{name}/units.ruleset", path)
         self.units = UnitsSettings(sections)
+
+        sections = SpecParser.load(f"{name}/governments.ruleset", path)
+        self.governments = GovernmentSettings(sections)
 
         # Replace NamedReference
         self._collections = {
