@@ -2,9 +2,10 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-FileCopyrightText: 2022 James Robertson <jwrober@gmail.com>
+# SPDX-FileCopyrightText: 2022 Louis Moureaux <m_louis30@yahoo.com>
 
 # Version string
-__version__ = "0.6"
+__version__ = "0.8"
 
 import configparser
 import logging
@@ -100,6 +101,23 @@ def process_ruleset(path, ruleset):
     city_parameters = rules.cities.parameters
     citizens = rules.cities.citizens
     missing_unit_upkeep = rules.cities.missing_unit_upkeep
+
+    # Get all the effects
+    all_effects = rules.effects
+    all_effects.sort(key=lambda e: e.type or "")
+
+    all_tech_effects = []
+    all_building_effects = []
+    for effect in all_effects:
+        for i in range(len(effect.reqs)):
+            if i == 0: pass
+            match effect.reqs[i].type:
+                case "Tech":
+                    all_tech_effects.append(effect.reqs[i])
+                case "Building":
+                    all_building_effects.append(effect.reqs[i])
+
+    #print(all_building_effects)
 
     logging.info(f"Writing manual for {ruleset}...")
 
@@ -371,20 +389,26 @@ def process_ruleset(path, ruleset):
     # Write out all of the tech advance details.
     template = env.get_template("advance.rst")
     advances_list = []
+
+    all_advances_buildings = {"building":"", "reqs":""}
+    for building in all_buildings.values():
+        for i in range(len(building.reqs)):
+            if i == 0: pass
+            if building.reqs[i].type == "Tech":
+                print(building.name)
+                print(building.reqs[i])
+
     for advance in all_advances.values():
         advances_list.append(advance.name)
         required_by = list(
-            filter(lambda adv: advance in adv.reqs, all_advances.values())
+            filter(lambda adv: (advance in adv.reqs), all_advances.values())
         )
         hard_required_by = list(
-            filter(lambda adv: advance == adv.root_req, all_advances.values())
+            filter(lambda adv: (advance == adv.root_req), all_advances.values())
         )
         required_by_units = list(
             filter(lambda ut: (advance in ut.tech_req), all_unit_types.values())
         )
-        # required_by_buildings = list(
-        #    filter(lambda bd: (
-
         with open(
             file_locations.get("conf.fc21_rst_output")
             + "/%s/advances/%s.rst" % (ruleset, make_slug(advance.name)),
@@ -396,6 +420,7 @@ def process_ruleset(path, ruleset):
                     required_by=required_by,
                     hard_required_by=hard_required_by,
                     required_by_units=required_by_units,
+                    #all_advances_buildings=all_advances_buildings,
                 )
             )
 
@@ -448,6 +473,7 @@ def main_func():
     # rulesets.append('multiplayer')
     # rulesets.append('royale')
     # rulesets.append('sandbox')
+    # rulesets.append('aviation')
     os.makedirs(file_locations.get("conf.fc21_rst_output") + "/", exist_ok=True)
     template = env.get_template("index.rst")
     with open(file_locations.get("conf.fc21_rst_output") + "/index.rst", "w") as out:
