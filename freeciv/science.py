@@ -14,6 +14,7 @@ def calculate_cost(advance, game_info):
     Thanks to pepeto, Matthias, and cazfi
     """
     recursive_reqs = set()
+
     def walk(adv):
         recursive_reqs.add(adv)
         for req in adv.reqs:
@@ -25,9 +26,13 @@ def calculate_cost(advance, game_info):
     if game_info.tech_cost_style in ("Civ1Civ2", "Linear"):
         cost = game_info.base_tech_cost * num_reqs
     elif game_info.tech_cost_style in ("Classic", "ClassicPreset"):
-        cost = game_info.base_tech_cost * (1.0 + num_reqs) * math.sqrt(1.0 + num_reqs) / 2
+        cost = (
+            game_info.base_tech_cost * (1.0 + num_reqs) * math.sqrt(1.0 + num_reqs) / 2
+        )
     elif game_info.tech_cost_style in ("Experimental", "ExperimentalPreset"):
-        cost = game_info.base_tech_cost * ((num_reqs) * (num_reqs) / (1 + math.sqrt(math.sqrt(num_reqs + 1))) - 0.5);
+        cost = game_info.base_tech_cost * (
+            (num_reqs) * (num_reqs) / (1 + math.sqrt(math.sqrt(num_reqs + 1))) - 0.5
+        )
     else:
         raise ValueError(f'Unknown tech cost style "{game_info.base_tech_cost}"')
 

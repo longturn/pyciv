@@ -63,6 +63,9 @@ class Building:
     def __lt__(self, other):
         return self.name < other.name
 
+    def required_techs(self) -> list[str]:
+        return [req.name for req in self.reqs if req.type == "Tech"]
+
 
 class BuildingsSettings:
     def __init__(self, sections):
