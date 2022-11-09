@@ -42,6 +42,7 @@ General Game Information
 {% if musicset.preferred %}
 :strong:`Preferred Musicset:`
   {{ musicset.preferred_help_rst }}{{ musicset.preferred }}{% endif %}
+:strong:`Government Status During Revolution:` {{ gov_parms.during_revolution }}
 
 
 Game Settings

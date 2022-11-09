@@ -5,7 +5,7 @@
 # SPDX-FileCopyrightText: 2022 Louis Moureaux <m_louis30@yahoo.com>
 
 # Version string
-__version__ = "0.8"
+__version__ = "0.9"
 
 import configparser
 import logging
@@ -108,22 +108,13 @@ def process_ruleset(path, ruleset):
     citizens = rules.cities.citizens
     missing_unit_upkeep = rules.cities.missing_unit_upkeep
 
+    # Get government settings
+    gov_parms = rules.governments.government_parms
+    all_governments = rules.governments.governments
+
     # Get all the effects
     all_effects = rules.effects
     all_effects.sort(key=lambda e: e.type or "")
-
-    # all_tech_effects = []
-    # all_building_effects = []
-    # for effect in all_effects:
-    #    for i in range(len(effect.reqs)):
-    #        if i == 0: pass
-    #        match effect.reqs[i].type:
-    #            case "Tech":
-    #                all_tech_effects.append(effect)
-    #            case "Building":
-    #                all_building_effects.append(effect)
-
-    # print(all_building_effects)
 
     logging.info(f"Writing manual for {ruleset}...")
 
@@ -135,7 +126,8 @@ def process_ruleset(path, ruleset):
     )
 
     # Start with the top level game page index with information from the [about], [options]
-    # [tileset], [soundset], and [musicset] sections.
+    # [tileset], [soundset], and [musicset] sections. Also includes the [government] section
+    # from governments.ruleset.
     template = env.get_template("index-game.rst")
     with open(
         file_locations.get("conf.fc21_rst_output") + "/%s/index.rst" % ruleset, "w"
@@ -147,6 +139,7 @@ def process_ruleset(path, ruleset):
                 tileset=tileset,
                 soundset=soundset,
                 musicset=musicset,
+                gov_parms=gov_parms,
             )
         )
 
@@ -426,18 +419,55 @@ def process_ruleset(path, ruleset):
                 )
             )
 
-    # Build a list of all the tech advance files created above and then populate an index page.
-    advances_list.sort()
-    template = env.get_template("advance-index.rst")
-    with open(
-        file_locations.get("conf.fc21_rst_output") + "/%s/advances.rst" % ruleset,
-        "w",
-    ) as out:
-        out.write(
-            template.render(
-                advances_list=advances_list,
+        # Build a list of all the tech advance files created above and then populate an index page.
+        advances_list.sort()
+        template = env.get_template("advance-index.rst")
+        with open(
+            file_locations.get("conf.fc21_rst_output") + "/%s/advances.rst" % ruleset,
+            "w",
+        ) as out:
+            out.write(
+                template.render(
+                    advances_list=advances_list,
+                )
             )
-        )
+
+    # Create a directory to house all the government pages.
+    os.makedirs(
+        file_locations.get("conf.fc21_rst_output") + "/%s/governments/" % ruleset,
+        exist_ok=True,
+    )
+
+    # Write out all of the tech advance details.
+    template = env.get_template("government.rst")
+
+    governments_list = []
+    for government in all_governments.values():
+        governments_list.append(government.name)
+        with open(
+            file_locations.get("conf.fc21_rst_output")
+            + "/%s/governments/%s.rst" % (ruleset, make_slug(government.name)),
+            "w",
+        ) as out:
+            out.write(
+                template.render(
+                    government=government,
+                )
+            )
+
+        # Build a list of all the government files created above and then populate an index page.
+        governments_list.sort()
+        template = env.get_template("government-index.rst")
+        with open(
+            file_locations.get("conf.fc21_rst_output")
+            + "/%s/governments.rst" % ruleset,
+            "w",
+        ) as out:
+            out.write(
+                template.render(
+                    governments_list=governments_list,
+                )
+            )
 
 
 def get_config(conf, section):
@@ -467,14 +497,14 @@ def main_func():
     rulesets = []
     # rulesets.append('alien')
     rulesets.append("civ1")
-    # rulesets.append('civ2')
-    # rulesets.append('civ2civ3')
-    # rulesets.append('classic')
-    # rulesets.append('experimental')
+    rulesets.append("civ2")
+    rulesets.append("civ2civ3")
+    rulesets.append("classic")
+    rulesets.append("experimental")
     # rulesets.append('granularity')
-    # rulesets.append('multiplayer')
-    # rulesets.append('royale')
-    # rulesets.append('sandbox')
+    rulesets.append("multiplayer")
+    rulesets.append("royale")
+    rulesets.append("sandbox")
     # rulesets.append('aviation')
     os.makedirs(file_locations.get("conf.fc21_rst_output") + "/", exist_ok=True)
     template = env.get_template("index.rst")
@@ -485,14 +515,14 @@ def main_func():
     for ruleset in (
         # "alien",
         "civ1",
-        # "civ2",
-        # "civ2civ3",
-        # "classic",
-        # "experimental",
+        "civ2",
+        "civ2civ3",
+        "classic",
+        "experimental",
         # "granularity",
-        # "multiplayer",
-        # "royale",
-        # "sandbox",
+        "multiplayer",
+        "royale",
+        "sandbox",
     ):
         process_ruleset([file_locations.get("conf.fc21_datadir_path")], ruleset)
 
