@@ -7,7 +7,7 @@ from .buildings import BuildingsSettings
 from .cities import CitySettings
 from .effects import Effect, EffectsSettings
 from .game import GameSettings
-from .science import Advance, ScienceSettings
+from .science import Advance, ScienceSettings, calculate_cost
 from .secfile import SpecParser
 from .units import UnitClass, UnitsSettings, UnitType, load_veteran_levels
 
@@ -57,6 +57,11 @@ class Ruleset:
         }
         # FIXME This seems to be doing quite a bit of extra work.
         self._link(self)
+
+        # FIXME Add a hook to make this more general
+        for advance in self.techs.advances.values():
+            if advance.cost is None:
+                advance.cost = calculate_cost(advance, self.game)
 
     def _handle(self, obj, hint):
         """

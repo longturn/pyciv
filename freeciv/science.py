@@ -1,3 +1,4 @@
+import math
 from dataclasses import dataclass, field
 from warnings import warn
 
@@ -7,7 +8,7 @@ from .game import ResearchData
 from .secfile.loader import NamedReference, read_named_sections, section
 
 
-def calculate_cost(advance, game_info):
+def calculate_cost(advance, game):
     """
     Function to calculate the full cost of a technology advance.
     Pulled formulas from freeciv21 tech.cpp.
@@ -23,24 +24,28 @@ def calculate_cost(advance, game_info):
     walk(advance)
     num_reqs = len(recursive_reqs)
 
-    if game_info.tech_cost_style in ("Civ1Civ2", "Linear"):
-        cost = game_info.base_tech_cost * num_reqs
-    elif game_info.tech_cost_style in ("Classic", "ClassicPreset"):
+    if game.research.tech_cost_style in ("Civ I|II", "Linear"):
+        cost = game.research.base_tech_cost * num_reqs
+    elif game.research.tech_cost_style in ("Classic", "ClassicPreset"):
         cost = (
-            game_info.base_tech_cost * (1.0 + num_reqs) * math.sqrt(1.0 + num_reqs) / 2
+            game.research.base_tech_cost
+            * (1.0 + num_reqs)
+            * math.sqrt(1.0 + num_reqs)
+            / 2
         )
-    elif game_info.tech_cost_style in ("Experimental", "ExperimentalPreset"):
-        cost = game_info.base_tech_cost * (
+    elif game.research.tech_cost_style in ("Experimental", "ExperimentalPreset"):
+        cost = game.research.base_tech_cost * (
             (num_reqs) * (num_reqs) / (1 + math.sqrt(math.sqrt(num_reqs + 1))) - 0.5
         )
     else:
-        raise ValueError(f'Unknown tech cost style "{game_info.base_tech_cost}"')
+        raise ValueError(f'Unknown tech cost style "{game.research.tech_cost_style}"')
 
-    if "Preset" in game_info.tech_cost_style:
-        cost = max(cost, game_info.base_tech_cost)
+    if "Preset" in game.research.tech_cost_style:
+        cost = max(cost, game.research.base_tech_cost)
 
-    if advance.tclass:
-        cost *= advance.tclass.cost_pct / 100
+    # FIXME Requires support for tech classes
+    # if advance.tclass:
+    # cost *= advance.tclass.cost_pct / 100
 
     return cost
 
@@ -77,9 +82,6 @@ class Advance:
 
         if type(self.helptext) is list:
             self.helptext = "\n\n".join(self.helptext)
-
-        if self.cost == "None":
-            self.cost = calculate_cost(advance, game_info)
 
     def __hash__(self):
         return self.name.__hash__()
