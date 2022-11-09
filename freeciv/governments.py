@@ -7,6 +7,7 @@ from freeciv.effects import Requirement
 
 from .secfile.loader import read_section, read_named_sections, section
 
+
 @section("governments")
 @typechecked
 @dataclass
