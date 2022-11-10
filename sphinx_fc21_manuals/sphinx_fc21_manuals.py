@@ -5,7 +5,7 @@
 # SPDX-FileCopyrightText: 2022 Louis Moureaux <m_louis30@yahoo.com>
 
 # Version string
-__version__ = "0.10"
+__version__ = "0.12"
 
 import configparser
 import logging
@@ -92,6 +92,7 @@ def process_ruleset(path, ruleset):
     combat_rules = rules.game.combat_rules
     auto_attack = rules.game.auto_attack
     actions = rules.game.actions
+    action_enablers = rules.game.action_enablers
     borders = rules.game.borders
     research = rules.game.research
     culture = rules.game.culture
@@ -352,6 +353,7 @@ def process_ruleset(path, ruleset):
                 template.render(
                     unit_type=unit_type,
                     obsolete=obsolete,
+                    action_enablers=action_enablers,
                 )
             )
 
