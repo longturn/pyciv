@@ -6,7 +6,7 @@ from typeguard import typechecked
 
 from freeciv.effects import Requirement
 
-from .secfile.loader import read_section, section
+from .secfile.loader import read_sections, read_section, section
 
 
 @section("datafile")
@@ -404,6 +404,24 @@ class ActionsData:
     ui_name_spread_plague: str = ""  # FIXME default?
 
 
+@section("actionenabler_.+")
+@typechecked
+@dataclass
+class ActionEnabler:
+    action: str
+    name: str = None
+    actor_reqs: list[Requirement] = field(default_factory=list)
+    target_reqs: list[Requirement] = field(default_factory=list)
+
+    #action_enabler_help_rst: str = "An action enabler is active when its Actor Requirements AND its Target Requirements are satisfied."
+
+    #def __post_init__(self):
+    #    if self.name == "None":
+    #        raise ValueError('An action enabler cannot be named "None"')
+
+    #def __hash__(self):
+    #    return self.name.__hash__()
+
 @section("borders")
 @typechecked
 @dataclass
@@ -521,6 +539,7 @@ class GameSettings:
     def __init__(self, sections):
         self.about = read_section(AboutData, sections)
         self.actions = read_section(ActionsData, sections, missing_ok=True)
+        self.action_enablers = read_sections(ActionEnabler, sections)
         self.auto_attack = read_section(AutoAttackData, sections, missing_ok=True)
         self.borders = read_section(BordersData, sections)
         self.calendar = read_section(CalendarData, sections)
