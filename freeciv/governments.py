@@ -5,7 +5,7 @@ from typeguard import typechecked
 
 from freeciv.effects import Requirement
 
-from .secfile.loader import read_section, read_named_sections, section
+from .secfile.loader import read_named_sections, read_section, section
 
 
 @section("governments")

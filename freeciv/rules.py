@@ -2,13 +2,14 @@
 # SPDX-FileCopyrightText: 2022 Louis Moureaux <m_louis30@yahoo.com>
 
 from typing import get_args, get_type_hints
+from warnings import warn
 
 from .buildings import BuildingsSettings
 from .cities import CitySettings
 from .effects import Effect, EffectsSettings
 from .game import GameSettings
-from .science import Advance, ScienceSettings, calculate_cost
 from .governments import GovernmentSettings
+from .science import Advance, ScienceSettings, calculate_cost
 from .secfile import SpecParser
 from .units import UnitClass, UnitsSettings, UnitType, load_veteran_levels
 
@@ -57,6 +58,7 @@ class Ruleset:
         self._collections = {
             "Advance": self.techs.advances,
             "Building": self.buildings.buildings,
+            "Government": self.governments.governments,
             "UnitClass": self.units.unit_classes,
             "UnitType": self.units.unit_types,
         }

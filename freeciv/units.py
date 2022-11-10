@@ -5,6 +5,7 @@ from typeguard import typechecked
 
 from .buildings import Building
 from .effects import Requirement
+from .governments import Government
 from .science import Advance
 from .secfile.loader import NamedReference, read_named_sections, rename, section
 
@@ -161,7 +162,7 @@ class UnitType:
     flags: set[str] = field(default_factory=set)
     roles: set[str] = field(default_factory=set)
     helptext: list[str] = field(default_factory=list)
-    gov_req: str = None  # TODO NamedReference(Government)
+    gov_req: NamedReference(Government) = None
     rule_name: str = None
 
     convert_to: NamedReference("UnitType") = None
