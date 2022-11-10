@@ -29,6 +29,8 @@ class Government:
     helptext: list[str] = field(default_factory=list)
     reqs: list[Requirement] = field(default_factory=list)
 
+    ai_better_help_rst: str = "The game AI will not consider this government for use if the government listed here is available. If the value is `None`, the setting is not enabled in this ruleset."
+
     def __post_init__(self):
         if type(self.helptext) is list:
             self.helptext = "\n\n".join(self.helptext)
