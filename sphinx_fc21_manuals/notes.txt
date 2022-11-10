@@ -50,7 +50,6 @@ freeciv21/Docs/Manuals/Rulesets/common
 TODO:
 - Figure out best way to document the nations. They are duplicated across the rulesets.
 - Figure out best way to document terrain. I'll bet there is a lot of overlap between the rulesets. Will need terrain specific sprites if we want to show it on the page.
-- Document the governments.
 - Gather effects and document them where they are "effected" and not as a big page of them
 - See if we can get all the unit action enablers documented and associated with the appropriate unit
 - Need a detailed look at the helptext across all rulesets. Many items need to be cleaned up to be rst friendly. Usage of consonants and other doco style are not being followed.
@@ -58,12 +57,14 @@ TODO:
 - The current graphics for the techs are really crappy. Before we go and show a graphic for the tech advances, need to get that issue fixed first.
 - Run through each of the rulesets one by one and see how many sphinx warnings come up and see about fixes.
 - Document (with helptext) what the scenario capabilities are. See index-game.rst
+- Need to add helptext for the scenario capabilities from game.ruleset
 
 FIXES:
 - SPRITE: The wonder mausoleum_of_halicarnassus sprite is referred to as simply mausoleum in most rulesets, causing an issue with image lookup
 - BLDG: Fix building flags (see airport in royale, or others that say "set()" or city walls with "{‘VisibleByOthers’}")
 - UNIT: The unit obsoletes value isn't working. for example, cavalry obsoletes knights in a lot of rulesets. Another example is pikemen obsolete phalanx.
 - UNIT: Some rulesets have the mobility bonus added to the name of the veteran level causing duplicated information in the table
+- IMAGES: Need to find a way to see if an image sprite exists on the filesystem and if not, don't write out the image code in the template.
 
 
 QUESTIONS:

@@ -76,12 +76,6 @@ env.filters["list_to_uobullet"] = list_to_uobullet
 env.filters["list_to_obullet"] = list_to_obullet
 
 
-def Convert(a):
-    it = iter(a)
-    res_dct = dict(zip(it, it))
-    return res_dct
-
-
 def process_ruleset(path, ruleset):
     rules = Ruleset(ruleset, path)
 
@@ -114,8 +108,8 @@ def process_ruleset(path, ruleset):
     all_governments = rules.governments.governments
 
     # Get all the effects
-    #all_effects = rules.effects
-    #all_effects.sort(key=lambda e: e.type or "")
+    # all_effects = rules.effects
+    # all_effects.sort(key=lambda e: e.type or "")
 
     logging.info(f"Writing manual for {ruleset}...")
 
@@ -404,7 +398,6 @@ def process_ruleset(path, ruleset):
             for building in all_buildings.values()
             if advance.name in building.required_techs()
         ]
-
         with open(
             file_locations.get("conf.fc21_rst_output")
             + "/%s/advances/%s.rst" % (ruleset, make_slug(advance.name)),
@@ -420,18 +413,18 @@ def process_ruleset(path, ruleset):
                 )
             )
 
-        # Build a list of all the tech advance files created above and then populate an index page.
-        advances_list.sort()
-        template = env.get_template("advance-index.rst")
-        with open(
-            file_locations.get("conf.fc21_rst_output") + "/%s/advances.rst" % ruleset,
-            "w",
-        ) as out:
-            out.write(
-                template.render(
-                    advances_list=advances_list,
-                )
+    # Build a list of all the tech advance files created above and then populate an index page.
+    advances_list.sort()
+    template = env.get_template("advance-index.rst")
+    with open(
+        file_locations.get("conf.fc21_rst_output") + "/%s/advances.rst" % ruleset,
+        "w",
+    ) as out:
+        out.write(
+            template.render(
+                advances_list=advances_list,
             )
+        )
 
     # Create a directory to house all the government pages.
     os.makedirs(
@@ -460,8 +453,7 @@ def process_ruleset(path, ruleset):
     governments_list.sort()
     template = env.get_template("government-index.rst")
     with open(
-        file_locations.get("conf.fc21_rst_output")
-        + "/%s/governments.rst" % ruleset,
+        file_locations.get("conf.fc21_rst_output") + "/%s/governments.rst" % ruleset,
         "w",
     ) as out:
         out.write(
@@ -496,7 +488,7 @@ def main_func():
 
     # Write top level index.rst
     rulesets = []
-    # rulesets.append('alien')
+    rulesets.append("alien")
     rulesets.append("civ1")
     rulesets.append("civ2")
     rulesets.append("civ2civ3")
@@ -514,7 +506,7 @@ def main_func():
 
     # process all the shipped rulesets
     for ruleset in (
-        # "alien",
+        "alien",
         "civ1",
         "civ2",
         "civ2civ3",

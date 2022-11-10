@@ -81,10 +81,10 @@ The following game parameters are set. Each impacts gameplay in some fashion.
 :strong:`Civil War` = {{ civ_style.civil_war_enabled }}
   {{ civ_style.civil_war_enabled_help_rst }}{% endif %}
 {% if civ_style.civil_war_bonus_celebrating %}
-:strong:`Civil War Celebration` = {{ civ_style.civil_war_bonus_celebrating }}
+:strong:`Civil War Celebration` = {{ civ_style.civil_war_bonus_celebrating }}%
   {{ civ_style.civil_war_bonus_celebrating_help_rst }}{% endif %}
 {% if civ_style.civil_war_bonus_unhappy %}
-:strong:`Civil War Unhappiness` = {{ civ_style.civil_war_bonus_unhappy }}
+:strong:`Civil War Unhappiness` = {{ civ_style.civil_war_bonus_unhappy }}%
   {{ civ_style.civil_war_bonus_unhappy_help_rst }}{% endif %}
 {% if civ_style.gameloss_style %}
 :strong:`End Game` = {{ civ_style.gameloss_style }}
