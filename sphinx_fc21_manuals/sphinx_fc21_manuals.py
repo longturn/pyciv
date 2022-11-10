@@ -456,19 +456,19 @@ def process_ruleset(path, ruleset):
                 )
             )
 
-        # Build a list of all the government files created above and then populate an index page.
-        governments_list.sort()
-        template = env.get_template("government-index.rst")
-        with open(
-            file_locations.get("conf.fc21_rst_output")
-            + "/%s/governments.rst" % ruleset,
-            "w",
-        ) as out:
-            out.write(
-                template.render(
-                    governments_list=governments_list,
-                )
+    # Build a list of all the government files created above and then populate an index page.
+    governments_list.sort()
+    template = env.get_template("government-index.rst")
+    with open(
+        file_locations.get("conf.fc21_rst_output")
+        + "/%s/governments.rst" % ruleset,
+        "w",
+    ) as out:
+        out.write(
+            template.render(
+                governments_list=governments_list,
             )
+        )
 
 
 def get_config(conf, section):
