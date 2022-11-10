@@ -68,7 +68,7 @@ class Ruleset:
         # FIXME Add a hook to make this more general
         for advance in self.techs.advances.values():
             if advance.cost is None:
-                advance.cost = calculate_cost(advance, self.game)
+                advance.cost = int(calculate_cost(advance, self.game))
 
     def _handle(self, obj, hint):
         """
