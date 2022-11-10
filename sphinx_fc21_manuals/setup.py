@@ -18,6 +18,7 @@ setup(
         "pytypes>=1.0",
         "ply>=3.11",
         "typeguard>=2.13",
+        "unidecode>=1.3",
     ],
     author="Freeciv21 Contributors",
     author_email="longturn.net@gmail.com",

@@ -7,6 +7,6 @@
 
 {{ government.helptext | clean_string }}
 
-:strong:`Male Leader Name:` {{ government.ruler_male_title }}
+:strong:`Male Leader Name:` {{ government.ruler_male_title | clean_string }}
 
-:strong:`Female Leader Name:` {{ government.ruler_female_title }}
+:strong:`Female Leader Name:` {{ government.ruler_female_title | clean_string }}

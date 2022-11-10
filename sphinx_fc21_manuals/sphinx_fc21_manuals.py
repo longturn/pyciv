@@ -38,6 +38,7 @@ def clean_string(name):
     name = name.replace(".", ". ")
     name = name.replace("*", "\n\n*")
     name = name.replace(":", ": ")
+    name = name.replace("%s", "")
 
     return name
 
