@@ -9,7 +9,7 @@ freeciv21/Docs/Manuals/Rulesets/{ruleset}
     buildings.rst -- Contains links to all the individual building pages from buildings.ruleset
     units-classes.rst -- Contains links to all of the individual unit class pages from units.ruleset
     units-types.rst -- Contains links to all of the individual unit type pages from units.ruleset
-    governments.rst -- [needs code] single page documenting the available governments
+    governments.rst -- single page documenting the available governments
     nations.rst -- [needs code] add to game information set of pages to show the values from nations.ruleset.
                 -- also include links to a common set of nation pages (see TODO)
     terrain.rst -- [needs code] add to game information set of pages to show the values from terrain.ruleset.

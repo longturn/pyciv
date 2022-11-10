@@ -5,7 +5,7 @@
 # SPDX-FileCopyrightText: 2022 Louis Moureaux <m_louis30@yahoo.com>
 
 # Version string
-__version__ = "0.9"
+__version__ = "0.10"
 
 import configparser
 import logging
@@ -114,8 +114,8 @@ def process_ruleset(path, ruleset):
     all_governments = rules.governments.governments
 
     # Get all the effects
-    all_effects = rules.effects
-    all_effects.sort(key=lambda e: e.type or "")
+    #all_effects = rules.effects
+    #all_effects.sort(key=lambda e: e.type or "")
 
     logging.info(f"Writing manual for {ruleset}...")
 

@@ -72,6 +72,7 @@ Here are links to other features of this ruleset:
 .. toctree::
   advances.rst
   buildings.rst
+  governments.rst
   unit-types.rst
   unit-classes.rst
   :maxdepth: 1
