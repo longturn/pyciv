@@ -414,15 +414,6 @@ class ActionEnabler:
     actor_reqs: list[Requirement] = field(default_factory=list)
     target_reqs: list[Requirement] = field(default_factory=list)
 
-    # action_enabler_help_rst: str = "An action enabler is active when its Actor Requirements AND its Target Requirements are satisfied."
-
-    # def __post_init__(self):
-    #    if self.name == "None":
-    #        raise ValueError('An action enabler cannot be named "None"')
-
-    # def __hash__(self):
-    #    return self.name.__hash__()
-
 
 @section("borders")
 @typechecked

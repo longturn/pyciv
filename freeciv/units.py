@@ -99,6 +99,8 @@ class UnitClass:
     flags: set[str] = field(default_factory=set)
     helptext: list[str] = field(default_factory=list)  # 3.0
 
+    hut_behavior_help_rst: str = "``Normal``: The player gets something from the hut. ``Nothing``: Unknown what this value does. ``Frighten``: The hut disappers and the player does not get anything from it."
+
     # Pre-2.5 stuff
     move_type: str = None
 
