@@ -34,6 +34,7 @@ class AboutData:
     capabilities_help_rst: str = (
         "This ruleset has the following scenario capabilities: "
     )
+    capabilities_help_rst2: str = "The ruleset provides at least these terrain types: Inaccessible, Lake, Ocean, Deep Ocean, Glacier, Desert, Forest, Grassland, Hills, Jungle, Mountains, Plains, Swamp, and Tundra. Ruleset provides River extra."
 
 
 @section("options")
@@ -413,14 +414,15 @@ class ActionEnabler:
     actor_reqs: list[Requirement] = field(default_factory=list)
     target_reqs: list[Requirement] = field(default_factory=list)
 
-    #action_enabler_help_rst: str = "An action enabler is active when its Actor Requirements AND its Target Requirements are satisfied."
+    # action_enabler_help_rst: str = "An action enabler is active when its Actor Requirements AND its Target Requirements are satisfied."
 
-    #def __post_init__(self):
+    # def __post_init__(self):
     #    if self.name == "None":
     #        raise ValueError('An action enabler cannot be named "None"')
 
-    #def __hash__(self):
+    # def __hash__(self):
     #    return self.name.__hash__()
+
 
 @section("borders")
 @typechecked
