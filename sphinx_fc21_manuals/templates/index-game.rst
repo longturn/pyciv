@@ -22,6 +22,8 @@ General Game Information
 {% if about.capabilities %}
 :strong:`Capabilities:`
   {{ about.capabilities_help_rst }}``{{ about.capabilities }}``
+
+  {{ about.capabilities_help_rst2 }}
 {% endif %}
 {% if options.global_init_techs %}
 :strong:`Start Technologies:`

@@ -2,6 +2,11 @@
     SPDX-License-Identifier: GPL-3.0-or-later
     SPDX-FileCopyrightText: 2022 James Robertson <jwrober@gmail.com>
 
+.. Custom Interpretive Text Roles for longturn.net/Freeciv21
+.. role:: unit
+.. role:: improvement
+.. role:: wonder
+
 {{ unit_type.name }}
 ********************
 
@@ -29,7 +34,7 @@ Unit Type Properties
   * :strong:`Upkeep: Food` {{ unit_type.uk_food }} food
   * :strong:`Upkeep: Gold` {{ unit_type.uk_gold }} gold
   * :strong:`Upkeep: Shield`{% if unit_type.uk_shield == 1 %} {{ unit_type.uk_shield }} shield{% elif unit_type.uk_shield > 1 %}{{ unit_type.uk_shield }} shields{% endif %}
-  * :strong:`Gov Required:`{% if unit_type.gov_req %} {{ unit_type.gov_req }}{% else %} None{% endif %}
+  * :strong:`Gov Required:`{% if unit_type.gov_req %} {{ unit_type.gov_req.name }}{% else %} None{% endif %}
   * :strong:`Unit Class:` :doc:`{{ unit_type.uclass.name | make_slug }}`
   * :strong:`Converts To:`{% if unit_type.convert_to %} {{ unit_type.convert_to }} in {{ unit_type.convert_time }} turns{% else %} None{% endif %}
 
@@ -74,7 +79,6 @@ Unit Type Properties
    {% for level in unit_type.veteran_levels %}
    "{{ level.name | title }}","{{ level.base_raise_chance }}%","{{ level.work_raise_chance }}%","{{ level.power_factor }}%","{{ level.move_bonus }}%"{% endfor %}
 
-
 :strong:`Flags:`
 {% if unit_type.flags %}
 {% for flag in unit_type.flags | sort %}
@@ -92,3 +96,24 @@ Unit Type Properties
 * This unit has no roles.{% endif %}
 
 .. todo:: Add helptext for all of the roles
+
+Unit Type Available Actions
+===========================
+{% if action_enablers %}{% for item in action_enablers %}
+{% if action_enabler_check(unit_type.flags, unit_type.roles, unit_type.uclass, item) == True %}
+:strong:`Available Action: {{ item.action }}`
+
+  `Actor Requirements Vector`:
+
+  .. csv-table::
+    :header: "Type", "Name", "Range", "Present"
+    {% set rows = item.actor_reqs | length %}{% for i in range(rows) %}
+    "{{ item.actor_reqs[i].type }}","{{ item.actor_reqs[i].name }}","{{ item.actor_reqs[i].range }}","{{ item.actor_reqs[i].present }}"{% endfor %}{% set rows = item.target_reqs | length %}{% if rows > 0 %}
+
+  `Target Requirement Vector`:
+
+  .. csv-table::
+    :header: "Type", "Name", "Range", "Present"
+    {% for x in range(rows) %}
+    "{{ item.target_reqs[x].type }}","{{ item.target_reqs[x].name }}","{{ item.target_reqs[x].range }}","{{ item.target_reqs[x].present }}"{% endfor %}{% endif %}{% endif %}{% endfor %}{% endif %}
+

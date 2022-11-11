@@ -5,7 +5,7 @@
 # SPDX-FileCopyrightText: 2022 Louis Moureaux <m_louis30@yahoo.com>
 
 # Version string
-__version__ = "0.12"
+__version__ = "0.13"
 
 import configparser
 import logging
@@ -67,6 +67,49 @@ def list_to_obullet(named_list):
     return return_string
 
 
+def action_enabler_check(unitFlags, unitRoles, unitClass, aeItem):
+    """
+    Custom jinja function to determine if a specific action enabler is for a given unit
+    """
+
+    # Test 1: Check to see if the UnitFlag value in the requirement vector name field is in the set
+    #   from unitFlags. The value of the present field in the requirement vector must also be True.
+    # Test 2: Check to see if the UnitType value in the requirement vector name field is in the set
+    #   from unitRoles. The value of the present field in the requirement vector must also be True.
+    # Test 3: Check to see if the UnitClassFlag value in the requirement vector name field is in the set
+    #   from unitClassFlags. The value of the present field in the requirement vector must also be True.
+    # Test 4: Check to see if UnitFlag, UnitType and UnitClassFlag is NOT in the requirement vector. If so
+    #   then return True as the action enabler is for every unit. We use the counter variable to help here.
+
+    counter = 0
+    for req in aeItem.actor_reqs:
+        if req.type == "UnitFlag":
+            counter += 1
+            if req.present and req.name in unitFlags:
+                return True
+            elif not req.present and req.name in unitFlags:
+                return False
+        if req.type == "UnitType":
+            counter += 1
+            if req.present and req.name in unitRoles:
+                return True
+            elif not req.present and req.name in unitRoles:
+                return False
+        if req.type == "UnitClassFlag":
+            counter += 1
+            if req.present and req.name in unitClass.flags:
+                return True
+            elif not req.present and req.name in unitClass.flags:
+                return False
+
+    # The culmination of Test 4. If none of the others are found in the full set of reqs, then the action
+    #   is for all units.
+    if counter == 0:
+        return True
+
+    return False
+
+
 env = Environment(
     loader=FileSystemLoader("./templates/"),
 )
@@ -74,6 +117,7 @@ env.filters["make_slug"] = make_slug
 env.filters["clean_string"] = clean_string
 env.filters["list_to_uobullet"] = list_to_uobullet
 env.filters["list_to_obullet"] = list_to_obullet
+env.globals["action_enabler_check"] = action_enabler_check
 
 
 def process_ruleset(path, ruleset):
