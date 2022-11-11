@@ -53,9 +53,9 @@ Properties
 
 :strong:`Flags:`
 {% if advance.flags %}{% for flag in advance.flags | sort %}
-  * ``{{ flag }}``{% endfor %}{% else %}
-  * This advance does not have any flags.{% endif %}
+  * ``{{ flag }}``{% endfor %}
 
-.. todo:: Add helptext for the flags.
+  For help on the advance flags defined here, please see :doc:`/Manuals/Rulesets/Common/tech_adv_flags`.{% else %}
+  * This advance does not have any flags.{% endif %}
 
 :strong:`Bonus Message:` {% if advance.bonus_message %}{{ advance.bonus_message }}{% else %}None.{% endif %}

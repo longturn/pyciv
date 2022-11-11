@@ -21,14 +21,15 @@ Unit Class Properties
 
 :strong:`Hut Behaviour:` {{ unit_class.hut_behavior }}
 
-.. todo:: Add help text for all the hut behaviors.
+{{ hut_behavior_help_rst }}
 
 :strong:`Flags:`
+
+For help on the unit class flags defined here, please see :doc:`/Manuals/Rulesets/Common/unit_class_flags`.
+
 {% if unit_class.flags %}{% for flag in unit_class.flags | sort %}
 * ``{{ flag }}``{% endfor %}{% else %}
 * This unit class has no flags.{% endif %}
-
-.. todo:: Add help text for all the flags and what effect they give.
 
 {% if units_in_class %}
 :strong:`Units in this class:`

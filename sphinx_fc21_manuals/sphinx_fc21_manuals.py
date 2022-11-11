@@ -5,7 +5,7 @@
 # SPDX-FileCopyrightText: 2022 Louis Moureaux <m_louis30@yahoo.com>
 
 # Version string
-__version__ = "0.13"
+__version__ = "0.14"
 
 import configparser
 import logging

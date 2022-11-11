@@ -43,7 +43,6 @@ freeciv21/Docs/Manuals/Rulesets/common
     building_flags.rst -- Common source to document all of the building flags.
     tech_adv_flags.rst -- Common source to document all of the technology advance flags
     unit_class_flags.rst -- Common source to document all of the unit class flags.
-    unit_class_hut.rst -- Common source to document all of the hut behaviors.
     unit_type_flags.rst -- Common source to document all of the unit type flags.
     unit_type_roles.rst -- Common source to document all of the unit type roles.
 
@@ -55,7 +54,6 @@ TODO:
 - Create a universal look up page to document what the requirement vector table columns mean. Link to it where needed.
 - The current graphics for the techs are really crappy. Before we go and show a graphic for the tech advances, need to get that issue fixed first.
 - Run through each of the rulesets one by one and see how many sphinx warnings come up and see about fixes.
-- Need to add helptext for the scenario capabilities from game.ruleset
 
 FIXES:
 - SPRITE: The wonder mausoleum_of_halicarnassus sprite is referred to as simply mausoleum in most rulesets, causing an issue with image lookup
@@ -68,88 +66,3 @@ FIXES:
 QUESTIONS:
 - Do we have any rulesets that use the "convert" feature for units? Would be good to see if the code works there.
 
-Unit Flags:
-- AirAttacker: Very bad at attacking AEGIS.
-- Airbase:
-- AddToCity: Citizen containing units (e.g. Settlers) can add population to a city. Must travel to the target city.
-- Bombarder: Can bombard cities.
-- Cant_Fortify: Unit cannot fortify inside or outside of cities.
-- Capturable: Can be captured by some enemy units.
-- Capturer: Can capture some enemy units.
-- Cities:
-- Coast: Must remain on a coastal (shallow ocean) tile.
-- Consensus: Undisbandable when your bureaucracy has a veto.
-- Diplomat: Performs varying Diplomatic functions. Must travel to target city.
-- FieldUnit
-- Helicopter: Defends very badly against :unit:`Fighters`.
-- HelpWonder: Can help to build a wonder. Must travel to target city.
-- Horse: Attack value reduced when attacking :unit:`Pikemen`.
-- IgZOC: Ignores unit zone of control (ZOC).
-- Infra: Can build infrastructure.
-- Marines: Can launch attack from non-native tiles.
-- NoBuild
-- NonMil: In not a military (attacking) unit.
-- NoVeteran: Does not gain veterancy.
-- Nuclear: Is nuclear capable.
-- NuclearOP:
-- OneAttack: Only attacks once and is destroyed/consumed as part of the attacking action.
-- Only_Native_Attack: Can only attack on native tiles. See ``AttackNonNative`` Unit Class Flag.
-- Paratroopers: Can be paradropped from a friendly city or suitable base.
-- Provoking
-- RealDiplomat: Can do real diplomat actions, unlike tech transfer units.
-- RealSpy: Can do real spy actions, unlike tech transfer units.
-- Settlers: Acts as a Settler type unit.
-- Submarine: Attack value reduced when attacking :unit:`Destroyer`.
-- TradeRoute: Can establish trade routes. Must travel to target city.
-- Transform
-- Unbribable: Unit cannot be bribed.
-
-Unit Roles:
-- AttackFastStartUnit: Can be designated as an attacking unit at game start.
-- AttackStrongStartUnit: Can be designated as a strong attacking unit at game start.
-- BarbarianBoat: This is the Barbarian boat.
-- BarbarianBuild: Barbarians can build these units.
-- BarbarianBuildTech
-- BarbarianLeader: This is the Barbarian Leader.
-- BarbarianSea
-- BarbarianSeaTech
-- BarbarianTech
-- BorderPolice: Can peacefully expel certain foreign units.
-- CitiesStartUnit: Can be designated as city founding unit at game start.
-- DefendGood
-- DefendGoodStartUnit: Can be designated as an good defending unit at game start.
-- DefendOk
-- DefendOkStartUnit: Can be designated as an ok defending unit at game start.
-- DiplomatStartUnit: Can be designated as diplomat unit at game start.
-- Expellable: Can be peacefully expelled from foreign tiles.
-- Explorer: This unit performs explorer functions.
-- ExplorerStartUnit: Can be designated as an explorer unit at game start.
-- Ferryboat: This unit can enter deep ocean tiles and act as a ferry/transport.
-- FerryStartUnit: Can be designated as a ferry boat unit at game start.
-- FirstBuild: If the technology advance is available, this unit will be the first item added to a new city's build list.
-- HeavyWeight: Airliftable from Airport after you learn Fusion Power.
-- Hunter
-- Hut
-- HutTech
-- LightWeight: Airliftable once you learn Flight.
-- MediumWeight: Airliftable from Airport after you learn Advanced Flight.
-- Settlers: Acts as a Settler type unit.
-- WorkerStartUnit: Can be designated as a worker unit at game start.
-
-Unit Class Flags
-- Airliftable: Can be airlifted from a suitable city.
-- AttackNonNative: Unit can attack units on non-native tiles (e.g. :unit:`Marines` in a :unit:`Transport` attacking a city). The Unit Flag ``Only_Native_Attack`` can override this.
-- AttFromNonNative: See ``AttackNonNative``.
-- BuildAnywhere: Unit can be built even in the middle of non-native terrain.
-- CanFortify: Unit can fortify inside and outside of cities gaining a defense bonus.
-- CanOccupyCity: Can enter a city and take onwership of it.
-- CanPillage: Can pillage a tile's infrastructure improvements.
-- CollectRansom: Can collect a ransom from killing a :unit:`Barbarian Leader`.
-- DamageSlows: Movement is reduced when damaged.
-- DoesntOccupyTile: Even if this kind of enemy unit is on a tile, cities can still work that tile.
-- KillCitizen: When attacking a city will kill citizens.
-- Missile: Acts as a missile.
-- TerrainDefense: Units gain defense bonus from terrain.
-- TerrainSpeed: Units use terrain specific speed.
-- Unreachable: Unit can be attacked only by units explicitly listing this class in its `targets`, unless on a city or native base. For class members which are transports, cargo cannot load/unload except in a city or native base, unless that unit explicitly lists this class in its `embarks`/`disembarks` actions.
-- ZOC: Unit is subject to zone of control rules.

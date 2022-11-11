@@ -20,11 +20,11 @@
 
   {{ government.ai_better_help_rst }}
 
-:strong:`Requirements:`
+:strong:`Requirement:`
 {% if government.reqs %}
   .. csv-table::
-   :header: "Type", "Name", "Range", "Present", "Survives", "Quiet"
+   :header: "Type", "Name", "Range", "Present"
    {% for req in government.reqs %}
-   "{{ req.type }}","{{ req.name }}","{{ req.range }}","{{ req.present }}","{{ req.survives }}","{{ req.quiet }}"{% endfor %}
+   "{{ req.type }}","{{ req.name }}","{{ req.range }}","{{ req.present }}"{% endfor %}
    {% else %}  This government has no requirements.
 {% endif %}

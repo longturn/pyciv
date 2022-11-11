@@ -80,25 +80,30 @@ Unit Type Properties
    "{{ level.name | title }}","{{ level.base_raise_chance }}%","{{ level.work_raise_chance }}%","{{ level.power_factor }}%","{{ level.move_bonus }}%"{% endfor %}
 
 :strong:`Flags:`
+
+For help on the unit class flags defined here, please see :doc:`/Manuals/Rulesets/Common/unit_type_flags`.
+
 {% if unit_type.flags %}
 {% for flag in unit_type.flags | sort %}
 * ``{{ flag }}``{% endfor %}{% else %}
 
 * This unit has no flags.{% endif %}
 
-.. todo:: Add helptext for all of the flags
-
 :strong:`Roles:`
+
+For help on the unit class flags defined here, please see :doc:`/Manuals/Rulesets/Common/unit_type_roles`.
+
 {% if unit_type.roles %}
 {% for role in unit_type.roles | sort %}
 * ``{{ role }}``{% endfor %}{% else %}
 
 * This unit has no roles.{% endif %}
 
-.. todo:: Add helptext for all of the roles
-
 Unit Type Available Actions
 ===========================
+
+For help on the available actions, please see :doc:`/Modding/Rulesets/actions`.
+
 {% if action_enablers %}{% for item in action_enablers %}
 {% if action_enabler_check(unit_type.flags, unit_type.roles, unit_type.uclass, item) == True %}
 :strong:`Available Action: {{ item.action }}`
