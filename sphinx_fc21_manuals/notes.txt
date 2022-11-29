@@ -4,7 +4,17 @@ freeciv21/Docs/Manuals/Rulesets
     index.rst -- contains links to all the ruleset manuals
 
 freeciv21/Docs/Manuals/Rulesets/{ruleset}
-    index.rst -- Information from game.ruleset and cities.ruleset
+    index.rst -- Top level document, provides some of the attributes from game.ruleset
+        borders.rst -- Add more details from the [borders] section in game.ruleset
+        calendar.rst -- Add more details from the [calendar] section in game.ruleset
+        city.rst -- Add details from city.ruleset
+        culture.rst -- Add more details from the [culture] section in game.ruleset
+        description.rst -- Allows for the long detailed description file to be loaded in its own page
+        game-parms.rst -- Add more details from the [civstyle] section in game.ruleset
+        incite-cost.rst -- Add more details from the [incite_cost] section in game.ruleset
+        plague.rst --  Add more details from the [illness] section in game.ruleset
+        research.rst -- Add more details from the [research] section in game.ruleset
+        unit-rules.rst -- Add more details from the [combat_rules], [auto_attack], [actions] sections in game.ruleset
     advances.rst -- Contains links to all the individual technology pages from techs.ruleset
     buildings.rst -- Contains links to all the individual building pages from buildings.ruleset
     units-classes.rst -- Contains links to all of the individual unit class pages from units.ruleset
@@ -12,6 +22,16 @@ freeciv21/Docs/Manuals/Rulesets/{ruleset}
     governments.rst -- single page documenting the available governments
     nations.rst -- [needs code] add to game information set of pages to show the values from nations.ruleset.
                 -- also include links to a common set of nation pages (see TODO)
+                -- Alien has its only set of Nations + custom nation effects
+                -- Civ1 has its own set of Nations
+                -- Civ2 has its own set of Nations
+                -- Civ2Civ3 uses the default/nationlist.ruleset file along with two other ones from nation/
+                -- Classic is same as Civ2Civ3
+                -- Experimental is same as Civ2Civ3
+                -- Granularity uses the default/nationlist.ruleset file along with a single one from nation/
+                -- Multiplayer is same as Civ2Civ3
+                -- Royale is same as Civ2Civ3
+                -- Sandbox is same as Granularity
     terrain.rst -- [needs code] add to game information set of pages to show the values from terrain.ruleset.
                 -- also include links to a common set of terrain pages (see TODO)
 
@@ -20,26 +40,26 @@ freeciv21/Docs/Manuals/Rulesets/{ruleset}
     styles.rst -- ? how do we want to document the styles ? -- generally not very important information here
 
 
-freeciv21/Docs/Manuals/Rulesets/{ruleset}/advances
+freeciv21/Docs/Manuals/Rulesets/{ruleset}/advances (done)
     {advance_name}.rst
 
-freeciv21/Docs/Manuals/Rulesets/{ruleset}/buildings
+freeciv21/Docs/Manuals/Rulesets/{ruleset}/buildings (done)
     {building_name}.rst
 
-freeciv21/Docs/Manuals/Rulesets/{ruleset}/units
+freeciv21/Docs/Manuals/Rulesets/{ruleset}/units (done)
     {unit_name}.rst
     {unit_class}.rst
 
-freeciv21/Docs/Manuals/Rulesets/{ruleset}/governments
+freeciv21/Docs/Manuals/Rulesets/{ruleset}/governments (done)
     {gov_name}.rst
 
-freeciv21/Docs/Manuals/Rulesets/common/nations
+freeciv21/Docs/Manuals/Rulesets/common/nations (todo)
     {nation_name).rst
 
-freeciv21/Docs/Manuals/Rulesets/common/terrain
+freeciv21/Docs/Manuals/Rulesets/common/terrain (todo)
     {terrain_name}.rst
 
-freeciv21/Docs/Manuals/Rulesets/common
+freeciv21/Docs/Manuals/Rulesets/common (done)
     building_flags.rst -- Common source to document all of the building flags.
     tech_adv_flags.rst -- Common source to document all of the technology advance flags
     unit_class_flags.rst -- Common source to document all of the unit class flags.
@@ -47,20 +67,20 @@ freeciv21/Docs/Manuals/Rulesets/common
     unit_type_roles.rst -- Common source to document all of the unit type roles.
 
 TODO:
-- Figure out best way to document the nations. They are duplicated across the rulesets.
+- Figure out best way to document the nations. They are duplicated across the rulesets in some cases and some rulesets have their own set.
 - Figure out best way to document terrain. I'll bet there is a lot of overlap between the rulesets. Will need terrain specific sprites if we want to show it on the page.
 - Gather effects and document them where they are "effected" and not as a big page of them
 - Need a detailed look at the helptext across all rulesets. Many items need to be cleaned up to be rst friendly. Usage of consonants and other doco style are not being followed.
 - Create a universal look up page to document what the requirement vector table columns mean. Link to it where needed.
 - The current graphics for the techs are really crappy. Before we go and show a graphic for the tech advances, need to get that issue fixed first.
-- Run through each of the rulesets one by one and see how many sphinx warnings come up and see about fixes.
+
 
 FIXES:
 - SPRITE: The wonder mausoleum_of_halicarnassus sprite is referred to as simply mausoleum in most rulesets, causing an issue with image lookup
 - BLDG: Fix building flags (see airport in royale, or others that say "set()" or city walls with "{‘VisibleByOthers’}")
 - UNIT: The unit obsoletes value isn't working. for example, cavalry obsoletes knights in a lot of rulesets. Another example is pikemen obsolete phalanx.
 - UNIT: Some rulesets have the mobility bonus added to the name of the veteran level causing duplicated information in the table
-- IMAGES: Need to find a way to see if an image sprite exists on the filesystem and if not, don't write out the image code in the template.
+- IMAGES: Need to find a way to see if an image sprite exists on the filesystem and if not, don't write out the image code in the template. Good use of a global function to process in the template page.
 
 
 QUESTIONS:
