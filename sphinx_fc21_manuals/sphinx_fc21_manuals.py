@@ -7,11 +7,11 @@
 # Version string, the build counter goes up by one at each commit.
 __version__ = "0.0.16"
 
+import argparse
 import logging
 import os
 import re
 import sys
-import argparse
 from pathlib import Path
 from warnings import warn
 
@@ -26,11 +26,15 @@ logging.basicConfig(level=logging.INFO)
 
 # Setup command line argument parsing, variables are global.
 parser = argparse.ArgumentParser(
-    description='Process a Freeciv21 Ruleset and write out Sphinx reStructured Text help files.'
-    )
-parser.add_argument('-r', '--ruleset_dir', help='Path to a ruleset serv file directory.')
-parser.add_argument('-t', '--target_dir', help='Path for output directory.')
-parser.add_argument('-n', '--name', help='Name of the ruleset to parse.', default='None')
+    description="Process a Freeciv21 Ruleset and write out Sphinx reStructured Text help files."
+)
+parser.add_argument(
+    "-r", "--ruleset_dir", help="Path to a ruleset serv file directory."
+)
+parser.add_argument("-t", "--target_dir", help="Path for output directory.")
+parser.add_argument(
+    "-n", "--name", help="Name of the ruleset to parse.", default="None"
+)
 
 args = parser.parse_args()
 
@@ -344,7 +348,11 @@ def process_ruleset(path, ruleset):
     template = env.get_template("building.rst")
     for building in all_buildings.values():
         building_list.append(building.name)
-        with open(args.target_dir + "/%s/buildings/%s.rst" % (ruleset, make_slug(building.name)), "w") as out:
+        with open(
+            args.target_dir
+            + "/%s/buildings/%s.rst" % (ruleset, make_slug(building.name)),
+            "w",
+        ) as out:
             out.write(
                 template.render(
                     building=building,
@@ -376,10 +384,15 @@ def process_ruleset(path, ruleset):
         units_in_class = filter(
             lambda ut: ut.uclass == unit_class, all_unit_types.values()
         )
-        with open(args.target_dir + "/%s/units/%s.rst" % (ruleset, make_slug(unit_class.name)), "w") as out:
+        with open(
+            args.target_dir
+            + "/%s/units/%s.rst" % (ruleset, "class_" + make_slug(unit_class.name)),
+            "w",
+        ) as out:
             out.write(
                 template.render(
-                    unit_class=unit_class, units_in_class=units_in_class,
+                    unit_class=unit_class,
+                    units_in_class=units_in_class,
                 )
             )
 
@@ -401,7 +414,10 @@ def process_ruleset(path, ruleset):
         obsolete = list(
             filter(lambda ut: (ut.obsolete_by == unit_type), all_unit_types.values())
         )
-        with open(args.target_dir + "/%s/units/%s.rst" % (ruleset, make_slug(unit_type.name)), "w") as out:
+        with open(
+            args.target_dir + "/%s/units/%s.rst" % (ruleset, make_slug(unit_type.name)),
+            "w",
+        ) as out:
             out.write(
                 template.render(
                     unit_type=unit_type,
@@ -446,7 +462,11 @@ def process_ruleset(path, ruleset):
             for building in all_buildings.values()
             if advance.name in building.required_techs()
         ]
-        with open(args.target_dir + "/%s/advances/%s.rst" % (ruleset, make_slug(advance.name)), "w") as out:
+        with open(
+            args.target_dir
+            + "/%s/advances/%s.rst" % (ruleset, make_slug(advance.name)),
+            "w",
+        ) as out:
             out.write(
                 template.render(
                     advance=advance,
@@ -477,7 +497,11 @@ def process_ruleset(path, ruleset):
     governments_list = []
     for government in all_governments.values():
         governments_list.append(government.name)
-        with open(args.target_dir + "/%s/governments/%s.rst" % (ruleset, make_slug(government.name)), "w") as out:
+        with open(
+            args.target_dir
+            + "/%s/governments/%s.rst" % (ruleset, make_slug(government.name)),
+            "w",
+        ) as out:
             out.write(
                 template.render(
                     government=government,
