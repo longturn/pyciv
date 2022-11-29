@@ -6,7 +6,7 @@ This python module uses the custom spec file parsers in the pyciv repo to genera
 documenting any Ruleset that the [Longturn](https://longturn.net) community either ships with Freeciv21 or
 plays in our online multiplayer games.
 
-[Documentation]:(docs/index)
+[Documentation]:(docs/index.md)
 
 Installation
 ------------
