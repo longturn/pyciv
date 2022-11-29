@@ -5,7 +5,7 @@
 # SPDX-FileCopyrightText: 2022 Louis Moureaux <m_louis30@yahoo.com>
 
 # Version string, the build counter goes up by one at each commit.
-__version__ = "0.0.16"
+__version__ = "0.0.18"
 
 import argparse
 import logging
@@ -169,7 +169,7 @@ def process_ruleset(path, ruleset):
     We leverage Jinja2 templates to make processing similar object instances (e.g. a single unit
     type such as Phalanx) in its own page. See the templates directory.
 
-    As of v0.16 (Nov 2022), the following game objects have not been processed and enabled here:
+    As of v0.18 (Nov 2022), the following game objects have not been processed and enabled here:
 
       * All the effects from [effects.ruleset], [nation_intelligence_effects.ruleset], and
         [ai_effects.ruleset] among the common list. Effects can easily be added to a single gigantic
