@@ -38,7 +38,7 @@ Unit Type Properties
   * :strong:`Upkeep: Gold` {{ unit_type.uk_gold }} gold
   * :strong:`Upkeep: Shield`{% if unit_type.uk_shield == 1 %} {{ unit_type.uk_shield }} shield{% elif unit_type.uk_shield > 1 %}{{ unit_type.uk_shield }} shields{% endif %}
   * :strong:`Gov Required:`{% if unit_type.gov_req %} {{ unit_type.gov_req.name }}{% else %} None{% endif %}
-  * :strong:`Unit Class:` :doc:`{{ unit_type.uclass.name | make_slug }}`
+  * :strong:`Unit Class:` :doc:`class_{{ unit_type.uclass.name | make_slug }}`
   * :strong:`Converts To:`{% if unit_type.convert_to %} {{ unit_type.convert_to }} in {{ unit_type.convert_time }} turns{% else %} None{% endif %}
 
 
