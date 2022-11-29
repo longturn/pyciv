@@ -24,9 +24,9 @@ The following parameters are set for cities. Each impacts gameplay in some fashi
 {% if parameters.celebrate_size_limit %}
 :strong:`Celebrate Size Limit` = {{ parameters.celebrate_size_limit }}
   {{ parameters.celebrate_size_limit_help_rst }}{% endif %}
-{% if parameters.changable_budget %}
-:strong:`National Budget` = {{ parameters.changable_budget }}
-  {{ parameters.changable_budget_help_rst }}{% endif %}
+{% if parameters.changeable_budget %}
+:strong:`National Budget` = {{ parameters.changeable_budget }}
+  {{ parameters.changeable_budget_help_rst }}{% endif %}
 {% if parameters.forced_science %}
 :strong:`Forced Science`
   {{ parameters.forced_science_help_rst }}``{{ parameters.forced_science }}``{% endif %}
