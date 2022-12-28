@@ -84,6 +84,20 @@ class SpecLexer:
         t.lexer.lineno += t.value.count("\n")
         return t
 
+    def t_RAW_LITERAL(self, t):
+        r"""
+        \$                      # Opening
+        (
+            ([^"]|\\\$)*[^\\]   # Contents: \" or anything else, no \ at the end
+            |                   # Or empty
+        )
+        \$                      # Closing
+        """
+        t.value = t.value[1:-1]
+        t.type = "STRING_LITERAL"
+        t.lexer.lineno += t.value.count("\n")
+        return t
+
     def t_STRING_FROM_FILE(self, t):
         r"\*[^\r\n]+\*"
         # Try to locate the file.
