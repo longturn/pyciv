@@ -77,7 +77,14 @@ class Section(dict):
             if not name[0] in self:
                 self[name[0]] = Section("[anonymous]")
             elif type(self[name[0]]) != Section:
-                raise ValueError('duplicate name "%s"' % name[0])
+                # The following is (unfortunately) allowed:
+                # a = 1
+                # a.b = 2
+                # We emit a warning and append $ to the second name
+                from warnings import warn
+                warn('Cannot represent the value of "%s"' % name[0])
+                self[(name[0] + "$",) + name[1:]] = value
+                return
 
             # Recurse
             if len(name) == 2:
