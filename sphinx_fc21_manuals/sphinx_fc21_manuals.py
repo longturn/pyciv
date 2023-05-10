@@ -1,11 +1,11 @@
 # sphinx_fc21_manuals.py
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
-# SPDX-FileCopyrightText: 2022 James Robertson <jwrober@gmail.com>
-# SPDX-FileCopyrightText: 2022 Louis Moureaux <m_louis30@yahoo.com>
+# SPDX-FileCopyrightText: James Robertson <jwrober@gmail.com>
+# SPDX-FileCopyrightText: Louis Moureaux <m_louis30@yahoo.com>
 
 # Version string, the build counter goes up by one at each commit.
-__version__ = "0.0.18"
+__version__ = "0.0.19"
 
 import argparse
 import logging
@@ -53,9 +53,9 @@ def clean_string(name):
     get malformed strings from the helptext sections of the rulesets as they are not
     written with rst in mind.
     """
-    name = name.replace("\n", "")
-    name = name.replace(".", ". ")
-    name = name.replace("*", "\n\n*")
+    #name = name.replace("\n", "")
+    #name = name.replace(".", ". ")
+    #name = name.replace("*", "\n\n *")
     name = name.replace(":", ": ")
     name = name.replace("%s", "")
 
@@ -155,7 +155,7 @@ env.globals["image_file_exists"] = image_file_exists
 
 def process_ruleset(path, ruleset):
     """
-    This is a long function that effectively instantiates all of the objects of a Freeciv
+    This is a long function that effectively instantiates all of the objects of a Freeciv21
     ruleset including:
 
       * Game parameters [game.ruleset]
@@ -176,7 +176,7 @@ def process_ruleset(path, ruleset):
         page, but that makes undertstanding them more difficult. It is best to document them in the
         same page as the target (e.g. A Great Wonder's effects on the page for the Great Wonder).
       * Nations. Some rulesets have unique Nations defined and many rulesets leverage a common
-        set of Nations. Custom code will been to be written to handle both scenarios.
+        set of Nations. Custom code will need to be written to handle both scenarios.
       * Terrain from [terrain.ruleset]. Right now the ruleset specfile parser does not handle
         tileset specifics. Escpecially sprites contained in a single file as opposed to being
         separate files. Also need to determine if we are going to go with hex tiles or square tiles
@@ -526,18 +526,16 @@ def main():
 
     print(f"Welcome to {sys.argv[0]} v{__version__}\n")
 
-    # If we don't pass a single ruleset name, assume you want to process all this shipped
+    # If we don't pass a single ruleset name, assume you want to process all the shipped
     #  rulesets.
     if args.name == "None":
         # process all the shipped rulesets
         for ruleset in (
-            "alien",
             "civ1",
             "civ2",
             "civ2civ3",
             "classic",
             "experimental",
-            # "granularity",
             "multiplayer",
             "royale",
             "sandbox",

@@ -8,13 +8,13 @@ for line in open("sphinx_fc21_manuals.py"):
         break
 
 setup(
-    name="sphinx-fc21-manuals",
+    name="sphinx_fc21_manuals",
     version=__version__,
     # package_dir={'': 'src'},
     py_modules=["sphinx_fc21_manuals"],
-    python_requires=">=3.8",
+    python_requires=">=3.10",
     install_requires=[
-        "sphinx>=1.8",
+        "sphinx>=1.10",
         "pytypes>=1.0",
         "ply>=3.11",
         "typeguard>=2.13",
