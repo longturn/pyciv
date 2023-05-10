@@ -1,7 +1,7 @@
 Folder Structure for sphinx_fc21_manuals
 
 freeciv21/Docs/Manuals/Rulesets
-    index.rst -- contains links to all the ruleset manuals
+    index.rst -- contains links to all the ruleset manuals (manually created)
 
 freeciv21/Docs/Manuals/Rulesets/{ruleset}
     index.rst -- Top level document, provides some of the attributes from game.ruleset
@@ -58,6 +58,7 @@ freeciv21/Docs/Manuals/Rulesets/common/nations (todo)
 
 freeciv21/Docs/Manuals/Rulesets/common/terrain (todo)
     {terrain_name}.rst
+    {special_name}.rst
 
 freeciv21/Docs/Manuals/Rulesets/common (done)
     building_flags.rst -- Common source to document all of the building flags.
@@ -73,6 +74,8 @@ TODO:
 - Need a detailed look at the helptext across all rulesets. Many items need to be cleaned up to be rst friendly. Usage of consonants and other doco style are not being followed.
 - Create a universal look up page to document what the requirement vector table columns mean. Link to it where needed.
 - The current graphics for the techs are really crappy. Before we go and show a graphic for the tech advances, need to get that issue fixed first.
+- Roll some kind of loop that looks for a set of words to recast using interpretive text roles. e.g. all the units, buildings, wonders and advances have
+  custom roles that should be enabled in the generated rst.
 
 
 FIXES:
