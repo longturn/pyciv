@@ -53,9 +53,9 @@ def clean_string(name):
     get malformed strings from the helptext sections of the rulesets as they are not
     written with rst in mind.
     """
-    #name = name.replace("\n", "")
-    #name = name.replace(".", ". ")
-    #name = name.replace("*", "\n\n *")
+    # name = name.replace("\n", "")
+    # name = name.replace(".", ". ")
+    # name = name.replace("*", "\n\n *")
     name = name.replace(":", ": ")
     name = name.replace("%s", "")
 

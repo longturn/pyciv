@@ -18,8 +18,10 @@ class CityParametersData:
     angry_citizens: bool = True
     celebrate_size_limit: int = 3
     changable_budget: bool = True
-    changeable_budget: bool = True # Value after changable_budget (fix typo, this is the correct value)
-    changable_tax: bool = True # Value before changable_budget (now deprecated)
+    changeable_budget: bool = (
+        True  # Value after changable_budget (fix typo, this is the correct value)
+    )
+    changable_tax: bool = True  # Value before changable_budget (now deprecated)
     forced_science: int = 0
     forced_luxury: int = 0
     forced_gold: int = 0

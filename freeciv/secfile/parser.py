@@ -82,6 +82,7 @@ class Section(dict):
                 # a.b = 2
                 # We emit a warning and append $ to the second name
                 from warnings import warn
+
                 warn('Cannot represent the value of "%s"' % name[0])
                 self[(name[0] + "$",) + name[1:]] = value
                 return

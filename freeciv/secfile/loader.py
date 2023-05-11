@@ -18,8 +18,10 @@ import re
 from typing import NewType, TypeVar, Union, get_args, get_origin, get_type_hints
 
 from typeguard import check_type
+
 try:
     from typeguard import TypeCheckError
+
     typeguard_version = 3
 except ImportError:
     TypeCheckError = TypeError

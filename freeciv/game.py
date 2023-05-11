@@ -6,7 +6,7 @@ from typeguard import typechecked
 
 from freeciv.effects import Requirement
 
-from .secfile.loader import read_sections, read_section, section
+from .secfile.loader import read_section, read_sections, section
 
 
 @section("datafile")
