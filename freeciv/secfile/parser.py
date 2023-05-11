@@ -26,10 +26,8 @@ _string_escape_regex = re.compile(r"\\(.)", re.DOTALL)
 
 
 def _string_escape_replace(match):
-    if match.group(1) == "n":
-        return "\n"
-    else:
-        return match.group(1)  # \", \\ or \ anything
+    escapes = {"n": "\n", "\n": ""}
+    return escapes.get(match.group(1), match.group(1))
 
 
 class _Table:
