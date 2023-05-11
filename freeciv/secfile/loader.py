@@ -18,6 +18,12 @@ import re
 from typing import NewType, TypeVar, Union, get_args, get_origin, get_type_hints
 
 from typeguard import check_type
+try:
+    from typeguard import TypeCheckError
+    typeguard_version = 3
+except ImportError:
+    TypeCheckError = TypeError
+    typeguard_version = 2
 
 
 def NamedReference(T):
@@ -94,9 +100,12 @@ def _instance_from_value(value, target_class, name=""):
 
     # Maybe we're already good
     try:  # try/catch for control flow :(
-        check_type(name, value, target_class)
+        if typeguard_version == 3:
+            check_type(value, target_class)
+        else:
+            check_type(name, value, target_class)
         return value
-    except TypeError:
+    except TypeCheckError:
         ...
 
     # "General" case. Convert arguments to the requested types
