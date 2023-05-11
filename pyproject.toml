@@ -1,3 +1,47 @@
 [tool.isort]
 profile = "black"
 
+[tool.pytest.ini_options]
+minversion = 6.0
+# The typeguard plugin is broken
+addopts = "-p no:typeguard"
+pythonpath = ["."]
+
+[tool.poetry]
+name = "pyciv"
+version = "0.0.19"
+description = "Python tools to work with Freeciv and Freeciv21 files"
+readme = "README.md"
+authors = [
+    "Louis Moureaux <m_louis30@yahoo.com>",
+    "James Robertson <jwrober@gmail.com>",
+]
+license = "GPL-3.0-or-later"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Environment :: Console",
+    "Operating System :: OS Independent",
+    "Natural Language :: English",
+    "Topic :: Games/Entertainment :: Turn Based Strategy",
+]
+
+[tool.poetry.urls]
+homepage = "https://github.com/longturn/pyciv"
+repository = "https://github.com/longturn/pyciv.git"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+ply = "^3.11"
+typeguard = ">=2.13"
+Unidecode = "1.3"
+
+[tool.poetry.dev-dependencies]
+black = "^23.3.0"
+isort = "^5.12.0"
+pytest = "^7.3.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

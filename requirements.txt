@@ -1,4 +1,0 @@
-jinja2
-ply
-pytypes
-unidecode
