@@ -15,7 +15,7 @@ from .secfile.loader import read_section, read_sections, section
 class DataFileHeader:
     description: str
     options: str
-    format_version: int  # 10 or 20
+    format_version: int = 10  # 10 or 20
 
 
 @section("about")
@@ -108,6 +108,16 @@ class CivStyleData:
     paradrop_to_transport: bool = True  # FIXME default?
     gold_upkeep_style: str = ""
     output_granularity: int = 1  # FIXME default?
+
+    # Freeciv 2.4
+    base_tech_cost: int = 100
+    nuke_contamination: str = ""
+    tech_leakage: int = 0
+    tech_cost_style: str = ""
+
+    # Freeciv 3.1
+    airlift_from_always_enabled: bool = True
+    airlift_to_always_enabled: bool = True
 
     # Help Strings
     base_pollution_help_rst: str = (
@@ -219,7 +229,7 @@ class InciteCostData:
     base_incite_cost: int = 0  # FIXME default?
 
     # Help Strings
-    improvement_factor_help_rst: str = "The values for ``base_incite_cost``, ``improvement_factor``, ``unit_factor``, and ``total_factor`` are used as part of a math equation to calculate the cost to incide a city. The formula is:\n\n  :math:`city\_incite\_cost = total\_factor * (city\_size) * (base\_incite\_cost + (units\_cost)`\n\n  :math:`* unit\_factor + (improvements\_cost) * improvement\_factor)`\n\n  :math:`/ ((distance\_to\_capital) * 100)`"
+    improvement_factor_help_rst: str = "The values for ``base_incite_cost``, ``improvement_factor``, ``unit_factor``, and ``total_factor`` are used as part of a math equation to calculate the cost to incide a city. The formula is:\n\n  :math:`city\\_incite\\_cost = total\\_factor * (city\\_size) * (base\\_incite\\_cost + (units\\_cost)`\n\n  :math:`* unit\\_factor + (improvements\\_cost) * improvement\\_factor)`\n\n  :math:`/ ((distance\\_to\\_capital) * 100)`"
 
 
 @section("combat_rules")
@@ -228,6 +238,15 @@ class InciteCostData:
 class CombatRulesData:
     # Object Attributes
     tired_attack: bool
+
+    # Freeciv 3.1 (FIXME meaning?)
+    low_firepower_badwallattacker: bool = False
+    low_firepower_combat_bonus: bool = False
+    low_firepower_nonnat_bombard: bool = False
+    low_firepower_pearl_harbour: bool = False
+    only_real_fight_makes_veteran: bool = False
+    damage_reduces_bombard_rate: bool = False
+    combat_odds_scaled_veterancy: bool = False
 
     # LT53
     incite_gold_capt_chance: int = 0
@@ -282,6 +301,7 @@ ActionRange = Union[int, Literal["unlimited"]]
 @dataclass
 class ActionsData:
     # Object Attributes
+    escape_city: bool = True # FIXME before Freeciv 3.1?
     force_trade_route: bool = True  # FIXME before 3.0?
     force_capture_units: bool = True  # FIXME before 3.0?
     force_bombard: bool = True  # FIXME before 3.0?
@@ -297,6 +317,30 @@ class ActionsData:
     nuke_city_max_range: ActionRange = 1  # FIXME before 3.0?
     nuke_units_max_range: ActionRange = 1  # FIXME before 3.0?
     airlift_max_range: ActionRange = "unlimited"
+
+    # Freeciv 3.1 (FIXME meaning?)
+    attack_blocked_by: list[str] = field(default_factory=list)
+    attack_post_success_forced_actions: list[str] = field(default_factory=list)
+    bombard_blocked_by: list[str] = field(default_factory=list)
+    bribe_unit_post_success_forced_actions: list[str] = field(default_factory=list)
+    conquer_city_blocked_by: list[str] = field(default_factory=list)
+    conquer_city_2_blocked_by: list[str] = field(default_factory=list)
+    disband_unit_recover_max_range: ActionRange = "unlimited"
+    diplchance_initial_odds: list[str] = field(default_factory=list)
+    enter_marketplace_blocked_by: list[str] = field(default_factory=list)
+    explode_nuclear_blocked_by: list[str] = field(default_factory=list)
+    explode_nuclear_consuming_always: bool = False
+    explode_nuclear_min_range: int = 0
+    found_city_consuming_always: bool = False
+    move_blocked_by: list[str] = field(default_factory=list)
+    nuke_city_blocked_by: list[str] = field(default_factory=list)
+    nuke_city_consuming_always: bool = False
+    nuke_city_min_range: int = 0
+    nuke_city_target_kind: str = ""
+    nuke_units_blocked_by: bool = False
+    nuke_units_consuming_always: bool = False
+    nuke_units_min_range: int = 0
+    suicide_attack_blocked_by: list[str] = field(default_factory=list)
 
     # Help Strings
     force_trade_route_help_rst: str = "If set to ``True``, it is illegal for a unit to enter the marketplace of a city if it can establish a trade route to it instead."
@@ -390,10 +434,17 @@ class ActionsData:
     ui_name_transport_disembark_2: str = ""  # FIXME default?
     ui_name_transport_embark: str = ""  # FIXME default?
     ui_name_user_action_1: str = ""  # FIXME default?
+    ui_name_user_action_2: str = ""  # FIXME default?
+    ui_name_enter_hut_2: str = "" # FIXME default?
+    ui_name_unit_move: str = "" # FIXME default?
     user_action_1_target_kind: str = ""  # FIXME default?
     user_action_1_min_range: int = 0  # FIXME default?
     user_action_1_max_range: ActionRange = "unlimited"  # FIXME default?
     user_action_1_actor_consuming_always: bool = True  # FIXME default?
+    user_action_2_target_kind: str = ""  # FIXME default?
+    user_action_2_min_range: int = 0  # FIXME default?
+    user_action_2_max_range: ActionRange = "unlimited"  # FIXME default?
+    user_action_2_actor_consuming_always: bool = True  # FIXME default?
     spread_plague_actor_consuming_always: bool = False  # FIXME default?
 
     quiet_actions: list[str] = field(default_factory=list)
@@ -403,6 +454,18 @@ class ActionsData:
     ui_name_destroy_city: str = ""  # FIXME default?
     ui_name_spy_attack: str = ""  # FIXME default?
     ui_name_spread_plague: str = ""  # FIXME default?
+
+    # Freeciv 3.1
+    ui_name_conquer_extras: str = "" # FIXME default?
+    ui_name_conquer_extras_2: str = "" # FIXME default?
+    ui_name_disband_unit_recover: str = "" # FIXME default?
+    ui_name_enter_hut: str = "" # FIXME default?
+    ui_name_frighten_hut: str = "" # FIXME default?
+    ui_name_frighten_hut_2: str = "" # FIXME default?
+    ui_name_heal_unit_2: str = "" # FIXME default?
+    ui_name_homeless: str = "" # FIXME default?
+    ui_name_paradrop_unit_enter: str = "" # FIXME default?
+    ui_name_paradrop_unit_enter_conquer: str = "" # FIXME default?
 
 
 @section("actionenabler_.+")
@@ -445,13 +508,13 @@ class ResearchData:
     free_tech_method: str = ""  # FIXME default?
 
     # Help Strings
-    tech_cost_style_help_rst: str = "This is the method of calculating technology costs.\n\n  * `Civ I|II`: Civ (I|II) style. Every new technology adds ``base_tech_cost`` (see below) to the cost of the next technology.\n\n  * `Classic`: The cost of technology is: :math:`base\_tech\_cost * (1 + reqs) * sqrt(1 + reqs) / 2`, where ``reqs`` equals the number of requirements for the technology advance, counted recursively.\n\n  * `Classic+`: The costs are read from :file:`tech.ruleset`. Missing costs are generated by style `Classic`.\n\n  * `Experimental`: The cost of technology is: :math:`base\_tech\_cost * (reqs^2 / (1 + sqrt(sqrt(reqs + 1))) - 0.5), where ``reqs`` equals the number of requirements for the technology, counted recursively. Initial technology cost will be ``base_tech_cost``.\n\n  * `Experimental+`: The costs are read from :file:`tech.ruleset`. Missing costs are generated by style `Experimental`.\n\n  * `Linear`: The cost of technology is: :math:`base\_tech\_cost * reqs`, where ``reqs`` equals the number of requirements for the technology, counted recursively."
+    tech_cost_style_help_rst: str = "This is the method of calculating technology costs.\n\n  * `Civ I|II`: Civ (I|II) style. Every new technology adds ``base_tech_cost`` (see below) to the cost of the next technology.\n\n  * `Classic`: The cost of technology is: :math:`base\\_tech\\_cost * (1 + reqs) * sqrt(1 + reqs) / 2`, where ``reqs`` equals the number of requirements for the technology advance, counted recursively.\n\n  * `Classic+`: The costs are read from :file:`tech.ruleset`. Missing costs are generated by style `Classic`.\n\n  * `Experimental`: The cost of technology is: :math:`base\\_tech\\_cost * (reqs^2 / (1 + sqrt(sqrt(reqs + 1))) - 0.5), where ``reqs`` equals the number of requirements for the technology, counted recursively. Initial technology cost will be ``base_tech_cost``.\n\n  * `Experimental+`: The costs are read from :file:`tech.ruleset`. Missing costs are generated by style `Experimental`.\n\n  * `Linear`: The cost of technology is: :math:`base\\_tech\\_cost * reqs`, where ``reqs`` equals the number of requirements for the technology, counted recursively."
 
     base_tech_cost_help_rst: str = "The value defines the base research cost for technology advances. Used in ``tech_cost_style`` (see above), where the technology cost is generated. In other words: used everywhere unless the cost of :strong:`all` technologies are specified and the technology cost style is `Experimental+` or `Classic+`."
 
     tech_leakage_help_rst: str = "This value defined how technology leakage occurs from other civilizations.\n\n  * `None`: There is no reduction of the technology cost.\n\n  * `Embassies`: The technology cost is reduced depending on the number of players which already know the technology and you have an embassy with.\n\n  * `All Players`: The technology cost is reduced depending on the number of all players (human, AI and barbarians) which already know the technology.\n\n  * `Normal Players`: The technology cost is reduced depending on the number of normal players (human and AI) which already know the technology."
 
-    tech_upkeep_style_help_rst: str = "This is the method of paying technology upkeep.\n\n  * `None`: This is no technology upkeep.\n\n  * `Basic`: The technology upkeep is calculated as: :math:`cost\_of\_technology / tech\_upkeep\_divider - tech\_upkeep\_free`.\n\n  * `Cities`: The technology upkeep is calculated like `Basic`, but multiplied by the number of cities."
+    tech_upkeep_style_help_rst: str = "This is the method of paying technology upkeep.\n\n  * `None`: This is no technology upkeep.\n\n  * `Basic`: The technology upkeep is calculated as: :math:`cost\\_of\\_technology / tech\\_upkeep\\_divider - tech\\_upkeep\\_free`.\n\n  * `Cities`: The technology upkeep is calculated like `Basic`, but multiplied by the number of cities."
 
     tech_upkeep_divider_help_rst: str = "The upkeep cost is divided by this value. It is essentially an over-ride value."
 

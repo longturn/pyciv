@@ -152,17 +152,17 @@ for ruleset in (
     "civ2",
     "civ2civ3",
     "classic",
-    "experimental",
+    # "experimental",
     "multiplayer",
     "sandbox",
 ):
-    process_ruleset(["/usr/share/freeciv"], ruleset)
+    process_ruleset(["/usr/share/games/freeciv"], ruleset)
 
 for ruleset in (
     ("AU1", "augmented2"),
     "augmented2",
     "MP3_26",
-    ("LT30", "lt30"),
+    # ("LT30", "lt30"),
     "LT31",
     "LT32",
     "LT33",
@@ -189,7 +189,7 @@ for ruleset in (
     if not type(ruleset) is tuple:
         ruleset = (ruleset, ruleset)
     process_ruleset(
-        [f"/home/louis/freeciv/ltnet/games/{ruleset[0]}/data", "/usr/share/freeciv"],
+        [f"/home/louis/Personal/games/{ruleset[0]}/data", "/usr/share/games/freeciv"],
         ruleset[1],
     )
 

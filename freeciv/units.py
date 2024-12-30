@@ -32,6 +32,12 @@ KNOWN_UNIT_CLASS_FLAGS = {
     # 3.0 stuff
     "Ground",
     "Flying",
+    # Freeciv 3.1 stuff
+    "Aerial",
+    "Barracks",
+    "HutFrighten",
+    "HutNothing",
+    "NonNatBombardTgt",
     # New stuff
     "BorderPolice",
     "Expellable",
@@ -176,6 +182,7 @@ class UnitType:
     veteran_power_fact: list[int] = None
     veteran_move_bonus: list[int] = None
     veteran_levels: list[str] = None  # Cannot be set from outside
+    veteran_raise_chance: list[int] = None  # AU1
 
     paratroopers_range: int = None
     paratroopers_mr_req: int = None
@@ -188,6 +195,9 @@ class UnitType:
 
     # 3.0 stuff
     city_size: int = None
+
+    # Freeciv 3.1 stuff
+    tp_defense: list[str] = field(default_factory=list)
 
     targets_help_rst: str = "This is a list of unit classes that this unit type can target (hit) in an attack. Targets are typically associated with airborne units and air-to-air combat."
 
@@ -203,6 +213,9 @@ class UnitType:
 
         if self.obsolete_by == "None":
             self.obsolete_by = None
+
+        if self.veteran_raise_chance:  # compat
+            self.veteran_base_raise_chance = self.veteran_raise_chance
 
         if self.veteran_levels:
             raise TypeError("veteran_levels cannot be set externally")
@@ -228,6 +241,9 @@ class UnitsSettings:
         self.unit_types = read_named_sections(UnitType, sections)
 
         for section in sections:
+            if "veteran_raise_chance" in section:  # compat
+                section["veteran_base_raise_chance"] = section["veteran_raise_chance"]
+                del section["veteran_raise_chance"]
             if section.name == "veteran_system":
                 self.veteran_system = load_veteran_levels(**section)
         if not self.veteran_system:
