@@ -2,13 +2,24 @@
 # SPDX-FileCopyrightText: Louis Moureaux <m_louis30@yahoo.com>
 
 from dataclasses import dataclass, field
+from pathlib import Path
 
+from PIL import Image
 from typeguard import typechecked
 
 from .secfile.loader import read_section, read_sections, section
 from .secfile.parser import SpecParser
 
-__all__ = ["FileData", "Grid", "Tile", "TilespecData", "Tileset", "Sprite"]
+__all__ = [
+    "FileData",
+    "ExtraData",
+    "GridData",
+    "TileData",
+    "TilespecData",
+    "Tileset",
+    "Sprite",
+    "SpriteData",
+]
 
 
 @section("tilespec")
@@ -114,7 +125,7 @@ class FileData:
 
 @typechecked
 @dataclass
-class Tile:
+class TileData:
     row: int
     column: int
     tag: list[str]
@@ -128,11 +139,11 @@ class Tile:
 @section("grid_.+")
 @typechecked
 @dataclass
-class Grid:
+class GridData:
     dx: int
     dy: int
 
-    tiles: list[Tile]
+    tiles: list[TileData]
 
     x_top_left: int = 0
     y_top_left: int = 1
@@ -140,11 +151,68 @@ class Grid:
     pixel_border: int = 0
 
 
+@typechecked
 @dataclass
+class SpriteData:
+    tag: list[str]
+    file: str
+
+    option: set[str] = field(default_factory=set)
+
+
+@section("extra")
+@typechecked
+@dataclass
+class ExtraData:
+    sprites: list[SpriteData]
+
+
 class Sprite:
-    image: FileData
-    grid: Grid
-    tile: Tile
+    """
+    Allows loading sprites from a tileset.
+    """
+
+    location: SpriteData | tuple[FileData, GridData, TileData]
+
+    def __init__(self, location: SpriteData | tuple[FileData, GridData, TileData]):
+        self.location = location
+
+    @property
+    def filename(self) -> str:
+        """
+        Returns the name of the image file to load this sprite from, without extension.
+        """
+        if isinstance(self.location, SpriteData):
+            return self.location.file
+        return self.location[0].gfx
+
+    def locate(self, path, extension=".png") -> Path:
+        """
+        Finds an image file to load this sprite from.
+        """
+        filename = self.filename + extension
+        for location in path:
+            full_path = Path(location) / filename
+            if full_path.exists():
+                return full_path
+
+        raise ValueError(f'Could not find a file called "{filename}"')
+
+    def load(self, path, extension=".png") -> Image:
+        """
+        Loads a sprite.
+        """
+        image = Image.open(self.locate(path, extension))
+        if isinstance(self.location, SpriteData):
+            return image
+
+        # Crop the sprite from the grid
+        _, grid, tile = self.location
+
+        x = grid.x_top_left + (grid.dx + grid.pixel_border) * tile.column
+        y = grid.y_top_left + (grid.dy + grid.pixel_border) * tile.row
+
+        return image.crop((x, y, x + grid.dx, y + grid.dy))
 
 
 class Tileset:
@@ -154,10 +222,12 @@ class Tileset:
 
     name: str
     tilespec: TilespecData
-    grids: list[Grid]
+    grids: list[GridData]
+    extras: list[ExtraData]
+
     sprite: dict[str, Sprite]
 
-    def __init__(self, name: str, path: str):
+    def __init__(self, name: str, path: str, options: set[str] = set()):
         """
         Reads the tileset called `name` under the data `path`.
         """
@@ -168,15 +238,30 @@ class Tileset:
         self.tilespec = read_section(TilespecData, sections)
 
         self.grids = []
+        self.extras = []
         self.sprites = {}
 
         for spec in self.tilespec.files:
             sections = SpecParser.load(spec, path)
-            file_data = read_section(FileData, sections, missing_ok=True)
-            grids = read_sections(Grid, sections)
 
-            self.grids.append(grids)
+            file_data = read_section(FileData, sections, missing_ok=True)
+
+            grids = read_sections(GridData, sections)
+            self.grids += grids
+
             for grid in grids:
                 for tile in grid.tiles:
+                    # Only load sprites for enabled options
+                    if not tile.option.issubset(options):
+                        continue
+
                     for tag in tile.tag:
-                        self.sprites[tag] = Sprite(file_data, grid, tile)
+                        self.sprites[tag] = Sprite((file_data, grid, tile))
+
+            extra = read_section(ExtraData, sections, missing_ok=True)
+            if extra:
+                self.extras.append(extra)
+
+                for sprite_data in extra.sprites:
+                    for tag in sprite_data.tag:
+                        self.sprites[tag] = Sprite(sprite_data)
