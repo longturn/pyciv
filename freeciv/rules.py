@@ -21,6 +21,8 @@ class Ruleset:
     Represents a Freeciv ruleset.
     """
 
+    name: str
+
     buildings: BuildingsSettings
     effects: list[Effect]
     game: GameSettings
@@ -32,6 +34,8 @@ class Ruleset:
         """
         Reads the ruleset called `name` under the data `path`.
         """
+
+        self.name = name
 
         sections = SpecParser.load(f"{name}/buildings.ruleset", path)
         self.buildings = BuildingsSettings(sections)
